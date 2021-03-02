@@ -25,5 +25,5 @@ response = requests.get(url, headers=headers, auth=(device['username'], device['
 interfaces = response['ietf-interfaces:interfaces']['interface']
 
 for interface in interfaces:
-   if bool(interface['ietf-ip:ipv4']): //check if IP address is available
+   if bool(interface['ietf-ip:ipv4']): ## check if IP address is available
       print(f"{interface['name']} -- {interface['description']} -- {interface['ietf-ip:ipv4']['address'][0]['ip']}")
