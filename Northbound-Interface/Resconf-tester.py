@@ -10,7 +10,8 @@ device = {
 }
 
 headers = {
-      "Accept" : "application/yang-data+json",
+      #"Accept" : "application/yang-data+json",
+      "Accept" : "*/*",
       "Content-Type" : "application/yang-data+json",
    }
 
