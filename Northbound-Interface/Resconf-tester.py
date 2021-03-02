@@ -23,7 +23,7 @@ module = "ietf-interfaces:interfaces"
 url = f"http://{device['ip']}:{device['port']}/restconf/config/network-topology:network-topology/topology/topology-netconf/node/netopeer/yang-ext:mount/{module}"
 
 requests.packages.urllib3.disable_warnings()
-response = requests.get(url, headers=headers, auth=(device['username'], device['password']), verify=False)
+response = requests.get(url, headers=headers, auth=(device['username'], device['password']), verify=False).json()
 
 
 print('testing response')
