@@ -17,11 +17,16 @@ headers = {
 module = "ietf-interfaces:interfaces"
 
 # Remember to modify the node automatically
+# http://192.168.0.41:8182/restconf/config/network-topology:network-topology/topology/topology-netconf/node/netopeer/yang-ext:mount/ietf-interfaces:interfaces
+
 url = f"http://{device['ip']}:{device['port']}/restconf/config/network-topology:network-topology/topology/topology-netconf/node/netopeer/yang-ext:mount/{module}"
 
 requests.packages.urllib3.disable_warnings()
 response = requests.get(url, headers=headers, auth=(device['username'], device['password']), verify=False).json()
 
+
+print('testing response')
+print(response)
 interfaces = response['ietf-interfaces:interfaces']['interface']
 
 for interface in interfaces:
