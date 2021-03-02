@@ -1,3 +1,4 @@
+#These commands are just for stoping git for asking the creadentials
 #Update the URL of origin remote using SSH instead of HTTPS;
 
 git remote set-url origin git@github.com:username/repo.git
