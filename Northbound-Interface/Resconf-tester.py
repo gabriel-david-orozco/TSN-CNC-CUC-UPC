@@ -27,8 +27,8 @@ response = requests.get(url, headers=headers, auth=(device['username'], device['
 
 print('testing response')
 print(response)
-interfaces = response['ietf-interfaces:interfaces']['interface']
+#interfaces = response['ietf-interfaces:interfaces']['interface']
 
-for interface in interfaces:
-   if bool(interface['ietf-ip:ipv4']): ## check if IP address is available
-      print(f"{interface['name']} -- {interface['description']} -- {interface['ietf-ip:ipv4']['address'][0]['ip']}")
+# for interface in interfaces:
+#    if bool(interface['ietf-ip:ipv4']): ## check if IP address is available
+#       print(f"{interface['name']} -- {interface['description']} -- {interface['ietf-ip:ipv4']['address'][0]['ip']}")
