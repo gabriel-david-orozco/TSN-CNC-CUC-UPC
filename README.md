@@ -8,3 +8,4 @@ This Time Sensitive Networking Controller is developed by the Universitat Polit√
 - Programmming the methods for doing the changes in the configuration of the interfaces
 - Teorethical design of a UNI communication between the CNC and the CUC
 - Testing the traffic management model
+- Creating a container for sending restconf request
