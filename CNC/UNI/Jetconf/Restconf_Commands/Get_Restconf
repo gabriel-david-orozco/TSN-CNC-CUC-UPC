@@ -1,0 +1,1 @@
+curl -k -v --http2 --cert-type PEM -E joe@example.net_curl.pem https://172.17.0.2:8443/restconf/operations/jetconf:conf-start
