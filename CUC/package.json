@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "node-opcua": "^2.36.0",
-    "node-rest-client": "^3.1.0"
+    "node-rest-client": "^3.1.0",
+    "yang-js": "^0.24.64"
   }
 }
