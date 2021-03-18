@@ -7,7 +7,7 @@ Yang.import(path.resolve(__dirname, "./../../Yang_models/ietf-inet-types.yang"))
 //The following schema is just the interface, instance data should be generated.
 var schema = Yang.parse(rawTsnSchema);
 
-//TODO create method that validates the input data with the already defined schema
+//TODO generate sample data to test the function
 function validateData(instanceData) {
     try {
         schema.validate(instanceData);
