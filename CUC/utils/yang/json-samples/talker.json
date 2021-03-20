@@ -1,0 +1,49 @@
+{
+    "group-talker": {
+
+        "stream-rank": {
+            "rank": ""
+        },
+
+        "end-station-interfaces": [
+            {
+                "mac-address": "",
+                "interface-name": ""
+            }
+        ],
+
+        "data-frame-specification": [
+            {
+                "index": "",
+                "field": "choice? line 1005"
+            }
+        ],
+
+        "traffic-specification": {
+            "interval": {
+                "numerator": "",
+                "denominator": ""
+            },
+            "max-frames-per-interval": "",
+            "max-frame-size": "",
+            "transmission-selection": "",
+            "time-aware": {
+                "earliest-transmit-offset": "",
+                "latest-transmit-offset": "",
+                "jitter": ""
+            }
+
+        },
+        "user-to-network-requirements": {
+            "num-seamless-trees": "",
+            "max-latency": ""
+        },
+        "interface-capabilities": {
+            "vlan-tag-capable": "",
+            "cb-stream-iden-type-list": [""],
+            "cb-sequence-type-list": [""]
+
+        }
+        
+    }
+}
