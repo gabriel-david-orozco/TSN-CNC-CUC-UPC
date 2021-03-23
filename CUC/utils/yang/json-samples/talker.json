@@ -2,48 +2,61 @@
     "group-talker": {
 
         "stream-rank": {
-            "rank": ""
+            "rank": 0
         },
 
         "end-station-interfaces": [
             {
-                "mac-address": "",
-                "interface-name": ""
-            }
-        ],
-
-        "data-frame-specification": [
-            {
-                "index": "",
-                "field": "choice? line 1005"
+                "mac-address": "60-F2-62-74-45-F0",
+                "interface-name": "eth0"
             }
         ],
 
         "traffic-specification": {
             "interval": {
-                "numerator": "",
-                "denominator": ""
+                "numerator": 1,
+                "denominator": 1
             },
-            "max-frames-per-interval": "",
-            "max-frame-size": "",
-            "transmission-selection": "",
+            "max-frames-per-interval": 1000,
+            "max-frame-size": 1518,
+            "transmission-selection": 0,
             "time-aware": {
-                "earliest-transmit-offset": "",
-                "latest-transmit-offset": "",
-                "jitter": ""
+                "earliest-transmit-offset": 10,
+                "latest-transmit-offset": 30,
+                "jitter": 5
             }
 
         },
         "user-to-network-requirements": {
-            "num-seamless-trees": "",
-            "max-latency": ""
+            "num-seamless-trees": 0,
+            "max-latency": 10
         },
         "interface-capabilities": {
-            "vlan-tag-capable": "",
-            "cb-stream-iden-type-list": [""],
-            "cb-sequence-type-list": [""]
+            "vlan-tag-capable": true,
+            "cb-stream-iden-type-list": [],
+            "cb-sequence-type-list": []
 
         }
         
+    },
+    "group-listener": {
+        "end-station-interfaces": [
+            {
+                "mac-address": "60-F2-62-74-45-F4",
+                "interface-name": "eth1"
+            }
+        ],
+
+        "user-to-network-requirements": {
+            "num-seamless-trees": 0,
+            "max-latency": 10
+        },
+
+        "interface-capabilities": {
+            "vlan-tag-capable": true,
+            "cb-stream-iden-type-list": [],
+            "cb-sequence-type-list": []
+
+        }
     }
 }

@@ -1312,7 +1312,7 @@ module ieee802-dot1q-tsn-types {
 
       list end-station-interfaces {
         key "mac-address interface-name";
-        min-elements 1;
+        ${/*min-elements 1; */''}
         description
           "List of identifiers, one for each physical
         interface (distinct point of attachment) in
