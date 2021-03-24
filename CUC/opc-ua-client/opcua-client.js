@@ -30,7 +30,7 @@ async function connectOpcUaServer(endpointUrl) {
     //Reading values. In our scenario it should just request all the needed data in Network Requirements section
     const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
     console.log(` value = ${dataValue.value.value.toString()}`);
-    logicHandler.checkDataFromOpcUaServer(dataValue);
+    logicHandler.receiveDataFromOpcUaServer(dataValue);
     //TODO Subscription to some content. Not yet considered
     /*
     const subscription = await session.createSubscription2({
