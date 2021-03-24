@@ -69,7 +69,7 @@ function generateUniGroups() {
             'cb-stream-iden-type-list': talkerInformation.streamIdTypes,
             'cb-sequence-type-list': talkerInformation.identificationTypes
         }
-//
+
         streamInformation['group-listener']['end-station-interfaces'].push({
             'mac-address': listenerInformation.macAddress,
             'interface-name': listenerInformation.interfaceName
@@ -83,7 +83,7 @@ function generateUniGroups() {
             'cb-stream-iden-type-list': listenerInformation.streamIdTypes,
             'cb-sequence-type-list': listenerInformation.identificationTypes
         }
-
+        //TODO validate YANG module
 
 }
 
