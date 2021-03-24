@@ -17,23 +17,23 @@ debug_confh = LogHelpers.create_module_dbg_logger(__name__)
 class JukeboxExampleConfHandler(ConfDataListHandler):
     def create_item(self, ii: InstanceRoute, ch: "DataChange"):
         debug_confh(self.__class__.__name__ + " replace triggered")
-        info("Creating item '/example-jukebox:jukebox/library/artist' in app configuration")
+        info("Creating item '/ieee802-dot1q-tsn-types' in app configuration")
 
     def create_list(self, ii: InstanceRoute, ch: "DataChange"):
         debug_confh(self.__class__.__name__ + " replace triggered")
-        info("Creating list '/example-jukebox:jukebox/library/artist' in app configuration")
+        info("Creating list '/ieee802-dot1q-tsn-types' in app configuration")
 
     def replace_item(self, ii: InstanceRoute, ch: "DataChange"):
         debug_confh(self.__class__.__name__ + " replace triggered")
-        info("Replacing item '/example-jukebox:jukebox/library/artist' in app configuration")
+        info("Replacing item '/ieee802-dot1q-tsn-types' in app configuration")
 
     def replace_list(self, ii: InstanceRoute, ch: "DataChange"):
         debug_confh(self.__class__.__name__ + " replace triggered")
-        info("Replacing list '/example-jukebox:jukebox/library/artist' in app configuration")
+        info("Replacing list '/ieee802-dot1q-tsn-types' in app configuration")
 
-    def delete_item(self, ii: InstanceRoute, ch: DataChange):
+    def delete_item(self, ii: InstanceRoute, ch: "DataChange"):
         debug_confh(self.__class__.__name__ + " delete triggered")
-        info("Deleting item '/example-jukebox:jukebox/library/artist' from app configuration")
+        info("Deleting item '/ieee802-dot1q-tsn-types' from app configuration")
 
     def delete_list(self, ii: InstanceRoute, ch: "DataChange"):
         debug_confh(self.__class__.__name__ + " delete triggered")
@@ -41,4 +41,4 @@ class JukeboxExampleConfHandler(ConfDataListHandler):
 
 
 def register_conf_handlers(ds: BaseDatastore):
-    ds.handlers.conf.register(JukeboxExampleConfHandler(ds, "/example-jukebox:jukebox/library/artist"))
+    ds.handlers.conf.register(JukeboxExampleConfHandler(ds, "ieee802-dot1q-tsn-types"))
