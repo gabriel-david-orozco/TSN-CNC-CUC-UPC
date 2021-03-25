@@ -28,7 +28,7 @@ function receiveDataFromOpcUaServer(receivedData) {
         listenerInformation.push(receivedData);
     }
     //Check content of streamInformation variable
-    checkStreamInformationReady(receivedData.id);
+    checkStreamInformationReady(receivedData.id); //ID should be compliant with stream-id-type of the YANG module
 }
 
 function checkStreamInformationReady(idStream) {
