@@ -1,6 +1,15 @@
 const Client = require('node-rest-client').Client;
- 
-var client = new Client();
+const fs = require('fs');
+
+var options = {
+    connection: {
+        secureOptions: constants.SSL_OP_NO_TLSv1_2,
+        ciphers: 'ECDHE-RSA-AES256-SHA:AES256-SHA:RC4-SHA:RC4:HIGH:!MD5:!aNULL:!EDH:!AESGCM',
+        honorCipherOrder: true,
+        ca: fs.readFileSync(path.resolve(__dirname, ""))//TODO: include the server certificate (self signed one)
+    }
+};
+var client = new Client(options);
 
 function restconfRequest(data) {
     var args = {
