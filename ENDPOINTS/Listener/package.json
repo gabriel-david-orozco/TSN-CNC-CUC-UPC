@@ -1,0 +1,11 @@
+{
+  "name": "listener",
+  "version": "0.1.0",
+  "description": "Listener of a TSN flow",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
