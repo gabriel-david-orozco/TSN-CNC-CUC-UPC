@@ -1,4 +1,4 @@
-const logicHandler = require('../logic/core.js');
+//const logicHandler = require('../logic/core.js');
 const {
     OPCUAClient,
     AttributeIds,
@@ -25,9 +25,8 @@ async function connectOpcUaServer(endpointUrl) {
     const session = await client.createSession(); 
 
     const browseResult = await session.browse("RootFolder"); //TODO check and compare this line and next one with the server. What is a RootFolder? Root directory of the adress space?
-    console.log(browseResult.references.map((r) => r.browseName.toString()).join("\n"));
-
-    //Reading values. In our scenario it should just request all the needed data in Network Requirements section
+    const dataValue2 = await session.readVariableValue("s=macAddress");
+    console.log(" value = " , dataValue2.toString());
     const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
     console.log(` value = ${dataValue.value.value.toString()}`);
     logicHandler.receiveDataFromOpcUaServer(dataValue);
@@ -64,4 +63,5 @@ async function connectOpcUaServer(endpointUrl) {
     */
 }
 
-module.exports.connectOpcUaServer = connectOpcUaServer;
+//module.exports.connectOpcUaServer = connectOpcUaServer;
+connectOpcUaServer("opc.tcp://localhost:4334/TSNInterface");
