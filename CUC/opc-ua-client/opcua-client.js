@@ -25,10 +25,18 @@ async function connectOpcUaServer(endpointUrl) {
     const session = await client.createSession(); 
 
     const browseResult = await session.browse("RootFolder"); //TODO check and compare this line and next one with the server. What is a RootFolder? Root directory of the adress space?
-    const dataValue2 = await session.readVariableValue("s=macAddress");
-    console.log(" value = " , dataValue2.toString());
-    const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
-    console.log(` value = ${dataValue.value.value.toString()}`);
+    const tsnInterface = await session.readVariableValue("ns=1;i=1000");
+    const macAddress = await session.readVariableValue("ns=1;i=1001");
+    console.log(" value = " , tsnInterface);
+    //const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
+        const maxAge = 0;
+        const nodeToRead = {
+          nodeId: "ns=1;i=1001",
+          attributeId: AttributeIds.Value
+        };
+        const dataValue =  await session.read(nodeToRead, maxAge);
+        console.log(" value =" ,dataValue.value.value );
+
     logicHandler.receiveDataFromOpcUaServer(dataValue);
     //TODO Subscription to some content. Not yet considered
     /*
@@ -63,5 +71,5 @@ async function connectOpcUaServer(endpointUrl) {
     */
 }
 
-//module.exports.connectOpcUaServer = connectOpcUaServer;
-connectOpcUaServer("opc.tcp://localhost:4334/TSNInterface");
+module.exports.connectOpcUaServer = connectOpcUaServer;
+//connectOpcUaServer("opc.tcp://localhost:4334/TSNInterface");

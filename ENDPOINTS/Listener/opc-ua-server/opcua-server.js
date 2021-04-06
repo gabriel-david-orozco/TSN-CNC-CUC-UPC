@@ -26,7 +26,7 @@ function post_initialize() {
         });
     
         // add some variables
-        let macAddress = "HOLA";
+        let macAddress = "000102";
         let interfaceName;
         let redundancy;
         let maxDelay;
@@ -42,7 +42,9 @@ function post_initialize() {
             browseName: "macAddress",
             dataType: "String",
             value: {
-                get: macAddress//TODO: implement;
+                get: function () {
+                return new opcua.Variant({dataType: opcua.DataType.String, value: macAddress });
+                }
             }
         });
 
