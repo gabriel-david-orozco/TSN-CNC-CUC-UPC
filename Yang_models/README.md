@@ -13,19 +13,16 @@ module: ieee802-dot1q-tsn-types-upc-version
      |  +--rw stream-id        stream-id-type
      |  +--rw request
      |  |  +--rw talker
-     |  |  |     ...
+     |  |  |     uses group-talker
      |  |  +--rw listeners-list* [index]
-     |  |  |     ...
+     |  |  |     uses group-listener
      |  |  +---x compute-request
      |  +--ro configuration
-     |     +--ro status-info
-     |     |     ...
-     |     +--ro failed-interfaces* [mac-address interface-name]
-     |     |     ...
+     |     |     uses group-status-stream
      |     +--ro talker
-     |     |     ...
+     |     |     uses group-talker
      |     +--ro listener-list* [index]
-     |     |     ...
+     |     |     uses group-listener
      |     +---x deploy-configuration
      |     +---x undeploy-configuration
      |     +---x delete-configuration
