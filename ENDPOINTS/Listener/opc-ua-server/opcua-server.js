@@ -26,17 +26,39 @@ function post_initialize() {
         });
     
         // add some variables
+        let streamId = "9a-f4-27-E7-7D-b3:E5-e5";
+        let endpointType = "LISTENER";
         let macAddress = "000102";
-        let interfaceName;
-        let redundancy;
-        let maxDelay;
+        let interfaceName = "eth0";
+        let redundancy = true;
+        let maxDelay = 10;
 
-        let vlanCapable;
-        let streamIdTypes;
-
-        //If talker, uncomment this
-        //TODO
+        let vlanCapable = true;
+        let streamIdTypes = "TYPES";
+        let identificationTypes = "TYPES";
         
+        namespace.addVariable({
+            componentOf: interface,
+            browseName: "streamId",
+            dataType: "String",
+            value: {
+                get: function () {
+                return new opcua.Variant({dataType: opcua.DataType.String, value: streamId });
+                }
+            }
+        });
+
+        namespace.addVariable({
+            componentOf: interface,
+            browseName: "endpointType",
+            dataType: "String",
+            value: {
+                get: function () {
+                return new opcua.Variant({dataType: opcua.DataType.String, value: endpointType });
+                }
+            }
+        });
+
         namespace.addVariable({
             componentOf: interface,
             browseName: "macAddress",
@@ -48,93 +70,183 @@ function post_initialize() {
             }
         });
 
-        /*namespace.addVariable({
-            componentOf: interfaceName,
+        namespace.addVariable({
+            componentOf: interface,
             browseName: "interfaceName",
             dataType: "String",
             value: {
-                get: getInterfaceName()//TODO: implement;
+                get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.String, value: interfaceName });
+                }
             }
         });
 
         namespace.addVariable({
-            componentOf: redundancy,
+            componentOf: interface,
             browseName: "redundancy",
-            dataType: "String",
+            dataType: "Boolean",
             value: {
-                get: getRedundancy()//TODO: implement;
+                get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.Boolean, value: redundancy });
+                }
             }
         });
 
         namespace.addVariable({
-            componentOf: maxDelay,
+            componentOf: interface,
             browseName: "maxDelay",
-            dataType: "String",
+            dataType: "UInt32",
             value: {
-                get: getMaxDelay()//TODO: implement;
+                get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: maxDelay });
+                }
             }
         });
 
         namespace.addVariable({
-            componentOf: vlanCapable,
+            componentOf: interface,
             browseName: "vlanCapable",
-            dataType: "String",
+            dataType: "Boolean",
             value: {
-                get: getVlanCapable()//TODO: implement;
+                get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.Boolean, value: vlanCapable });
+                }
             }
         });
 
         namespace.addVariable({
-            componentOf: streamIdTypes,
+            componentOf: interface,
             browseName: "streamIdTypes",
             dataType: "String",
             value: {
-                get: getStreamIdTypes()//TODO: implement;
-            }
-        });*/
-
-
-        /*namespace.addVariable({
-        
-            componentOf: device,
-        
-            nodeId: "ns=1;b=1020FFAA", // some opaque NodeId in namespace 4
-        
-            browseName: "MyVariable2",
-        
-            dataType: "Double",    
-        
-            value: {
                 get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.Double, value: variable2 });
-                },
-                set: function (variant) {
-                    variable2 = parseFloat(variant.value);
-                    return opcua.StatusCodes.Good;
+                    return new opcua.Variant({dataType: opcua.DataType.String, value: streamIdTypes });
                 }
             }
-        });*/
-        const os = require("os");
-        /**
-         * returns the percentage of free memory on the running machine
-         * @return {double}
-         */
-        /*function available_memory() {
-            // var value = process.memoryUsage().heapUsed / 1000000;
-            const percentageMemUsed = os.freemem() / os.totalmem() * 100.0;
-            return percentageMemUsed;
-        }
+        });
+
         namespace.addVariable({
-        
-            componentOf: device,
-        
-            nodeId: "s=free_memory", // a string nodeID
-            browseName: "FreeMemory",
-            dataType: "Double",    
+            componentOf: interface,
+            browseName: "identificationTypes",
+            dataType: "String",
             value: {
-                get: function () {return new opcua.Variant({dataType: opcua.DataType.Double, value: available_memory() });}
+                get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.String, value: identificationTypes });
+                }
             }
-        });*/
+        });
+
+        if(endpointType === "TALKER") {
+            let priority = 5;
+            let intervalNumerator = 1;
+            let intervalDenominator = 1;
+            let maxFrameNumber = 10;
+            let maxFrameSize = 1518;
+            let transmissionSelection = 0;
+            let earliestTransmitOffset = 10;
+            let latestTransmitOffset = 30;
+            let jitter = 5;
+
+            namespace.addVariable({
+                componentOf: interface,
+                browseName: "priority",
+                dataType: "UInt32",
+                value: {
+                    get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: priority });
+                    }
+                }
+            });
+
+            namespace.addVariable({
+                componentOf: interface,
+                browseName: "intervalNumerator",
+                dataType: "UInt32",
+                value: {
+                    get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: intervalNumerator });
+                    }
+                }
+            });
+
+            namespace.addVariable({
+                componentOf: interface,
+                browseName: "intervalDenominator",
+                dataType: "UInt32",
+                value: {
+                    get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: intervalDenominator });
+                    }
+                }
+            });
+
+            namespace.addVariable({
+                componentOf: interface,
+                browseName: "maxFrameNumber",
+                dataType: "UInt32",
+                value: {
+                    get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: maxFrameNumber });
+                    }
+                }
+            });
+
+            namespace.addVariable({
+                componentOf: interface,
+                browseName: "maxFrameSize",
+                dataType: "UInt32",
+                value: {
+                    get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: maxFrameSize });
+                    }
+                }
+            });
+
+            namespace.addVariable({
+                componentOf: interface,
+                browseName: "transmissionSelection",
+                dataType: "UInt32",
+                value: {
+                    get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: transmissionSelection });
+                    }
+                }
+            });
+
+            namespace.addVariable({
+                componentOf: interface,
+                browseName: "earliestTransmitOffset",
+                dataType: "UInt32",
+                value: {
+                    get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: earliestTransmitOffset });
+                    }
+                }
+            });
+
+            namespace.addVariable({
+                componentOf: interface,
+                browseName: "latesTransmitOffset",
+                dataType: "UInt32",
+                value: {
+                    get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: latestTransmitOffset });
+                    }
+                }
+            });
+
+            namespace.addVariable({
+                componentOf: interface,
+                browseName: "jitter",
+                dataType: "UInt32",
+                value: {
+                    get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: jitter });
+                    }
+                }
+            });
+
+        }
     }
     construct_my_address_space(server);
     server.start(function() {

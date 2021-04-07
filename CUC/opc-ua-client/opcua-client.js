@@ -1,4 +1,4 @@
-//const logicHandler = require('../logic/core.js');
+const logicHandler = require('../logic/core.js');
 const {
     OPCUAClient,
     AttributeIds,
@@ -24,18 +24,64 @@ async function connectOpcUaServer(endpointUrl) {
 
     const session = await client.createSession(); 
 
-    const browseResult = await session.browse("RootFolder"); //TODO check and compare this line and next one with the server. What is a RootFolder? Root directory of the adress space?
-    const tsnInterface = await session.readVariableValue("ns=1;i=1000");
-    const macAddress = await session.readVariableValue("ns=1;i=1001");
-    console.log(" value = " , tsnInterface);
-    //const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
-        const maxAge = 0;
-        const nodeToRead = {
-          nodeId: "ns=1;i=1001",
-          attributeId: AttributeIds.Value
+    const streamId = await session.readVariableValue("ns=1;i=1001")
+    const endpointType = await session.readVariableValue("ns=1;i=1002");
+    const macAddress = await session.readVariableValue("ns=1;i=1003");
+    const interfaceName = await session.readVariableValue("ns=1;i=1004");
+    const redundancy = await session.readVariableValue("ns=1;i=1005");
+    const maxDelay = await session.readVariableValue("ns=1;i=1006");
+    const vlanCapable = await session.readVariableValue("ns=1;i=1007");
+    const streamIdTypes = await session.readVariableValue("ns=1;i=1008");
+    const identificationTypes = await session.readVariableValue("ns=1;i=1009");
+    
+
+    if(endpointType.value.value === "TALKER") {
+        //Talker has more variables received
+        const priority = await session.readVariableValue("ns=1;i=1010");
+        const intervalNumerator = await session.readVariableValue("ns=1;i=1011");
+        const intervalDenominator = await session.readVariableValue("ns=1;i=1012");
+        const maxFrameNumber = await session.readVariableValue("ns=1;i=1013");
+        const maxFrameSize = await session.readVariableValue("ns=1;i=1014");
+        const transmissionSelection = await session.readVariableValue("ns=1;i=1015");
+        const earliestTransmitOffset = await session.readVariableValue("ns=1;i=1016");
+        const latestTransmitOffset = await session.readVariableValue("ns=1;i=1017");
+        const jitter = await session.readVariableValue("ns=1;i=1018");
+
+        dataValue = {
+            streamId: streamId.value.value,
+            endpointType: endpointType.value.value,
+            macAddress: macAddress.value.value,
+            interfaceName: interfaceName.value.value,
+            redundancy: redundancy.value.value,
+            maxDelay: maxDelay.value.value,
+            vlanCapable: vlanCapable.value.value,
+            streamIdTypes: streamIdTypes.value.value,
+            identificationTypes: identificationTypes.value.value,
+            priority: priority.value.value,
+            intervalNumerator: intervalNumerator.value.value,
+            intervalDenominator: intervalDenominator.value.value,
+            maxFrameNumber: maxFrameNumber.value.value,
+            maxFrameSize: maxFrameSize.value.value,
+            transmissionSelection: transmissionSelection.value.value,
+            earliestTransmitOffset: earliestTransmitOffset.value.value,
+            latestTransmitOffset: latestTransmitOffset.value.value,
+            jitter: jitter.value.value
         };
-        const dataValue =  await session.read(nodeToRead, maxAge);
-        console.log(" value =" ,dataValue.value.value );
+    } else{
+        dataValue = {
+            streamId: streamId.value.value,
+            endpointType: endpointType.value.value,
+            macAddress: macAddress.value.value,
+            interfaceName: interfaceName.value.value,
+            redundancy: redundancy.value.value,
+            maxDelay: maxDelay.value.value,
+            vlanCapable: vlanCapable.value.value,
+            streamIdTypes: streamIdTypes.value.value,
+            identificationTypes: identificationTypes.value.value
+        };
+    }
+
+    
 
     logicHandler.receiveDataFromOpcUaServer(dataValue);
     //TODO Subscription to some content. Not yet considered
