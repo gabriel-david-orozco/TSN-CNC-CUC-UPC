@@ -6,6 +6,7 @@ Thats the reason of why we create our own YANG model based on the groups and typ
 
 The module is allocated on the ieee802-dot1q-tsn-types-upc-version@2018-02-15.yang file, and its tree structure is as follows:
 
+```
 module: ieee802-dot1q-tsn-types-upc-version
   +--rw tsn-uni
      +--rw stream-list* [stream-id]
@@ -32,3 +33,4 @@ module: ieee802-dot1q-tsn-types-upc-version
      +---x deploy-all-configuration
      +---x undeploy-all-configuration
      +---x delete-all-configuration
+```
