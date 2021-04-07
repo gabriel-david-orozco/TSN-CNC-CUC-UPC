@@ -1484,30 +1484,124 @@ module ieee802-dot1q-tsn-types-upc-version {
         container talker{
           uses group-talker;
         }
-list listeners-list{
+        list listeners-list{
           key index;
           leaf index{
             type uint16;
           }
           uses group-listener;
         }
+        action compute-request{
+            input{
+                leaf compute-at {
+                    type yang:date-and-time;
+                }
+            }
+            output{
+                 leaf compute-finished-at {
+                    type yang:date-and-time;
+                }
+            }
+        }
       }
-
+      container configuration{
+        config false;
+        uses group-status-stream;
+        container talker {
+          uses group-status-talker-listener;
+        }
+        list listener-list{
+          key index;
+          leaf index{
+            type uint16;
+          }
+          uses group-status-talker-listener;
+        }
+        action deploy-configuration{
+            input{
+                leaf compute-at {
+                    type yang:date-and-time;
+                }
+            }
+            output{
+                 leaf compute-finished-at {
+                    type yang:date-and-time;
+                }
+            }
+        }
+        action undeploy-configuration{
+            input{
+                leaf compute-at {
+                    type yang:date-and-time;
+                }
+            }
+            output{
+                 leaf compute-finished-at {
+                    type yang:date-and-time;
+                }
+            }
+        }
+        action delete-configuration{
+            input{
+                leaf compute-at {
+                    type yang:date-and-time;
+                }
+            }
+            output{
+                 leaf compute-finished-at {
+                    type yang:date-and-time;
+                }
+            }
+        }
+        }
+  }
+  action compute-all-configuration{
+    input{
+        leaf compute-at {
+            type yang:date-and-time;
+        }
+    }
+    output{
+         leaf compute-finished-at {
+            type yang:date-and-time;
+        }
     }
   }
-  container configuration{
-    config false;
-    uses group-status-stream;
-    container talker {
-      uses group-status-talker-listener;
-    }
-    list listener-list{
-      key index;
-      leaf index{
-        type uint16;
+    action deploy-all-configuration{
+      input{
+          leaf compute-at {
+              type yang:date-and-time;
+          }
       }
-      uses group-status-talker-listener;
-    }
+      output{
+           leaf compute-finished-at {
+              type yang:date-and-time;
+          }
+      }
   }
-
+    action undeploy-all-configuration{
+      input{
+          leaf compute-at {
+              type yang:date-and-time;
+          }
+      }
+      output{
+           leaf compute-finished-at {
+              type yang:date-and-time;
+          }
+      }
+  }
+    action delete-all-configuration{
+      input{
+          leaf compute-at {
+              type yang:date-and-time;
+          }
+      }
+      output{
+           leaf compute-finished-at {
+              type yang:date-and-time;
+          }
+      }
+  }
+  }
 }
