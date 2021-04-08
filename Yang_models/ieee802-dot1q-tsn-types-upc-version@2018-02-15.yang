@@ -1,10 +1,13 @@
 module ieee802-dot1q-tsn-types-upc-version {
 
-  namespace "urn:ieee:std:802.1Q:yang:ieee802-dot1q-tsn-types-upc-version";
+  namespace "http://example.com/ns/ieee802-dot1q-tsn-types-upc-version";
   prefix "dot1q-tsn-types";
 
   import ietf-inet-types { prefix "inet"; }
 
+  import ietf-yang-types {
+    prefix yang;
+  }
   organization
     "Institute of Electrical and Electronics Engineers";
 

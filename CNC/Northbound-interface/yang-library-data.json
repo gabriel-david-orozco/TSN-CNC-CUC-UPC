@@ -37,9 +37,9 @@
         "schema": "https://github.com/YangModels/yang/blob/master/standard/ietf/DRAFT/example-jukebox.yang"
       },
       {
-        "name": "ieee802-dot1q-tsn-types",
+        "name": "ieee802-dot1q-tsn-types-upc-version",
         "revision": "2018-02-15",
-        "namespace": "urn:ieee:std:802.1Q:yang:ieee802-dot1q-tsn-types",
+        "namespace": "urn:ietf:params:xml:ns:yang:ieee802-dot1q-tsn-types-upc-version",
         "conformance-type": "implement"
       }
     ]
