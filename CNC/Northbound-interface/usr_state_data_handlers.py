@@ -16,7 +16,8 @@ class JukeboxExampleStateHandler(StateDataContainerHandler):
         # artist_list_ii = self.ds.parse_ii("/example-jukebox:jukebox/library/artist", PathFormat.URL)
         # jb_artists = self.ds.get_data_root().goto(artist_list_ii).value
 
-        return len(jb_artists)
+        #return len(jb_artists)
+        return 1
 
 
 # This handler will generate /example-jukebox:jukebox/library/album-count node
