@@ -57,52 +57,59 @@ function checkStreamInformationReady(idStream) {
 
 function generateUniGroups(ctrTalker, ctrListener) {
         let streamInformation = {
-            'group-talker': {
-                'stream-rank': {
-                    'rank':talkerInformation[ctrTalker].priority 
-                },
-                'end-station-interfaces': [{
-                    'mac-address': talkerInformation[ctrTalker].macAddress,
-                    'interface-name': talkerInformation[ctrTalker].interfaceName
-                }],
-                'traffic-specification': {
-                    'interval': {
-                        'numerator': talkerInformation[ctrTalker].intervalNumerator,
-                        'denominator': talkerInformation[ctrTalker].intervalDenominator
-                    },
-                    'max-frames-per-interval': talkerInformation[ctrTalker].maxFrameNumber,
-                    'max-frame-size': talkerInformation[ctrTalker].maxFrameSize,
-                    'transmission-selection': talkerInformation[ctrTalker].transmissionSelection,
-                    'time-aware': {
-                        'earliest-transmit-offset': talkerInformation[ctrTalker].earliestTransmitOffset,
-                        'latest-transmit-offset': talkerInformation[ctrTalker].latestTransmitOffset,
-                        'jitter': talkerInformation[ctrTalker].jitter
+            "tsn-uni": {
+                "stream-list": [{
+                    "stream-id": talkerInformation[ctrTalker].streamId,
+                    "request": {
+                        'talker': {
+                            'stream-rank': {
+                                'rank':talkerInformation[ctrTalker].priority 
+                            },
+                            'end-station-interfaces': [{
+                                'mac-address': talkerInformation[ctrTalker].macAddress,
+                                'interface-name': talkerInformation[ctrTalker].interfaceName
+                            }],
+                            'traffic-specification': {
+                                'interval': {
+                                    'numerator': talkerInformation[ctrTalker].intervalNumerator,
+                                    'denominator': talkerInformation[ctrTalker].intervalDenominator
+                                },
+                                'max-frames-per-interval': talkerInformation[ctrTalker].maxFrameNumber,
+                                'max-frame-size': talkerInformation[ctrTalker].maxFrameSize,
+                                'transmission-selection': talkerInformation[ctrTalker].transmissionSelection,
+                                'time-aware': {
+                                    'earliest-transmit-offset': talkerInformation[ctrTalker].earliestTransmitOffset,
+                                    'latest-transmit-offset': talkerInformation[ctrTalker].latestTransmitOffset,
+                                    'jitter': talkerInformation[ctrTalker].jitter
+                                }
+                            },
+                            'user-to-network-requirements': {
+                                'num-seamless-trees': talkerInformation[ctrTalker].redundancy,
+                                'max-latency': talkerInformation[ctrTalker].maxDelay
+                            },
+                            'interface-capabilities': { 
+                                'vlan-tag-capable': talkerInformation[ctrTalker].vlanCapable,
+                                'cb-stream-iden-type-list': talkerInformation[ctrTalker].streamIdTypes,
+                                'cb-sequence-type-list': talkerInformation[ctrTalker].identificationTypes
+                            }
+                        },
+                        'listeners-list': [{
+                            'end-station-interfaces': [{
+                                'mac-address': listenerInformation[ctrListener].macAddress,
+                                'interface-name': listenerInformation[ctrListener].interfaceName
+                            }],
+                            'user-to-network-requirements': {
+                                'num-seamless-trees': listenerInformation[ctrListener].redundancy,
+                                'max-latency': listenerInformation[ctrListener].maxDelay
+                            },
+                            'interface-capabilities':  { 
+                                'vlan-tag-capable': listenerInformation[ctrListener].vlanCapable,
+                                'cb-stream-iden-type-list': listenerInformation[ctrListener].streamIdTypes,
+                                'cb-sequence-type-list': listenerInformation[ctrListener].identificationTypes
+                            }
+                        }]
                     }
-                },
-                'user-to-network-requirements': {
-                    'num-seamless-trees': talkerInformation[ctrTalker].redundancy,
-                    'max-latency': talkerInformation[ctrTalker].maxDelay
-                },
-                'interface-capabilities': { 
-                    'vlan-tag-capable': talkerInformation[ctrTalker].vlanCapable,
-                    'cb-stream-iden-type-list': talkerInformation[ctrTalker].streamIdTypes,
-                    'cb-sequence-type-list': talkerInformation[ctrTalker].identificationTypes
-                }
-            },
-            'group-listener': {
-                'end-station-interfaces': [{
-                    'mac-address': listenerInformation[ctrListener].macAddress,
-                    'interface-name': listenerInformation[ctrListener].interfaceName
-                }],
-                'user-to-network-requirements': {
-                    'num-seamless-trees': listenerInformation[ctrListener].redundancy,
-                    'max-latency': listenerInformation[ctrListener].maxDelay
-                },
-                'interface-capabilities':  { 
-                    'vlan-tag-capable': listenerInformation[ctrListener].vlanCapable,
-                    'cb-stream-iden-type-list': listenerInformation[ctrListener].streamIdTypes,
-                    'cb-sequence-type-list': listenerInformation[ctrListener].identificationTypes
-                }
+                }]
             }
         }
         return streamInformation
