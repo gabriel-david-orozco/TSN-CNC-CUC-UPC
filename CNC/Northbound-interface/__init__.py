@@ -1,25 +1,20 @@
-from pyspark import SparkContext, SparkConf
-import time
-sc = SparkContext(appName="word_counter")
-for i in range(20):
-    #lineas = sc.textFile("/quijote.txt", minPartitions=2)
-    lineas = sc.textFile("/home/quijote.txt",minPartitions=2).flatMap(lambda line: line.split(" "))
-    #lineas = sc.textFile("/home/words.txt")
-    #Se extrae las palabras del texto y se cuentan
-
-    # Para empezar a contar el tiempo
-
-    start_time = time.time()
-    print("---------------------------Time counter has started---------------------------")
-    #contarPalabras = lineas.flatMap(lambda linea: linea.split(" ")).countByValue()
-    contarPalabras = lineas.map(lambda word: (word, 1)).reduceByKey(lambda v1,v2:v1 +v2)
-    #Se muestra las palabras con la cantidad de veces que tiene su aparición
-
-    counted_list = contarPalabras.collect()
-    #for palabra, contador in counted_list.items():
-    #    print("{} : {}".format(palabra, contador))
-    print(counted_list)
-    file = open('record_3_machines.txt','a')
-    execution_time = str(time.time()-start_time)
-    file.write(execution_time +'\n')
-    print(f"El programa tardo {(time.time()-start_time)} segundos en su ejecucion")
+8,644022941589355
+8,020892858505249
+7,955399036407471
+8,213598489761353
+7,974985599517822
+8,429621458053589
+8,086480379104614
+8,560056924819946
+7,911274433135986
+8,04276704788208
+7,966715574264526
+7,941422939300537
+8,157851696014404
+8,864555358886719
+7,901469707489014
+8,144530773162842
+8,60604977607727
+7,997637510299683
+8,098408699035645
+8,221703290939331
