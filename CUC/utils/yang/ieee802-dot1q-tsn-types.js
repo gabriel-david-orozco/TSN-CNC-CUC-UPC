@@ -1,22 +1,19 @@
 const schema = `
-module ieee802-dot1q-tsn-types {
+module ieee802-dot1q-tsn-types-upc-version {
 
-    yang-version 1;
+  namespace "http://example.com/ns/ieee802-dot1q-tsn-types-upc-version";
+  prefix "dot1q-tsn-types";
 
-    namespace
-      "urn:ieee:std:802.1Q:yang:ieee802-dot1q-tsn-types";
+  import ietf-inet-types { prefix "inet"; }
 
-    prefix dot1q-tsn-types;
+  import ietf-yang-types {
+    prefix yang;
+  }
+  organization
+    "Institute of Electrical and Electronics Engineers";
 
-    import ietf-inet-types {
-      prefix inet;
-    }
-
-    organization
-      "Institute of Electrical and Electronics Engineers";
-
-    contact
-      "WG-URL: http://ieee802.org/1/
+  contact
+    "WG-URL: http://ieee802.org/1/
     WG-EMail: stds-802-1@ieee.org
 
     Contact: IEEE 802.1 Working Group Chair
@@ -29,28 +26,25 @@ module ieee802-dot1q-tsn-types {
 
     E-mail: stds-802-1@ieee.org";
 
-    description
-      "Common typedefs and groupings for TSN user/network configuration
+  description
+    "Common typedefs and groupings for TSN user/network configuration
     in IEEE Std 802.1Q.";
 
-    revision "2018-02-15" {
-      description
-        "Initial revision specified in 46.3 of IEEE Std 802.1Qcc-2018,
+  revision 2018-02-15 {
+    description
+      "Initial revision specified in 46.3 of IEEE Std 802.1Qcc-2018,
       Amendment: Stream Reservation Protocol (SRP) Enhancements
       and Performance Improvements.";
-      reference
-        "46.3 of IEEE Std 802.1Qcc-2018";
+    reference
+      "46.3 of IEEE Std 802.1Qcc-2018";
+  }
 
+  typedef stream-id-type {
+    type string {
+      pattern '[0-9a-fA-F]{2}(-[0-9a-fA-F]{2}){5}:[0-9a-fA-F]{2}-[0-9a-fA-F]{2}';
     }
-
-
-    typedef stream-id-type {
-      type string {
-        pattern
-          '[0-9a-fA-F]{2}(-[0-9a-fA-F]{2}){5}:[0-9a-fA-F]{2}-[0-9a-fA-F]{2}';
-      }
-      description
-        "This typedef specifies a Stream ID, a unique identifier
+    description
+      "This typedef specifies a Stream ID, a unique identifier
       of the Stream's configuration, used by protocols in the
       network to associate the user's Stream with TSN resources.
 
@@ -62,14 +56,14 @@ module ieee802-dot1q-tsn-types {
         the Talker sourcing the Stream to the bridged network.
         The entire range of MAC addresses are acceptable.
 
-        NOTE 1 — The MAC address component of the StreamID can,
+        NOTE 1 â€” The MAC address component of the StreamID can,
         but does not necessarily, have the same value as the
         source_address parameter of any frame in the actual
         data Stream. For example, the Stream ID can be assigned
         by a TSN CUC (see 46.1.3.3 of IEEE Std 802.1Qcc-2018),
         using a pool of MAC addresses that the TSN CUC maintains.
 
-        NOTE 2 — If the MAC addresses used to construct
+        NOTE 2 â€” If the MAC addresses used to construct
         Stream IDs are not unique within the network, duplicate
         Stream IDs can be generated, with unpredictable results.
 
@@ -94,26 +88,23 @@ module ieee802-dot1q-tsn-types {
       configurations (using group-talker and group-listener)
       and a list of Stream status (using group-status-stream
       and group-status-talker-listener).";
-      reference
-        "46.2.3.1 of IEEE Std 802.1Qcc-2018";
+    reference
+      "46.2.3.1 of IEEE Std 802.1Qcc-2018";
+  }
 
-    }
-
-    grouping group-interface-id {
-      description
-        "This YANG grouping specifies the identification of
+  grouping group-interface-id {
+    description
+      "This YANG grouping specifies the identification of
       a distinct point of attachment (interface) in a station
       (end station or Bridge).";
-      reference
-        "46.2.3.3 of IEEE Std 802.1Qcc-2018";
-
-      leaf mac-address {
-        type string {
-          pattern
-            '[0-9a-fA-F]{2}(-[0-9a-fA-F]{2}){5}';
-        }
-        description
-          "mac-address is the EUI-48 MAC address (IEEE Std 802)
+    reference
+      "46.2.3.3 of IEEE Std 802.1Qcc-2018";
+    leaf mac-address {
+      type string {
+        pattern '[0-9a-fA-F]{2}(-[0-9a-fA-F]{2}){5}';
+      }
+      description
+        "mac-address is the EUI-48 MAC address (IEEE Std 802)
         of the interface in the station (end station or Bridge).
         This MAC address uniquely identifies the station within
         the local network.
@@ -121,22 +112,21 @@ module ieee802-dot1q-tsn-types {
         mac-address shall be included in an instance of
         a container using group-interface-id.
 
-        NOTE — This MAC address can be discovered in the
+        NOTE â€” This MAC address can be discovered in the
         physical topology using protocols such as
         IEEE Std 802.1AB (LLDP). LLDP supports MAC address
-        as a subtype for the station’s Chassis ID and Port ID.
+        as a subtype for the stationâ€™s Chassis ID and Port ID.
         If the station does not use MAC address for its LLDP IDs,
         remote management can be used to associate this mac-address
         to the values provided in the LLDP IDs.
 
         The string uses the hexadecimal representation
         specified in IEEE Std 802 (i.e. canonical format).";
-      }
-
-      leaf interface-name {
-        type string;
-        description
-          "interface-name is the name of the interface that is
+    }
+    leaf interface-name {
+      type string;
+      description
+        "interface-name is the name of the interface that is
         assigned locally by the station (end station or Bridge).
 
         interface-name may be included in an instance of
@@ -156,30 +146,30 @@ module ieee802-dot1q-tsn-types {
 
         When YANG is used for management of the station,
         interface-name is the interface name that serves
-        as the key for the station’s interface list (RFC7223).
+        as the key for the stationâ€™s interface list (RFC7223).
 
-        NOTE 1 — The TSN CNC is typically located in a different
+        NOTE 1 â€” The TSN CNC is typically located in a different
         physical product than the station identified by this
         group-interface-id. Since the interface-name is assigned
         locally by the identified station, it is possible that
-        the station’s product will change interface-name in a
+        the stationâ€™s product will change interface-name in a
         manner that the TSN CNC cannot detect. For example,
         RFC7223 mentions that the YANG interface name can change
         when a physical attachment point is inserted or removed.
 
-        NOTE 2 — This interface name can be discovered in the
+        NOTE 2 â€” This interface name can be discovered in the
         physical topology using protocols such as
         IEEE Std 802.1AB (LLDP). LLDP supports interface name
         as a subtype for its Port ID. If the station does not
         use interface name for its LLDP Port ID, remote management
         can be used to associate this interface-name to the values
         provided in the LLDP Port ID.";
-      }
-    }  // grouping group-interface-id
+    }
+  }
 
-    grouping group-ieee802-mac-addresses {
-      description
-        "This YANG grouping specifies the pair of
+  grouping group-ieee802-mac-addresses {
+    description
+      "This YANG grouping specifies the pair of
       IEEE 802 MAC addresses for Stream identification.
 
       The use of these fields for Stream identification
@@ -188,16 +178,14 @@ module ieee802-dot1q-tsn-types {
       If inconsistency arises between this specification
       and IEEE Std 802.1CB, IEEE Std 802.1CB takes
       precedence.";
-      reference
-        "46.2.3.4.1 of IEEE Std 802.1Qcc-2018";
-
-      leaf destination-mac-address {
-        type string {
-          pattern
-            '[0-9a-fA-F]{2}(-[0-9a-fA-F]{2}){5}';
-        }
-        description
-          "Destination MAC address.
+    reference
+      "46.2.3.4.1 of IEEE Std 802.1Qcc-2018";
+    leaf destination-mac-address {
+      type string {
+        pattern '[0-9a-fA-F]{2}(-[0-9a-fA-F]{2}){5}';
+      }
+      description
+        "Destination MAC address.
 
         An address of all 1's specifies that
         the destination MAC address is ignored for
@@ -205,15 +193,13 @@ module ieee802-dot1q-tsn-types {
 
         The string uses the hexadecimal representation
         specified in IEEE Std 802 (i.e. canonical format).";
+    }
+    leaf source-mac-address {
+      type string {
+        pattern '[0-9a-fA-F]{2}(-[0-9a-fA-F]{2}){5}';
       }
-
-      leaf source-mac-address {
-        type string {
-          pattern
-            '[0-9a-fA-F]{2}(-[0-9a-fA-F]{2}){5}';
-        }
-        description
-          "Source MAC address.
+      description
+        "Source MAC address.
 
         An address of all 1's specifies that
         the source MAC address is ignored for
@@ -221,12 +207,12 @@ module ieee802-dot1q-tsn-types {
 
         The string uses the hexadecimal representation
         specified in IEEE Std 802 (i.e. canonical format).";
-      }
-    }  // grouping group-ieee802-mac-addresses
+    }
+  }
 
-    grouping group-ieee802-vlan-tag {
-      description
-        "This YANG grouping specifies a
+  grouping group-ieee802-vlan-tag {
+    description
+      "This YANG grouping specifies a
       customer VLAN Tag (C-TAG of clause 9)
       for Stream identification.
 
@@ -240,37 +226,35 @@ module ieee802-dot1q-tsn-types {
       If inconsistency arises between this specification
       and IEEE Std 802.1CB, IEEE Std 802.1CB takes
       precedence.";
-      reference
-        "46.2.3.4.2 of IEEE Std 802.1Qcc-2018";
-
-      leaf priority-code-point {
-        type uint8 {
-          range "0 .. 7";
-        }
-        description
-          "Priority Code Point (PCP) field.
+    reference
+      "46.2.3.4.2 of IEEE Std 802.1Qcc-2018";
+    leaf priority-code-point {
+      type uint8 {
+        range "0 .. 7"; // 3 bits
+      }
+      description
+        "Priority Code Point (PCP) field.
 
         The priority-code-point is not used to
         identify the Stream, but it does
         identify a traffic class (queue) in
         Bridges.";
+    }
+    leaf vlan-id {
+      type uint16 {
+        range "0 .. 4095"; // 12 bits
       }
-
-      leaf vlan-id {
-        type uint16 {
-          range "0 .. 4095";
-        }
-        description
-          "VLAN ID (VID) field.
+      description
+        "VLAN ID (VID) field.
 
         If only the priority-code-point is known,
         the vlan-id is specified as 0.";
-      }
-    }  // grouping group-ieee802-vlan-tag
+    }
+  }
 
-    grouping group-ipv4-tuple {
-      description
-        "This YANG grouping specifies parameters
+  grouping group-ipv4-tuple {
+    description
+      "This YANG grouping specifies parameters
       to identify an IPv4 (RFC791) Stream.
 
       The use of these fields for Stream identification
@@ -279,67 +263,61 @@ module ieee802-dot1q-tsn-types {
       If inconsistency arises between this specification
       and IEEE Std 802.1CB, IEEE Std 802.1CB takes
       precedence.";
-      reference
-        "46.2.3.4.3 of IEEE Std 802.1Qcc-2018";
-
-      leaf source-ip-address {
-        type inet:ipv4-address;
-        description
-          "Source IPv4 address.
+    reference
+      "46.2.3.4.3 of IEEE Std 802.1Qcc-2018";
+    leaf source-ip-address {
+      type inet:ipv4-address;
+      description
+        "Source IPv4 address.
 
         An address of all 0's specifies that
         the IP source address is ignored for
         purposes of Stream identification.";
-      }
-
-      leaf destination-ip-address {
-        type inet:ipv4-address;
-        description
-          "Destination IPv4 address.";
-      }
-
-      leaf dscp {
-        type uint8;
-        description
-          "Differentiated services code
+    }
+    leaf destination-ip-address {
+      type inet:ipv4-address;
+      description
+        "Destination IPv4 address.";
+    }
+    leaf dscp {
+      type uint8;
+      description
+        "Differentiated services code
         point, DSCP (RFC2474).
 
         A value of 64 decimal specifies that
         the DSCP is ignored for
         purposes of Stream identification.";
-      }
+    }
+    leaf protocol {
+      type uint16;
+      description
+        "IPv4 Protocol (e.g. UDP).
 
-      leaf protocol {
-        type uint16;
-        description
-          "IPv4 Protocol (e.g. UDP).
-
-        The special value of all 1’s (FFFF hex)
-        represents ’None’, meaning that
+        The special value of all 1â€™s (FFFF hex)
+        represents â€™Noneâ€™, meaning that
         protocol, source-port, and
         destination-port are ignored for
         purposes of Stream identification.
 
-        For any value other than all 1’s, the
+        For any value other than all 1â€™s, the
         lower octet is used to match IPv4 Protocol.";
-      }
-
-      leaf source-port {
-        type uint16;
-        description
-          "This matches the source port of the protocol.";
-      }
-
-      leaf destination-port {
-        type uint16;
-        description
-          "This matches the destination port of the protocol.";
-      }
-    }  // grouping group-ipv4-tuple
-
-    grouping group-ipv6-tuple {
+    }
+    leaf source-port {
+      type uint16;
       description
-        "This YANG grouping specifies parameters
+        "This matches the source port of the protocol.";
+    }
+    leaf destination-port {
+      type uint16;
+      description
+        "This matches the destination port of the protocol.";
+    }
+  }
+
+  grouping group-ipv6-tuple {
+    description
+      "This YANG grouping specifies parameters
       to identify an IPv6 (RFC2460) Stream.
 
       The use of these fields for Stream identification
@@ -348,80 +326,73 @@ module ieee802-dot1q-tsn-types {
       If inconsistency arises between this specification
       and IEEE Std 802.1CB, IEEE Std 802.1CB takes
       precedence.";
-      reference
-        "46.2.3.4.4 of IEEE Std 802.1Qcc-2018";
-
-      leaf source-ip-address {
-        type inet:ipv6-address;
-        description
-          "Source IPv6 address.
+    reference
+      "46.2.3.4.4 of IEEE Std 802.1Qcc-2018";
+    leaf source-ip-address {
+      type inet:ipv6-address;
+      description
+        "Source IPv6 address.
 
         An address of all 0's specifies that
         the IP source address is ignored for
         purposes of Stream identification.";
-      }
-
-      leaf destination-ip-address {
-        type inet:ipv6-address;
-        description
-          "Destination IPv6 address.";
-      }
-
-      leaf dscp {
-        type uint8;
-        description
-          "Differentiated services code
+    }
+    leaf destination-ip-address {
+      type inet:ipv6-address;
+      description
+        "Destination IPv6 address.";
+    }
+    leaf dscp {
+      type uint8;
+      description
+        "Differentiated services code
         point, DSCP (RFC2474).
 
         A value of 64 decimal specifies that
         the DSCP is ignored for
         purposes of Stream identification.";
-      }
+    }
+    leaf protocol {
+      type uint16;
+      description
+        "IPv6 Next Header (e.g. UDP).
 
-      leaf protocol {
-        type uint16;
-        description
-          "IPv6 Next Header (e.g. UDP).
-
-        The special value of all 1’s (FFFF hex)
-        represents ’None’, meaning that
+        The special value of all 1â€™s (FFFF hex)
+        represents â€™Noneâ€™, meaning that
         protocol, source-port, and
         destination-port are ignored for
         purposes of Stream identification.
 
-        For any value other than all 1’s, the
+        For any value other than all 1â€™s, the
         lower octet is used to match IPv6 Next Header.";
-      }
-
-      leaf source-port {
-        type uint16;
-        description
-          "This matches the source port of the protocol.";
-      }
-
-      leaf destination-port {
-        type uint16;
-        description
-          "This matches the destination port of the protocol.";
-      }
-    }  // grouping group-ipv6-tuple
-
-    grouping group-user-to-network-requirements {
+    }
+    leaf source-port {
+      type uint16;
       description
-        "This YANG grouping specifies specifies user requirements
+        "This matches the source port of the protocol.";
+    }
+    leaf destination-port {
+      type uint16;
+      description
+        "This matches the destination port of the protocol.";
+    }
+  }
+
+  grouping group-user-to-network-requirements {
+    description
+      "This YANG grouping specifies specifies user requirements
       for the Stream, such as latency and redundancy.
 
       The network (e.g. CNC) will merge
       all user-to-network-requirements for a Stream
       to ensure that all requirements are met.";
-      reference
-        "46.2.3.6 of IEEE Std 802.1Qcc-2018";
-
-      leaf num-seamless-trees {
-        type uint8;
-        default "1";
-        description
-          "num-seamless-trees specifies the number
+    reference
+      "46.2.3.6 of IEEE Std 802.1Qcc-2018";
+    leaf num-seamless-trees {
+      type uint8;
+      default "1";
+      description
+        "num-seamless-trees specifies the number
         of trees that the network will configure to
         deliver seamless redundancy for the Stream.
 
@@ -443,7 +414,7 @@ module ieee802-dot1q-tsn-types {
         tree is disjoint from other trees, in that the
         network evaluates the physical topology to avoid
         sharing the same Bridge and links in each
-        tree’s paths. This computation of disjoint trees
+        treeâ€™s paths. This computation of disjoint trees
         is maximal, in that shared Bridges and links
         are avoided to the maximum extent allowed
         by the physical topology. For example, if a
@@ -452,7 +423,7 @@ module ieee802-dot1q-tsn-types {
         share that link to the Listener.
 
         When num-seamless-trees is greater than one,
-        the transfer of the Stream’s data frames
+        the transfer of the Streamâ€™s data frames
         shall use a seamless redundancy standard, such as
         IEEE Std 802.1CB. When a link shared by multiple trees
         diverges to multiple disjoint links, the
@@ -482,16 +453,14 @@ module ieee802-dot1q-tsn-types {
         If group-user-to-network-requirements is not
         provided by the Talker or Listener, the network
         shall use the default value of one for this leaf.";
-        reference
-          "46.2.3.6.1 of IEEE Std 802.1Qcc-2018";
-
-      }
-
-      leaf max-latency {
-        type uint32;
-        default "0";
-        description
-          "Maximum latency from Talker to
+      reference
+        "46.2.3.6.1 of IEEE Std 802.1Qcc-2018";
+    }
+    leaf max-latency {
+      type uint32;
+      default "0";
+      description
+        "Maximum latency from Talker to
         Listener(s) for a single frame of the Stream.
 
         max-latency is specified as an integer number
@@ -499,14 +468,14 @@ module ieee802-dot1q-tsn-types {
 
         Latency shall use the definition of 3.102,
         with additional context as follows:
-        The ’known reference point in the frame’ is
+        The â€™known reference point in the frameâ€™ is
         the message timestamp point specified in
         IEEE Std 802.1AS for various media
-        (i.e. start of the frame). The ’first point’
+        (i.e. start of the frame). The â€™first pointâ€™
         is in the Talker, at the reference plane
         marking the boundary between the network
         media and PHY (see IEEE Std 802.1AS).
-        The ’second point’ is in the Listener,
+        The â€™second pointâ€™ is in the Listener,
         at the reference plane marking the boundary
         between the network media and PHY.
 
@@ -532,9 +501,9 @@ module ieee802-dot1q-tsn-types {
         Stream, such that any subsequent increase in
         latency beyond that value causes the Stream to fail.
 
-        The assumption for when the ’first point’ occurs
+        The assumption for when the â€™first pointâ€™ occurs
         in the Talker depends on the presence of the
-        time-aware container in the Talker’s
+        time-aware container in the Talkerâ€™s
         traffic-specification.
 
         When time-aware is not present:
@@ -544,42 +513,41 @@ module ieee802-dot1q-tsn-types {
 
         When time-aware is present:
 
-          The ’first point’ is assumed to occur
+          The â€™first pointâ€™ is assumed to occur
           at the start of traffic-specification.interval,
-          as if the Talker’s offsets (earliest-transmit-offset
+          as if the Talkerâ€™s offsets (earliest-transmit-offset
           and latest-transmit-offset) are both zero.
-          The Talker’s offsets are not typically zero,
+          The Talkerâ€™s offsets are not typically zero,
           but use of the start of interval for purposes
           of max-latency allows the Listener(s) to
           schedule their application independently
-          from the Talker’s offset configuration.
+          from the Talkerâ€™s offset configuration.
 
           The Listener determines max-latency
           based on its scheduling of a read
           function in the application. Nevertheless,
-          the time from frame reception (i.e. ’second
-          point’) to execution of the read function
+          the time from frame reception (i.e. â€™second
+          pointâ€™) to execution of the read function
           is in the user scope, and therefore
           not included in max-latency.
 
           max-latency can be set to
-          a value greater than the Talker’s
+          a value greater than the Talkerâ€™s
           interval, in order to specify a
           longer latency requirement. For example,
-          if the Talker’s interval is 500 microsec,
+          if the Talkerâ€™s interval is 500 microsec,
           and max-latency is 700 microsec, the Listener
           receives the frame no later than
           200 microsec into the interval that follows
-          the Talker’s interval.";
-        reference
-          "46.2.3.6.2 of IEEE Std 802.1Qcc-2018";
+          the Talkerâ€™s interval.";
+      reference
+        "46.2.3.6.2 of IEEE Std 802.1Qcc-2018";
+    }
+  }
 
-      }
-    }  // grouping group-user-to-network-requirements
-
-    grouping group-interface-capabilities {
-      description
-        "This YANG grouping specifies the network
+  grouping group-interface-capabilities {
+    description
+      "This YANG grouping specifies the network
       capabilities of all interfaces (Ports) contained
       in end-station-interfaces.
 
@@ -594,31 +562,30 @@ module ieee802-dot1q-tsn-types {
       Use of multiple entries in end-station-interfaces is intended
       for network capabilities that span multiple interfaces
       (e.g. seamless redundancy).";
-      reference
-        "46.2.3.7 of IEEE Std 802.1Qcc-2018";
-
-      leaf vlan-tag-capable {
-        type boolean;
-        default "false";
-        description
-          "When vlan-tag-capable is true, the interface supports
+    reference
+      "46.2.3.7 of IEEE Std 802.1Qcc-2018";
+    leaf vlan-tag-capable {
+      type boolean;
+      default "false";
+      description
+        "When vlan-tag-capable is true, the interface supports
         the ability to tag/untag frames using a
         Customer VLAN Tag (C-TAG of clause 9)
         provided by the network.
 
-        For a Talker, the network’s tag replaces the
+        For a Talker, the networkâ€™s tag replaces the
         tag specified by the data-frame-specification.
         If the data-frame-specification is untagged
-        (no group-ieee802-vlan-tag), the network’s tag is
+        (no group-ieee802-vlan-tag), the networkâ€™s tag is
         inserted in the frame as it passes through the
         interface.
 
-        For a Listener, the user’s tag from
+        For a Listener, the userâ€™s tag from
         the data-frame-specification replaces the
-        network’s tag as the frame passes
+        networkâ€™s tag as the frame passes
         through the interface. If the data-frame-specification
         is untagged (no group-ieee802-vlan-tag), the
-        network’s tag is removed from the frame as it
+        networkâ€™s tag is removed from the frame as it
         passes through the interface.
 
         If the end station supports more than one interface
@@ -637,15 +604,13 @@ module ieee802-dot1q-tsn-types {
         If interface-capabilities is not provided by the Talker
         or Listener, the network shall use the default
         value of false for this leaf.";
-        reference
-          "46.2.3.7.1 of IEEE Std 802.1Qcc-2018";
-
-      }
-
-      leaf-list cb-stream-iden-type-list {
-        type uint32;
-        description
-          "cb-stream-iden-type-list provides a list of the
+      reference
+        "46.2.3.7.1 of IEEE Std 802.1Qcc-2018";
+    }
+    leaf-list cb-stream-iden-type-list {
+      type uint32;
+      description
+        "cb-stream-iden-type-list provides a list of the
         supported Stream Identification types as specified
         in IEEE Std 802.1CB.
 
@@ -654,7 +619,7 @@ module ieee802-dot1q-tsn-types {
         contain the OUI/CID, and the lowest octet contains
         the type number.
 
-        NOTE —  If the Talker/Listener end system supports
+        NOTE â€”  If the Talker/Listener end system supports
         IEEE Std 802.1CB, Null Stream identification is
         required, and that Stream Identification type is
         included in this list. If the Talker/Listener end
@@ -674,15 +639,13 @@ module ieee802-dot1q-tsn-types {
         If interface-capabilities is not provided within
         group-talker or group-listener, the network shall use an empty
         list as the default value for this element.";
-        reference
-          "46.2.3.7.2 of IEEE Std 802.1Qcc-2018";
-
-      }
-
-      leaf-list cb-sequence-type-list {
-        type uint32;
-        description
-          "cb-sequence-type-list provides a list of the supported
+      reference
+        "46.2.3.7.2 of IEEE Std 802.1Qcc-2018";
+    }
+    leaf-list cb-sequence-type-list {
+      type uint32;
+      description
+        "cb-sequence-type-list provides a list of the supported
         Sequence Encode/Decode types as specified in
         IEEE Std 802.1CB.
 
@@ -693,26 +656,24 @@ module ieee802-dot1q-tsn-types {
         If interface-capabilities is not provided within
         group-talker or group-listener, the network shall use an empty
         list as the default value for this element.";
-        reference
-          "46.2.3.7.3 of IEEE Std 802.1Qcc-2018";
+      reference
+        "46.2.3.7.3 of IEEE Std 802.1Qcc-2018";
+    }
+  }
 
-      }
-    }  // grouping group-interface-capabilities
-
-    grouping group-interface-configuration {
-      description
-        "This YANG grouping provides configuration of
+  grouping group-interface-configuration {
+    description
+      "This YANG grouping provides configuration of
       interfaces in the Talker/Listener. This configuration
-      assists the network in meeting the Stream’s requirements.
+      assists the network in meeting the Streamâ€™s requirements.
       The interface-configuration meets the capabilities of
       the interface as provided in interface-capabilities.";
-      reference
-        "46.2.5.3 of IEEE Std 802.1Qcc-2018";
-
-      list interface-list {
-        key "mac-address interface-name";
-        description
-          "A distinct configuration is provided for
+    reference
+      "46.2.5.3 of IEEE Std 802.1Qcc-2018";
+    list interface-list {
+      key "mac-address interface-name";
+      description
+        "A distinct configuration is provided for
         each interface in the Talker/Listener (even if
         multiple interfaces use the same configuration).
         Each entry in this interface-list consists
@@ -727,32 +688,30 @@ module ieee802-dot1q-tsn-types {
 
         Since the interface-name leaf is optional, empty string
         can be used for its key value.";
-        uses group-interface-id;
-
-        list config-list {
-          key "index";
-          description
-            "List of configuration values for
+      uses group-interface-id;
+      list config-list {
+        key "index";
+        description
+          "List of configuration values for
           the interface.";
-          leaf index {
-            type uint8;
-            description
-              "This index is provided in order to
+        leaf index {
+          type uint8;
+          description
+            "This index is provided in order to
             provide a unique key per list entry.
             The value of index for each entry
             shall be unique (but not necessarily
             contiguous).";
-          }
-
-          choice config-value {
-            description
-              "One of the following choices is
+        }
+        choice config-value {
+          description
+            "One of the following choices is
             provided for each configuration value.
             Each container name acts as the case name
             for the choice.";
-            container ieee802-mac-addresses {
-              description
-                "Source and destination MAC addresses
+          container ieee802-mac-addresses {
+            description
+              "Source and destination MAC addresses
               that apply to the network side of
               the user/network boundary.
 
@@ -774,14 +733,13 @@ module ieee802-dot1q-tsn-types {
               and VLAN Stream identification
               is provided in cb-stream-iden-type-list
               of interface-capabilities.";
-              reference
-                "46.2.5.3.1 of IEEE Std 802.1Qcc-2018";
-
-              uses group-ieee802-mac-addresses;
-            }  // container ieee802-mac-addresses
-            container ieee802-vlan-tag {
-              description
-                "Customer VLAN Tag (C-TAG of clause 9)
+            reference
+              "46.2.5.3.1 of IEEE Std 802.1Qcc-2018";
+            uses group-ieee802-mac-addresses;
+          }
+          container ieee802-vlan-tag {
+            description
+              "Customer VLAN Tag (C-TAG of clause 9)
               that applies to the network side of
               the user/network boundary.
 
@@ -791,7 +749,7 @@ module ieee802-dot1q-tsn-types {
 
               If the user provides a VLAN ID in the
               ieee802-vlan-tag of data-frame-specification,
-              the Stream’s data frames are assumed to
+              the Streamâ€™s data frames are assumed to
               be limited to the active topology for
               that VLAN ID. Therefore, if the network
               uses a different VLAN ID in
@@ -802,14 +760,13 @@ module ieee802-dot1q-tsn-types {
               This configuration value is not provided
               unless vlan-tag-capable of
               interface-capabilities is true.";
-              reference
-                "46.2.5.3.2 of IEEE Std 802.1Qcc-2018";
-
-              uses group-ieee802-vlan-tag;
-            }  // container ieee802-vlan-tag
-            container ipv4-tuple {
-              description
-                "IPv4 identification that applies to the
+            reference
+              "46.2.5.3.2 of IEEE Std 802.1Qcc-2018";
+            uses group-ieee802-vlan-tag;
+          }
+          container ipv4-tuple {
+            description
+              "IPv4 identification that applies to the
               network side of the user/network
               boundary.
 
@@ -818,14 +775,13 @@ module ieee802-dot1q-tsn-types {
               and a value for IP Stream identification
               is provided in cb-stream-iden-type-list
               of interface-capabilities.";
-              reference
-                "46.2.5.3.3 of IEEE Std 802.1Qcc-2018";
-
-              uses group-ipv4-tuple;
-            }  // container ipv4-tuple
-            container ipv6-tuple {
-              description
-                "IPv6 identification that applies to the
+            reference
+              "46.2.5.3.3 of IEEE Std 802.1Qcc-2018";
+            uses group-ipv4-tuple;
+          }
+          container ipv6-tuple {
+            description
+              "IPv6 identification that applies to the
               network side of the user/network
               boundary.
 
@@ -834,15 +790,14 @@ module ieee802-dot1q-tsn-types {
               and a value for IP Stream identification
               is provided in cb-stream-iden-type-list
               of interface-capabilities.";
-              reference
-                "46.2.5.3.4 of IEEE Std 802.1Qcc-2018";
-
-              uses group-ipv6-tuple;
-            }  // container ipv6-tuple
-            leaf time-aware-offset {
-              type uint32;
-              description
-                "If the time-aware container
+            reference
+              "46.2.5.3.4 of IEEE Std 802.1Qcc-2018";
+            uses group-ipv6-tuple;
+          }
+          leaf time-aware-offset {
+            type uint32;
+            description
+            "If the time-aware container
             is present in the
             traffic-specification of the Talker,
             this config-value shall be provided
@@ -864,47 +819,45 @@ module ieee802-dot1q-tsn-types {
             The network returns a value between
             earliest-transmit-offset
             and latest-transmit-offset of the
-            Talker’s traffic-specification.
+            Talkerâ€™s traffic-specification.
             The value is expressed as
             nanoseconds after the start
-            of the Talker’s interval.";
-              reference
-                "46.2.5.3.5 of IEEE Std 802.1Qcc-2018";
+            of the Talkerâ€™s interval.";
+            reference
+              "46.2.5.3.5 of IEEE Std 802.1Qcc-2018";
+          }
+        }
+      }
+    }
+  }
 
-            }
-          }  // choice config-value
-        }  // list config-list
-      }  // list interface-list
-    }  // grouping group-interface-configuration
-
-    grouping group-talker {
-      description
-        "This YANG grouping specifies:
-      - Talker’s behavior for Stream (how/when transmitted)
-      - Talker’s requirements from the network
-      - TSN capabilities of the Talker’s interface(s)
+  grouping group-talker {
+    description
+      "This YANG grouping specifies:
+      - Talkerâ€™s behavior for Stream (how/when transmitted)
+      - Talkerâ€™s requirements from the network
+      - TSN capabilities of the Talkerâ€™s interface(s)
 
       In the fully centralized model of TSN configuration,
       this grouping originates from the CUC, and
       is delivered to the CNC.";
-      reference
-        "46.2.3 of IEEE Std 802.1Qcc-2018";
+    reference
+      "46.2.3 of IEEE Std 802.1Qcc-2018";
 
-      container stream-rank {
-        description
-          "Rank of this Stream's configuration relative to other
+    container stream-rank {
+      description
+        "Rank of this Stream's configuration relative to other
         Streams in the network. This rank is used to determine
         success/failure of Stream resource configuration,
-        and it is unrelated to the Stream’s data.";
-        reference
-          "46.2.3.2 of IEEE Std 802.1Qcc-2018";
-
-        leaf rank {
-          type uint8;
-          description
-            "The Rank is used by the network to decide which Streams
+        and it is unrelated to the Streamâ€™s data.";
+      reference
+        "46.2.3.2 of IEEE Std 802.1Qcc-2018";
+      leaf rank {
+        type uint8;
+        description
+          "The Rank is used by the network to decide which Streams
           can and cannot exist when TSN resources reach their limit.
-          If a Bridge’s Port becomes oversubscribed (e.g. network
+          If a Bridgeâ€™s Port becomes oversubscribed (e.g. network
           reconfiguration, IEEE 802.11 bandwidth reduction), the
           Rank is used to help determine which Streams can be
           dropped (i.e. removed from Bridge configuration).
@@ -916,7 +869,7 @@ module ieee802-dot1q-tsn-types {
           emergency traffic, and the Rank value of one is
           intended for non-emergency traffic.
 
-          NOTE — It is expected that higher layer applications
+          NOTE â€” It is expected that higher layer applications
           and protocols can use the Rank to indicate the
           relative importance of Streams based on user
           preferences. Those user preferences are expressed
@@ -932,17 +885,16 @@ module ieee802-dot1q-tsn-types {
           that carries audio Streams for fire safety
           announcements, all applications are likely to
           agree that those Streams use Rank of zero.";
-          reference
-            "46.2.3.2.1 of IEEE Std 802.1Qcc-2018";
+        reference
+          "46.2.3.2.1 of IEEE Std 802.1Qcc-2018";
+      }
+    }
 
-        }
-      }  // container stream-rank
-
-      list end-station-interfaces {
-        key "mac-address interface-name";
-        min-elements 1;
-        description
-          "List of identifiers, one for each physical
+    list end-station-interfaces {
+      key "mac-address interface-name";
+      min-elements 1;
+      description
+        "List of identifiers, one for each physical
         interface (distinct point of attachment) in
         the end station acting as a Talker.
 
@@ -956,22 +908,21 @@ module ieee802-dot1q-tsn-types {
 
         Since the interface-name leaf is optional, empty string
         can be used for its key value.";
-        reference
-          "46.2.3.3 of IEEE Std 802.1Qcc-2018";
+      reference
+        "46.2.3.3 of IEEE Std 802.1Qcc-2018";
+      uses group-interface-id;
+    }
 
-        uses group-interface-id;
-      }  // list end-station-interfaces
-
-      list data-frame-specification {
-        key "index";
-        min-elements 1;
-        description
-          "data-frame-specification specifies the frame that carries the
-        Talker’s Stream data. The network uses the specification
-        to identify this Stream’s frames as TSN, in order to apply
+    list data-frame-specification {
+      key "index";
+      min-elements 1;
+      description
+        "data-frame-specification specifies the frame that carries the
+        Talkerâ€™s Stream data. The network uses the specification
+        to identify this Streamâ€™s frames as TSN, in order to apply
         the required TSN configuration.
 
-        The specification is based on the user’s knowledge of the
+        The specification is based on the userâ€™s knowledge of the
         frame, without any network specifics. In other words, this
         specifies the frame that the Talker would use in the absence
         of TSN.
@@ -990,60 +941,54 @@ module ieee802-dot1q-tsn-types {
         indicates that Stream transformation is performed
         in the Talker and Listeners of this Stream
         (46.2.2 of IEEE Sd 802.1Q-2018).";
-        reference
-          "46.2.3.4 of IEEE Std 802.1Qcc-2018";
-
-        leaf index {
-          type uint8;
-          description
-            "This index is provided in order to
+      reference
+        "46.2.3.4 of IEEE Std 802.1Qcc-2018";
+      leaf index {
+        type uint8;
+        description
+          "This index is provided in order to
           provide a unique key per list entry.
           The value of index for each entry
           shall be unique (but not necessarily
           contiguous).";
-        }
-
-        choice field {
-          description
-            "One of the following choices is provided
+      }
+      choice field {
+        description
+          "One of the following choices is provided
           for each field that the user knows.
           Each container name acts as the case name
           for the choice.";
-          container ieee802-mac-addresses {
-            description
-              "IEEE 802 MAC addresses.";
-            uses group-ieee802-mac-addresses;
-          }  // container ieee802-mac-addresses
-          container ieee802-vlan-tag {
-            description "IEEE 802.1 CTAG";
-            uses group-ieee802-vlan-tag;
-          }  // container ieee802-vlan-tag
-          container ipv4-tuple {
-            description
-              "IPv4 packet identification";
-            uses group-ipv4-tuple;
-          }  // container ipv4-tuple
-          container ipv6-tuple {
-            description
-              "IPv6 packet identification";
-            uses group-ipv6-tuple;
-          }  // container ipv6-tuple
-        }  // choice field
-      }  // list data-frame-specification
+        container ieee802-mac-addresses {
+          description "IEEE 802 MAC addresses.";
+          uses group-ieee802-mac-addresses;
+        }
+        container ieee802-vlan-tag {
+          description "IEEE 802.1 CTAG";
+          uses group-ieee802-vlan-tag;
+        }
+        container ipv4-tuple {
+          description "IPv4 packet identification";
+          uses group-ipv4-tuple;
+        }
+        container ipv6-tuple {
+          description "IPv6 packet identification";
+          uses group-ipv6-tuple;
+        }
+      }
+    }
 
-      container traffic-specification {
-        description
-          "This traffic-specification specifies how the Talker
+    container traffic-specification {
+      description
+        "This traffic-specification specifies how the Talker
         transmits frames for the Stream. This is effectively
-        the Talker’s promise to the network. The network
+        the Talkerâ€™s promise to the network. The network
         uses this traffic spec to allocate resources and
         adjust queue parameters in Bridges.";
-        reference
-          "46.2.3.5 of IEEE Std 802.1Qcc-2018";
-
-        container interval {
-          description
-            "This interval specifies the period of time in
+      reference
+        "46.2.3.5 of IEEE Std 802.1Qcc-2018";
+      container interval {
+        description
+          "This interval specifies the period of time in
           which the traffic specification cannot be exceeded.
           The traffic specification is specified by
           max-frames-per-interval and max-frame-size.
@@ -1054,7 +999,7 @@ module ieee802-dot1q-tsn-types {
 
           If the time-aware container is not present,
           the interval specifies a sliding window of time.
-          The Talker’s transmission is not synchronized
+          The Talkerâ€™s transmission is not synchronized
           to a time on the network, and therefore
           the traffic specification cannot be exceeded
           during any interval in time.
@@ -1072,37 +1017,30 @@ module ieee802-dot1q-tsn-types {
           where N is the smallest integer for which the relation
             StartOfNextInterval >= CurrentTime
           would be TRUE.";
-          reference
-            "46.2.3.5.1 of IEEE Std 802.1Qcc-2018";
-
-          leaf numerator {
-            type uint32;
-            description
-              "interval’s numerator.";
-          }
-
-          leaf denominator {
-            type uint32;
-            description
-              "interval’s denominator.";
-          }
-        }  // container interval
-
-        leaf max-frames-per-interval {
-          type uint16;
-          description
-            "max-frames-per-interval specifies the maximum
+        reference
+          "46.2.3.5.1 of IEEE Std 802.1Qcc-2018";
+        leaf numerator {
+          type uint32;
+          description "intervalâ€™s numerator.";
+        }
+        leaf denominator {
+          type uint32;
+          description "intervalâ€™s denominator.";
+        }
+      }
+      leaf max-frames-per-interval {
+        type uint16;
+        description
+          "max-frames-per-interval specifies the maximum
           number of frames that the Talker can transmit
           in one interval.";
-          reference
-            "46.2.3.5.2 of IEEE Std 802.1Qcc-2018";
-
-        }
-
-        leaf max-frame-size {
-          type uint16;
-          description
-            "max-frame-size specifies maximum frame size that
+        reference
+          "46.2.3.5.2 of IEEE Std 802.1Qcc-2018";
+      }
+      leaf max-frame-size {
+        type uint16;
+        description
+          "max-frame-size specifies maximum frame size that
           the Talker will transmit, excluding any overhead
           for media-specific framing (e.g., preamble,
           IEEE 802.3 header, Priority/VID tag, CRC,
@@ -1112,16 +1050,14 @@ module ieee802-dot1q-tsn-types {
           media-specific framing overhead on that Port and
           add it to the number specified in the max-frame-size
           leaf.";
-          reference
-            "46.2.3.5.3 of IEEE Std 802.1Qcc-2018";
-
-        }
-
-        leaf transmission-selection {
-          type uint8;
-          description
-            "transmission-selection specifies the algorithm
-          that the Talker uses to transmit this Stream’s
+        reference
+          "46.2.3.5.3 of IEEE Std 802.1Qcc-2018";
+      }
+      leaf transmission-selection {
+        type uint8;
+        description
+          "transmission-selection specifies the algorithm
+          that the Talker uses to transmit this Streamâ€™s
           traffic class. This algorithm is often referred
           to as the shaper for the traffic class.
 
@@ -1131,23 +1067,21 @@ module ieee802-dot1q-tsn-types {
           If no algorithm is known, the value
           zero (strict priority) can be used.
 
-          The Talker’s shaping and scheduling of the
+          The Talkerâ€™s shaping and scheduling of the
           Stream is considered to be on the user side
           of the user/network boundary, and this leaf
-          specifies the Talker’s behavior to the network.";
-          reference
-            "46.2.3.5.4 of IEEE Std 802.1Qcc-2018";
-
-        }
-
-        container time-aware {
-          presence
-            "Specifies that the Talker’s traffic is synchronized
+          specifies the Talkerâ€™s behavior to the network.";
+        reference
+          "46.2.3.5.4 of IEEE Std 802.1Qcc-2018";
+      }
+      container time-aware {
+        presence
+          "Specifies that the Talkerâ€™s traffic is synchronized
           to a known time on the network
           (e.g. using IEEE Std 802.1AS)";
-          description
-            "The time-aware container provides leafs to specify
-          the Talker’s time-aware transmit to the network.
+        description
+          "The time-aware container provides leafs to specify
+          the Talkerâ€™s time-aware transmit to the network.
 
           The Talker and Listeners of a Stream are assumed to
           coordinate using user (application) mechanisms, such
@@ -1164,13 +1098,12 @@ module ieee802-dot1q-tsn-types {
           of a time-aware Talker, the time-aware container
           is intended to support alternate implementations of
           scheduling.";
-          reference
-            "46.2.3.5 of IEEE Std 802.1Qcc-2018";
-
-          leaf earliest-transmit-offset {
-            type uint32;
-            description
-              "earliest-transmit-offset specifies the
+        reference
+          "46.2.3.5 of IEEE Std 802.1Qcc-2018";
+        leaf earliest-transmit-offset {
+          type uint32;
+          description
+            "earliest-transmit-offset specifies the
             earliest offset within the interval at which
             the Talker is capable of starting
             transmit of its frames. As part of
@@ -1183,26 +1116,24 @@ module ieee802-dot1q-tsn-types {
             earliest-transmit-offset is specified
             as an integer number of nanoseconds.
 
-            The Talker’s transmit offsets
+            The Talkerâ€™s transmit offsets
             include earliest-transmit-offset,
             latest-transmit-offset, and the
             time-aware-offset returned to the Talker.
-            Each of the Talker’s offsets is specified
+            Each of the Talkerâ€™s offsets is specified
             at the point when the message timestamp point
             of the first frame of the Stream passes the
             reference plane marking the boundary between
             the network media and PHY.
             The message timestamp point is specified
             by IEEE Std 802.1AS for various media.";
-            reference
-              "46.2.3.5.5 of IEEE Std 802.1Qcc-2018";
-
-          }
-
-          leaf latest-transmit-offset {
-            type uint32;
-            description
-              "latest-transmit-offset specifies the
+          reference
+            "46.2.3.5.5 of IEEE Std 802.1Qcc-2018";
+        }
+        leaf latest-transmit-offset {
+          type uint32;
+          description
+            "latest-transmit-offset specifies the
             latest offset within the interval at which
             the Talker is capable of starting
             transmit ofits frames. As part of
@@ -1214,16 +1145,14 @@ module ieee802-dot1q-tsn-types {
 
             latest-transmit-offset is specified
             as an integer number of nanoseconds.";
-            reference
-              "46.2.3.5.6 of IEEE Std 802.1Qcc-2018";
-
-          }
-
-          leaf jitter {
-            type uint32;
-            description
-              "The jitter leaf specifies the maximum difference
-            in time between the Talker’s transmit offsets,
+          reference
+            "46.2.3.5.6 of IEEE Std 802.1Qcc-2018";
+        }
+        leaf jitter {
+          type uint32;
+          description
+            "The jitter leaf specifies the maximum difference
+            in time between the Talkerâ€™s transmit offsets,
             and the ideal synchronized network time
             (e.g. IEEE 802.1AS time). Jitter is
             specified as an unsigned integer number
@@ -1242,41 +1171,39 @@ module ieee802-dot1q-tsn-types {
             assumed to be known by the network, and
             time synchronization is a network technology.
             The jitter leaf is intended to specify
-            inaccuracies in the Talker’s implementation.
-            For example, if the Talker’s IEEE 802.1AS time is
+            inaccuracies in the Talkerâ€™s implementation.
+            For example, if the Talkerâ€™s IEEE 802.1AS time is
             +/- 812 nanoseconds relative to the
             grandmaster, and the Talker schedules using a
             100 microsecond timer tick driven by IEEE 802.1AS
             time, Jitter is 50000 (not 50812).
 
-            The Talker’s transmit offsets
+            The Talkerâ€™s transmit offsets
             include earliest-transmit-offset,
             latest-transmit-offset, and the
             time-aware-offset returned to the Talker in
             group-status-talker-listener.interface-configuration.";
-            reference
-              "46.2.3.5.7 of IEEE Std 802.1Qcc-2018";
+          reference
+            "46.2.3.5.7 of IEEE Std 802.1Qcc-2018";
+        }
+      }
+    }
 
-          }
-        }  // container time-aware
-      }  // container traffic-specification
-
-      container user-to-network-requirements {
-        description
-          "user-to-network-requirements specifies user requirements
+    container user-to-network-requirements {
+      description
+        "user-to-network-requirements specifies user requirements
         for the Stream, such as latency and redundancy.
         The network (CNC) will merge all
         user-to-network-requirements for a Stream
         to ensure that all requirements are met.";
-        reference
-          "46.2.3.6 of IEEE Std 802.1Qcc-2018";
+      reference
+        "46.2.3.6 of IEEE Std 802.1Qcc-2018";
+      uses group-user-to-network-requirements;
+    }
 
-        uses group-user-to-network-requirements;
-      }  // container user-to-network-requirements
-
-      container interface-capabilities {
-        description
-          "interface-capabilities specifies the network
+    container interface-capabilities {
+      description
+        "interface-capabilities specifies the network
         capabilities of all interfaces (Ports) contained
         in end-station-interfaces.
 
@@ -1291,30 +1218,28 @@ module ieee802-dot1q-tsn-types {
         Use of multiple entries in end-station-interfaces is intended
         for network capabilities that span multiple interfaces
         (e.g. seamless redundancy).";
-        reference
-          "46.2.3.7 of IEEE Std 802.1Qcc-2018";
+      reference
+        "46.2.3.7 of IEEE Std 802.1Qcc-2018";
+      uses group-interface-capabilities;
+    }
+  }
 
-        uses group-interface-capabilities;
-      }  // container interface-capabilities
-    }  // grouping group-talker
-
-    grouping group-listener {
-      description
-        "This YANG grouping specifies:
-      - Listener’s requirements from the network
-      - TSN capabilities of the Listener’s interface(s)
+  grouping group-listener {
+    description
+      "This YANG grouping specifies:
+      - Listenerâ€™s requirements from the network
+      - TSN capabilities of the Listenerâ€™s interface(s)
 
       In the fully centralized model of TSN configuration,
       this grouping originates from the CUC, and
       is delivered to the CNC.";
-      reference
-        "46.2.4 of IEEE Std 802.1Qcc-2018";
+    reference
+      "46.2.4 of IEEE Std 802.1Qcc-2018";
 
-      list end-station-interfaces {
-        key "mac-address interface-name";
-        ${/*min-elements 1; */''}
-        description
-          "List of identifiers, one for each physical
+    list end-station-interfaces {
+      key "mac-address interface-name";
+      description
+        "List of identifiers, one for each physical
         interface (distinct point of attachment) in
         the end station acting as a Listener.
 
@@ -1328,28 +1253,26 @@ module ieee802-dot1q-tsn-types {
 
         Since the interface-name leaf is optional, empty string
         can be used for its key value.";
-        reference
-          "46.2.3.3 of IEEE Std 802.1Qcc-2018";
+      reference
+        "46.2.3.3 of IEEE Std 802.1Qcc-2018";
+      uses group-interface-id;
+    }
 
-        uses group-interface-id;
-      }  // list end-station-interfaces
-
-      container user-to-network-requirements {
-        description
-          "user-to-network-requirements specifies user requirements
+    container user-to-network-requirements {
+      description
+        "user-to-network-requirements specifies user requirements
         for the Stream, such as latency and redundancy.
         The network (CNC) will merge all
         user-to-network-requirements for a Stream
         to ensure that all requirements are met.";
-        reference
-          "46.2.3.6 of IEEE Std 802.1Qcc-2018";
+      reference
+        "46.2.3.6 of IEEE Std 802.1Qcc-2018";
+      uses group-user-to-network-requirements;
+    }
 
-        uses group-user-to-network-requirements;
-      }  // container user-to-network-requirements
-
-      container interface-capabilities {
-        description
-          "interface-capabilities specifies the network
+    container interface-capabilities {
+      description
+        "interface-capabilities specifies the network
         capabilities of all interfaces (Ports) contained
         in end-station-interfaces.
 
@@ -1364,16 +1287,15 @@ module ieee802-dot1q-tsn-types {
         Use of multiple entries in end-station-interfaces is intended
         for network capabilities that span multiple interfaces
         (e.g. seamless redundancy).";
-        reference
-          "46.2.3.7 of IEEE Std 802.1Qcc-2018";
+      reference
+        "46.2.3.7 of IEEE Std 802.1Qcc-2018";
+      uses group-interface-capabilities;
+    }
+  }
 
-        uses group-interface-capabilities;
-      }  // container interface-capabilities
-    }  // grouping group-listener
-
-    grouping group-status-stream {
-      description
-        "This YANG grouping provides the status of a Stream’s
+  grouping group-status-stream {
+    description
+      "This YANG grouping provides the status of a Streamâ€™s
       configuration from the network to each user. The status
       in this grouping applies to the entire Stream (Talker
       and all Listeners).
@@ -1390,93 +1312,82 @@ module ieee802-dot1q-tsn-types {
       - container using group-status-stream
       - container for Talker, using group-status-talker-listener
       - list for Listeners, using group-status-talker-listener";
+    reference
+      "46.2.5 of IEEE Std 802.1Qcc-2018";
+
+    container status-info {
+      description
+        "status-info provides information regarding the status
+        of a Streamâ€™s configuration in the network.";
       reference
-        "46.2.5 of IEEE Std 802.1Qcc-2018";
-
-      container status-info {
-        description
-          "status-info provides information regarding the status
-        of a Stream’s configuration in the network.";
-        reference
-          "46.2.5.1 of IEEE Std 802.1Qcc-2018";
-
-        leaf talker-status {
-          type enumeration {
-            enum "none" {
-              value 0;
-              description
-                "No Talker detected.";
-            }
-            enum "ready" {
-              value 1;
-              description
-                "Talker ready (configured).";
-            }
-            enum "failed" {
-              value 2;
-              description "Talker failed.";
-            }
+        "46.2.5.1 of IEEE Std 802.1Qcc-2018";
+      leaf talker-status {
+        type enumeration {
+          enum none {
+            value 0;
+            description "No Talker detected.";
           }
-          description
-            "This is an enumeration for the status of
-          the Stream’s Talker.";
-          reference
-            "46.2.5.1.1 of IEEE Std 802.1Qcc-2018";
-
+          enum ready {
+            value 1;
+            description "Talker ready (configured).";
+          }
+          enum failed {
+            value 2;
+            description "Talker failed.";
+          }
         }
-
-        leaf listener-status {
-          type enumeration {
-            enum "none" {
-              value 0;
-              description
-                "No Listener detected.";
-            }
-            enum "ready" {
-              value 1;
-              description
-                "All Listeners ready (configured).";
-            }
-            enum "partial-failed" {
-              value 2;
-              description
-                "One or more Listeners ready, and
+        description
+          "This is an enumeration for the status of
+          the Streamâ€™s Talker.";
+        reference
+          "46.2.5.1.1 of IEEE Std 802.1Qcc-2018";
+      }
+      leaf listener-status {
+        type enumeration {
+          enum none {
+            value 0;
+            description "No Listener detected.";
+          }
+          enum ready {
+            value 1;
+            description "All Listeners ready (configured).";
+          }
+          enum partial-failed {
+            value 2;
+            description
+              "One or more Listeners ready, and
               one or more Listeners failed.
               If Talker is ready, Stream can be used.";
-            }
-            enum "failed" {
-              value 3;
-              description
-                "All Listeners failed";
-            }
           }
-          description
-            "This is an enumeration for the status of
-          the Stream’s Listener(s).";
-          reference
-            "46.2.5.1.2 of IEEE Std 802.1Qcc-2018";
-
+          enum failed {
+            value 3;
+            description "All Listeners failed";
+          }
         }
-
-        leaf failure-code {
-          type uint8;
-          description
-            "If the Stream encounters a failure (talker-status
+        description
+          "This is an enumeration for the status of
+          the Streamâ€™s Listener(s).";
+        reference
+          "46.2.5.1.2 of IEEE Std 802.1Qcc-2018";
+      }
+      leaf failure-code {
+        type uint8;
+        description
+          "If the Stream encounters a failure (talker-status
           is failed, or listener-status is failed, or
           listener-status is partial-failed), failure-code
           provides a non-zero code that specifies the
           problem. Table 46-1 of IEEE Std 802.1Q-2018
           describes each code.)";
-          reference
-            "46.2.5.1.3 of IEEE Std 802.1Qcc-2018";
+        reference
+          "46.2.5.1.3 of IEEE Std 802.1Qcc-2018";
+      }
+    }
 
-        }
-      }  // container status-info
-
-      list failed-interfaces {
-        key "mac-address interface-name";
-        description
-          "When a failure occurs in network configuration
+    list failed-interfaces {
+      key "mac-address interface-name";
+      description
+        "When a failure occurs in network configuration
         (i.e. non-zero failure-code in status-info),
         failed-interfaces provides a list of one or more
         physical interfaces (distinct points of attachement)
@@ -1488,28 +1399,27 @@ module ieee802-dot1q-tsn-types {
 
         Since the interface-name leaf is optional, empty string
         can be used for its key value.";
-        reference
-          "46.2.5.4 of IEEE Std 802.1Qcc-2018";
+      reference
+        "46.2.5.4 of IEEE Std 802.1Qcc-2018";
+      uses group-interface-id;
+    }
+  }
 
-        uses group-interface-id;
-      }  // list failed-interfaces
-    }  // grouping group-status-stream
-
-    grouping group-status-talker-listener {
-      description
-        "This YANG grouping provides the status for a specific
+  grouping group-status-talker-listener {
+    description
+      "This YANG grouping provides the status for a specific
       Talker or Listener.
 
       In the fully centralized model of TSN configuration,
       this grouping originates from the CNC, and
       is delivered to the CUC.";
-      reference
-        "46.2.5 of IEEE Std 802.1Qcc-2018";
+    reference
+      "46.2.5 of IEEE Std 802.1Qcc-2018";
 
-      leaf accumulated-latency {
-        type uint32;
-        description
-          "accumulated-latency provides the worst-case maximum
+    leaf accumulated-latency {
+      type uint32;
+      description
+        "accumulated-latency provides the worst-case maximum
         latency that a single frame of the Stream
         can encounter along its current path(s).
 
@@ -1532,12 +1442,12 @@ module ieee802-dot1q-tsn-types {
         If the time-aware container is present in
         the traffic-specification of the Talker,
         the value is expressed as nanoseconds after the
-        start of the Talker’s traffic-specification.interval.
+        start of the Talkerâ€™s traffic-specification.interval.
 
         If the time-aware container is not present in
         the traffic-specification of the Talker,
         the value is expressed as nanoseconds after the
-        Talker’s transmit of any frame in the Stream,
+        Talkerâ€™s transmit of any frame in the Stream,
         at any arbitrary time.
 
         If user-to-network-requirements.num-seamless-trees is one,
@@ -1550,25 +1460,154 @@ module ieee802-dot1q-tsn-types {
         is greater than one, accumulated-latency shall
         provide the worst-case maximum latency for all paths
         configured from the Talker to each Listener.";
-        reference
-          "46.2.5.2 of IEEE Std 802.1Qcc-2018";
+      reference
+        "46.2.5.2 of IEEE Std 802.1Qcc-2018";
+    }
 
-      }
-
-      container interface-configuration {
-        description
-          "interface-configuration provides configuration of
+    container interface-configuration {
+      description
+        "interface-configuration provides configuration of
         interfaces in the Talker/Listener. This configuration
-        assists the network in meeting the Stream’s requirements.
+        assists the network in meeting the Streamâ€™s requirements.
         The interface-configuration meets the capabilities of
         the interface as provided in interface-capabilities.";
-        reference
-          "46.2.5.3 of IEEE Std 802.1Qcc-2018";
+      reference
+        "46.2.5.3 of IEEE Std 802.1Qcc-2018";
 
-        uses group-interface-configuration;
-      }  // container interface-configuration
-    }  // grouping group-status-talker-listener
-  }  // module ieee802-dot1q-tsn-types
+      uses group-interface-configuration;
+    }
+  }
+  container tsn-uni{
+    list stream-list{
+      key stream-id;
+      leaf stream-id{
+        type stream-id-type;
+      }
+      container request {
+        container talker{
+          uses group-talker;
+        }
+        list listeners-list{
+          key index;
+          leaf index{
+            type uint16;
+          }
+          uses group-listener;
+        }
+        action compute-request{
+            input{
+                leaf compute-at {
+                    type yang:date-and-time;
+                }
+            }
+            output{
+                 leaf compute-finished-at {
+                    type yang:date-and-time;
+                }
+            }
+        }
+      }
+      container configuration{
+        config false;
+        uses group-status-stream;
+        container talker {
+          uses group-status-talker-listener;
+        }
+        list listener-list{
+          key index;
+          leaf index{
+            type uint16;
+          }
+          uses group-status-talker-listener;
+        }
+        action deploy-configuration{
+            input{
+                leaf compute-at {
+                    type yang:date-and-time;
+                }
+            }
+            output{
+                 leaf compute-finished-at {
+                    type yang:date-and-time;
+                }
+            }
+        }
+        action undeploy-configuration{
+            input{
+                leaf compute-at {
+                    type yang:date-and-time;
+                }
+            }
+            output{
+                 leaf compute-finished-at {
+                    type yang:date-and-time;
+                }
+            }
+        }
+        action delete-configuration{
+            input{
+                leaf compute-at {
+                    type yang:date-and-time;
+                }
+            }
+            output{
+                 leaf compute-finished-at {
+                    type yang:date-and-time;
+                }
+            }
+        }
+        }
+  }
+  action compute-all-configuration{
+    input{
+        leaf compute-at {
+            type yang:date-and-time;
+        }
+    }
+    output{
+         leaf compute-finished-at {
+            type yang:date-and-time;
+        }
+    }
+  }
+  action deploy-all-configuration{
+      input{
+          leaf compute-at {
+              type yang:date-and-time;
+          }
+      }
+      output{
+           leaf compute-finished-at {
+              type yang:date-and-time;
+          }
+      }
+  }
+  action undeploy-all-configuration{
+      input{
+          leaf compute-at {
+              type yang:date-and-time;
+          }
+      }
+      output{
+           leaf compute-finished-at {
+              type yang:date-and-time;
+          }
+      }
+  }
+  action delete-all-configuration{
+      input{
+          leaf compute-at {
+              type yang:date-and-time;
+          }
+      }
+      output{
+           leaf compute-finished-at {
+              type yang:date-and-time;
+          }
+      }
+  }
+  }
+}
 
 `
 

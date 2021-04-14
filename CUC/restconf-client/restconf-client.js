@@ -1,30 +1,39 @@
-const Client = require('node-rest-client').Client;
 const fs = require('fs');
 const path = require('path');
-var constants = require('constants');
+const http2 = require('http2');
 
-var options = {
-    connection: {
-        secureOptions: constants.SSL_OP_NO_TLSv1_2,
-        ciphers: 'ECDHE-RSA-AES256-SHA:AES256-SHA:RC4-SHA:RC4:HIGH:!MD5:!aNULL:!EDH:!AESGCM',
-        honorCipherOrder: true,
-        //ca: fs.readFileSync(path.resolve(__dirname, ""))//TODO: include the server certificate (self signed one)
-    }
-};
-var client = new Client(options);
+const client = http2.connect('https://127.0.0.1:8443', {
+    ca: fs.readFileSync(path.resolve(__dirname, "../resources/ca.pem")),
+    cert: fs.readFileSync(path.resolve(__dirname, "../resources/client-certificate.pem")),
+    key: fs.readFileSync(path.resolve(__dirname, "../resources/client-key.pem")) 
+});
+client.on('error', (err) => console.error(err));
 
-function restconfRequest(data) {
-    var args = {
-        data: data,
-        headers: { "Content-Type": "application/json" }
-    };
-     
-    client.post("URL RESTCONF", args, function (data, response) {
-        // parsed response body as js object
-        console.log(data);
-        // raw response
-        console.log(response);
+
+function restconfRequest(body) {
+    let buffer = Buffer.from(JSON.stringify(body))
+    const req = client.request({
+        ':method': 'POST',
+        ':authority': `127.0.0.1:8443`,
+        ':path' : '/restconf/data/ieee802-dot1q-tsn-types-upc-version:tsn-uni',
+        'Content-Type': 'application/yang.api+json',
+        'body': buffer,
+      });
+    
+    req.on('response', (headers, flags) => {
+      for (const name in headers) {
+        console.log(`${name}: ${headers[name]}`);
+      }
     });
+    
+    req.setEncoding('utf8');
+    let data = '';
+    req.on('data', (chunk) => { data += chunk; });
+    req.on('end', () => {
+      console.log(`\n${data}`);
+      client.close();
+    });
+    req.end();
 }
 
 module.exports.restconfRequest = restconfRequest;
