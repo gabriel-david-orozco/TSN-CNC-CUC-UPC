@@ -190,3 +190,27 @@ module: ieee802-dot1q-tsn-types-upc-version
      +---x undeploy-all-configuration
      +---x delete-all-configuration
 ```
+# YANG Modules description
+
+For the moment, the operational data is not ready since it has to be delivered at the end of the controlling process. Consequently, a draft version of the Yang model without the actions and read-only data has been provided. The three structure is as follows:
+
+```
+module: ieee802-dot1q-tsn-types-upc-version
+  +--rw tsn-uni
+     +--rw stream-list* [stream-id]
+        +--rw stream-id        stream-id-type
+        +--rw request
+        |  +--rw talker
+        |  |     ...
+        |  +--rw listeners-list* [index]
+        |        ...
+        +--ro configuration
+           +--ro status-info
+           |     ...
+           +--ro failed-interfaces* [mac-address interface-name]
+           |     ...
+           +--ro talker
+           |     ...
+           +--ro listener-list* [index]
+           
+```
