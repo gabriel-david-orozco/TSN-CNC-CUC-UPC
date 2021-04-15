@@ -56,9 +56,9 @@ function checkStreamInformationReady(idStream) {
 }
 
 function generateUniGroups(ctrTalker, ctrListener) {
+    //TODO testear contenido
         let streamInformation = {
-            "tsn-uni": {
-                "stream-list": [{
+                "ieee802-dot1q-tsn-types-upc-version:stream-list": {
                     "stream-id": talkerInformation[ctrTalker].streamId,
                     "request": {
                         'talker': {
@@ -109,9 +109,8 @@ function generateUniGroups(ctrTalker, ctrListener) {
                             }
                         }]
                     }
-                }]
+                }
             }
-        }
         return streamInformation
 }
 

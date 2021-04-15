@@ -11,13 +11,12 @@ client.on('error', (err) => console.error(err));
 
 
 function restconfRequest(body) {
-    let buffer = Buffer.from(JSON.stringify(body))
+    let buffer = Buffer.from(JSON.stringify(body));
+
     const req = client.request({
         ':method': 'POST',
-        ':authority': `127.0.0.1:8443`,
         ':path' : '/restconf/data/ieee802-dot1q-tsn-types-upc-version:tsn-uni',
-        'Content-Type': 'application/yang.api+json',
-        'body': buffer,
+        'Content-Type': 'application/json',
       });
     
     req.on('response', (headers, flags) => {
@@ -33,6 +32,7 @@ function restconfRequest(body) {
       console.log(`\n${data}`);
       client.close();
     });
+    req.write(buffer);
     req.end();
 }
 
