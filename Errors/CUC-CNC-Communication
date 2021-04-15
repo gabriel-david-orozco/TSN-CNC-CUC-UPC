@@ -1,0 +1,21 @@
+AttributeError: 'str' object has no attribute 'keys'
+2021-04-15 14:43:54,088 INFO     [example@mail.cz] api_post: /restconf/data/ieee802-dot1q-tsn-types-upc-version:tsn-uni
+2021-04-15 14:43:54,089 DEBUG    data: Acquired datastore lock for user "example@mail.cz"
+2021-04-15 14:43:54,092 DEBUG    data: Released datastore lock for user "example@mail.cz"
+2021-04-15 14:43:54,094 ERROR    application protocol failed to receive SSL data
+protocol: <asyncio.sslproto.SSLProtocol object at 0x7f7cb14bfcd0>
+transport: <_SelectorSocketTransport fd=9 read=polling write=<idle, bufsize=0>>
+Traceback (most recent call last):
+  File "/usr/lib/python3.8/asyncio/sslproto.py", line 546, in data_received
+    self._app_protocol.data_received(chunk)
+  File "/usr/local/lib/python3.8/dist-packages/jetconf/rest_server.py", line 121, in data_received
+    self.run_request_handler(headers, event.stream_id, body)
+  File "/usr/local/lib/python3.8/dist-packages/jetconf/rest_server.py", line 193, in run_request_handler
+    resp = h(headers, data, self.client_cert)
+  File "/usr/local/lib/python3.8/dist-packages/jetconf/http_handlers.py", line 606, in post_api
+    http_resp = self._post(api_pth, username, data)
+  File "/usr/local/lib/python3.8/dist-packages/jetconf/http_handlers.py", line 551, in _post
+    new_root = self.ds.create_node_rpc(staging_root, rpc1, json_data)
+  File "/usr/local/lib/python3.8/dist-packages/jetconf/data.py", line 398, in create_node_rpc
+    input_member_keys = tuple(value.keys())
+AttributeError: 'str' object has no attribute 'keys'
