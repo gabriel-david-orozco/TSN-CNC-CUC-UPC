@@ -34,8 +34,8 @@ function post_initialize() {
         let maxDelay = 10;
 
         let vlanCapable = true;
-        let streamIdTypes = "TYPES";
-        let identificationTypes = "TYPES";
+        let streamIdTypes = 60;
+        let identificationTypes = 60;
         
         namespace.addVariable({
             componentOf: interface,
@@ -120,7 +120,7 @@ function post_initialize() {
             dataType: "String",
             value: {
                 get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.String, value: streamIdTypes });
+                    return new opcua.Variant({dataType: opcua.DataType.Int32, value: streamIdTypes });
                 }
             }
         });
@@ -131,7 +131,7 @@ function post_initialize() {
             dataType: "String",
             value: {
                 get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.String, value: identificationTypes });
+                    return new opcua.Variant({dataType: opcua.DataType.Int32, value: identificationTypes });
                 }
             }
         });

@@ -56,7 +56,11 @@ function checkStreamInformationReady(idStream) {
 }
 
 function generateUniGroups(ctrTalker, ctrListener) {
-    //TODO testear contenido
+    //Adapt incoming data to UNI definition
+    if(talkerInformation[ctrTalker].redundancy) {
+        redundancy = 2;
+    }
+    //Load the UNI instance data to streamInformation
         let streamInformation = {
                 "ieee802-dot1q-tsn-types-upc-version:stream-list": {
                     "stream-id": talkerInformation[ctrTalker].streamId,
@@ -84,13 +88,13 @@ function generateUniGroups(ctrTalker, ctrListener) {
                                 }
                             },
                             'user-to-network-requirements': {
-                                'num-seamless-trees': talkerInformation[ctrTalker].redundancy,
+                                'num-seamless-trees': talkerInformation[ctrTalker].redundancy ? talkerInformation[ctrTalker].redundancy = 2 : null,
                                 'max-latency': talkerInformation[ctrTalker].maxDelay
                             },
                             'interface-capabilities': { 
                                 'vlan-tag-capable': talkerInformation[ctrTalker].vlanCapable,
-                                'cb-stream-iden-type-list': talkerInformation[ctrTalker].streamIdTypes,
-                                'cb-sequence-type-list': talkerInformation[ctrTalker].identificationTypes
+                                'cb-stream-iden-type-list': [talkerInformation[ctrTalker].streamIdTypes],
+                                'cb-sequence-type-list': [talkerInformation[ctrTalker].identificationTypes]
                             }
                         },
                         'listeners-list': [{
@@ -99,13 +103,13 @@ function generateUniGroups(ctrTalker, ctrListener) {
                                 'interface-name': listenerInformation[ctrListener].interfaceName
                             }],
                             'user-to-network-requirements': {
-                                'num-seamless-trees': listenerInformation[ctrListener].redundancy,
+                                'num-seamless-trees': listenerInformation[ctrListener].redundancy ? listenerInformation[ctrListener].redundancy = 2 : null,
                                 'max-latency': listenerInformation[ctrListener].maxDelay
                             },
                             'interface-capabilities':  { 
                                 'vlan-tag-capable': listenerInformation[ctrListener].vlanCapable,
-                                'cb-stream-iden-type-list': listenerInformation[ctrListener].streamIdTypes,
-                                'cb-sequence-type-list': listenerInformation[ctrListener].identificationTypes
+                                'cb-stream-iden-type-list': [listenerInformation[ctrListener].streamIdTypes],
+                                'cb-sequence-type-list': [listenerInformation[ctrListener].identificationTypes]
                             }
                         }]
                     }
