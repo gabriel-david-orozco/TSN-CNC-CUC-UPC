@@ -1,0 +1,48 @@
+{
+    "ieee802-dot1q-tsn-types-upc-version:stream-list": [{
+        "stream-id": "9a-f4-27-E7-7D-b3:E5-e5",
+        "configuration": {
+            "status-info": {
+                "talker-status": 1,
+                "listener-status": 1,
+                "failure-code": 0
+            },
+            "talker": {
+                "accumulated-latency": 100,
+                "interface-configuration": {
+                    "interface-list": [{
+                        "mac-address": "000102",
+                        "interface-name": "eth0",
+                        "config-list": [{
+                            "index": 0,
+                            "ieee802-vlan-tag": {
+                                "priority-code-point": 7,
+                                "vlan-id": 1997
+                            }
+                        },
+                        {
+                            "index": 1,
+                            "time-aware-offset": 20
+                        }]
+                    }]
+                }
+            },
+            "listener-list": [{
+                "accumulated-latency": 100,
+                "interface-configuration": {
+                    "interface-list": [{
+                        "mac-address": "000102",
+                        "interface-name": "eth0",
+                        "config-list": [{
+                            "index": 0,
+                            "ieee802-vlan-tag": {
+                                "priority-code-point": 7,
+                                "vlan-id": 1997
+                            }
+                        }]
+                    }]
+                }
+            }]
+        }
+    }]
+}
