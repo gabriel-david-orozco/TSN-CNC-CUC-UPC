@@ -48,39 +48,42 @@ async function connectOpcUaServer(endpointUrl) {
         const jitter = await session.readVariableValue("ns=1;i=1018");
 
         dataValue = {
-            streamId: streamId.value.value,
-            endpointType: endpointType.value.value,
-            macAddress: macAddress.value.value,
-            interfaceName: interfaceName.value.value,
-            redundancy: redundancy.value.value,
-            maxDelay: maxDelay.value.value,
-            vlanCapable: vlanCapable.value.value,
-            streamIdTypes: streamIdTypes.value.value,
-            identificationTypes: identificationTypes.value.value,
-            priority: priority.value.value,
-            intervalNumerator: intervalNumerator.value.value,
-            intervalDenominator: intervalDenominator.value.value,
-            maxFrameNumber: maxFrameNumber.value.value,
-            maxFrameSize: maxFrameSize.value.value,
-            transmissionSelection: transmissionSelection.value.value,
-            earliestTransmitOffset: earliestTransmitOffset.value.value,
-            latestTransmitOffset: latestTransmitOffset.value.value,
-            jitter: jitter.value.value
+            request: {
+                streamId: streamId.value.value,
+                endpointType: endpointType.value.value,
+                macAddress: macAddress.value.value,
+                interfaceName: interfaceName.value.value,
+                redundancy: redundancy.value.value,
+                maxDelay: maxDelay.value.value,
+                vlanCapable: vlanCapable.value.value,
+                streamIdTypes: streamIdTypes.value.value,
+                identificationTypes: identificationTypes.value.value,
+                priority: priority.value.value,
+                intervalNumerator: intervalNumerator.value.value,
+                intervalDenominator: intervalDenominator.value.value,
+                maxFrameNumber: maxFrameNumber.value.value,
+                maxFrameSize: maxFrameSize.value.value,
+                transmissionSelection: transmissionSelection.value.value,
+                earliestTransmitOffset: earliestTransmitOffset.value.value,
+                latestTransmitOffset: latestTransmitOffset.value.value,
+                jitter: jitter.value.value
+            }
         };
-    } else{
+    } else {
         dataValue = {
-            streamId: streamId.value.value,
-            endpointType: endpointType.value.value,
-            macAddress: macAddress.value.value,
-            interfaceName: interfaceName.value.value,
-            redundancy: redundancy.value.value,
-            maxDelay: maxDelay.value.value,
-            vlanCapable: vlanCapable.value.value,
-            streamIdTypes: streamIdTypes.value.value,
-            identificationTypes: identificationTypes.value.value
-        };
+            request: {
+                streamId: streamId.value.value,
+                endpointType: endpointType.value.value,
+                macAddress: macAddress.value.value,
+                interfaceName: interfaceName.value.value,
+                redundancy: redundancy.value.value,
+                maxDelay: maxDelay.value.value,
+                vlanCapable: vlanCapable.value.value,
+                streamIdTypes: streamIdTypes.value.value,
+                identificationTypes: identificationTypes.value.value
+            }      
+         };
     }
-
     
 
     logicHandler.receiveDataFromOpcUaServer(dataValue);
@@ -118,4 +121,3 @@ async function connectOpcUaServer(endpointUrl) {
 }
 
 module.exports.connectOpcUaServer = connectOpcUaServer;
-//connectOpcUaServer("opc.tcp://localhost:4334/TSNInterface");

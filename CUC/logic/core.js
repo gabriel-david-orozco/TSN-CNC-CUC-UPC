@@ -1,57 +1,66 @@
 const restconfClient = require('./../restconf-client/restconf-client.js');
-
+const arrayUtils = require('./../utils/arrayUtils.js')
 let talkerInformation = [];
 let listenerInformation = [];
-//TODO return chain needs to be done
+
+let config;
+
 function receiveDataFromOpcUaServer(receivedData) {
     //Check literally all the contents sent by the server. It must include everyting necessary to generate the correct Groups for the UNI
-    if(receivedData.streamId == null) return -1;
-    if (receivedData.macAddress == null) return -1;
-    if (receivedData.interfaceName == null) return -1;
-    if (receivedData.redundancy == null) return -1;
-    if (receivedData.maxDelay == null) return -1;
-    if (receivedData.vlanCapable == null) return -1;
-    if (receivedData.streamIdTypes == null) return -1;
-    if (receivedData.identificationTypes == null) return -1;
-    if(receivedData.endpointType === "TALKER") {
-        if (receivedData.priority == null) return -1;
-        if (receivedData.intervalNumerator == null) return -1;
-        if (receivedData.intervalDenominator == null) return -1;
-        if (receivedData.maxFrameNumber == null) return -1;
-        if (receivedData.maxFrameSize == null) return -1;
-        if (receivedData.transmissionSelection == null) return -1;
-        if (receivedData.earliestTransmitOffset == null) return -1;
-        if (receivedData.latestTransmitOffset == null) return -1;
-        if (receivedData.jitter == null) return -1;
+    if(receivedData.request.streamId == null) return -1;
+    if (receivedData.request.macAddress == null) return -1;
+    if (receivedData.request.interfaceName == null) return -1;
+    if (receivedData.request.redundancy == null) return -1;
+    if (receivedData.request.maxDelay == null) return -1;
+    if (receivedData.request.vlanCapable == null) return -1;
+    if (receivedData.request.streamIdTypes == null) return -1;
+    if (receivedData.request.identificationTypes == null) return -1;
+    if(receivedData.request.endpointType === "TALKER") {
+        if (receivedData.request.priority == null) return -1;
+        if (receivedData.request.intervalNumerator == null) return -1;
+        if (receivedData.request.intervalDenominator == null) return -1;
+        if (receivedData.request.maxFrameNumber == null) return -1;
+        if (receivedData.request.maxFrameSize == null) return -1;
+        if (receivedData.request.transmissionSelection == null) return -1;
+        if (receivedData.request.earliestTransmitOffset == null) return -1;
+        if (receivedData.request.latestTransmitOffset == null) return -1;
+        if (receivedData.request.jitter == null) return -1;
         talkerInformation.push(receivedData);
     } else{
         listenerInformation.push(receivedData);
     }
     //Check content of streamInformation variable
-    checkStreamInformationReady(receivedData.streamId); //ID should be compliant with stream-id-type of the YANG module
+    let responseReceived = checkStreamInformationReadyAndSend(receivedData.streamId); //ID should be compliant with stream-id-type of the YANG module
+    if(responseReceived) {
+        //TODO: parse response into talkerInformation and listenerInformation variables
+        let configDataReady = parseConfigurationData();
+        if(configDataReady) {
+            //Generate gate control list
+        } else {
+            //TODO: handle errors
+        }
+    } else {
+        //TODO: handle error
+    }
 }
 
-function checkStreamInformationReady(idStream) {
+function checkStreamInformationReadyAndSend(idStream) {
     //TODO test
-    let foundTalker = false;
-    let ctrTalker = 0;
-    while(!foundTalker && ctrTalker < talkerInformation.length) {
-        if(talkerInformation[ctrTalker].streamId === idStream) foundTalker = true;
-        else ctrTalker++;
-    };
-    let foundListener = false;
-    let ctrListener = 0;
-    while(!foundListener && ctrListener < listenerInformation.length) {
-        if(listenerInformation[ctrListener].streamId === idStream) foundListener = true;
-        else ctrListener++;
-    };
+
+    let ctrTalker = arrayUtils.indexGetter(talkerInformation, idStream);
+
+    let ctrListener = arrayUtils.indexGetter(listenerInformation, idStream);
     
-    if(foundListener && foundTalker)
+    if(ctrTalker != -1 && ctrListener != -1)
     {
         let uniGroups = generateUniGroups(ctrTalker, ctrListener)
         //Once they are ready, send them to the restConfServer (CNC)
         restconfClient.restconfRequest(uniGroups);
-        
+        //TODO: Maybe the response needs to be polled by a GET with a given stream ID.
+        config = require('../utils/yang/json-samples/cncResponse.json');
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -63,53 +72,53 @@ function generateUniGroups(ctrTalker, ctrListener) {
     //Load the UNI instance data to streamInformation
         let streamInformation = {
                 "ieee802-dot1q-tsn-types-upc-version:stream-list": {
-                    "stream-id": talkerInformation[ctrTalker].streamId,
+                    "stream-id": talkerInformation[ctrTalker].request.streamId,
                     "request": {
                         'talker': {
                             'stream-rank': {
-                                'rank':talkerInformation[ctrTalker].priority 
+                                'rank':talkerInformation[ctrTalker].request.priority 
                             },
                             'end-station-interfaces': [{
-                                'mac-address': talkerInformation[ctrTalker].macAddress,
-                                'interface-name': talkerInformation[ctrTalker].interfaceName
+                                'mac-address': talkerInformation[ctrTalker].request.macAddress,
+                                'interface-name': talkerInformation[ctrTalker].request.interfaceName
                             }],
                             'traffic-specification': {
                                 'interval': {
-                                    'numerator': talkerInformation[ctrTalker].intervalNumerator,
-                                    'denominator': talkerInformation[ctrTalker].intervalDenominator
+                                    'numerator': talkerInformation[ctrTalker].request.intervalNumerator,
+                                    'denominator': talkerInformation[ctrTalker].request.intervalDenominator
                                 },
-                                'max-frames-per-interval': talkerInformation[ctrTalker].maxFrameNumber,
-                                'max-frame-size': talkerInformation[ctrTalker].maxFrameSize,
-                                'transmission-selection': talkerInformation[ctrTalker].transmissionSelection,
+                                'max-frames-per-interval': talkerInformation[ctrTalker].request.maxFrameNumber,
+                                'max-frame-size': talkerInformation[ctrTalker].request.maxFrameSize,
+                                'transmission-selection': talkerInformation[ctrTalker].request.transmissionSelection,
                                 'time-aware': {
-                                    'earliest-transmit-offset': talkerInformation[ctrTalker].earliestTransmitOffset,
-                                    'latest-transmit-offset': talkerInformation[ctrTalker].latestTransmitOffset,
-                                    'jitter': talkerInformation[ctrTalker].jitter
+                                    'earliest-transmit-offset': talkerInformation[ctrTalker].request.earliestTransmitOffset,
+                                    'latest-transmit-offset': talkerInformation[ctrTalker].request.latestTransmitOffset,
+                                    'jitter': talkerInformation[ctrTalker].request.jitter
                                 }
                             },
                             'user-to-network-requirements': {
-                                'num-seamless-trees': talkerInformation[ctrTalker].redundancy ? talkerInformation[ctrTalker].redundancy = 2 : null,
-                                'max-latency': talkerInformation[ctrTalker].maxDelay
+                                'num-seamless-trees': talkerInformation[ctrTalker].request.redundancy ? talkerInformation[ctrTalker].request.redundancy = 2 : null,
+                                'max-latency': talkerInformation[ctrTalker].request.maxDelay
                             },
                             'interface-capabilities': { 
-                                'vlan-tag-capable': talkerInformation[ctrTalker].vlanCapable,
-                                'cb-stream-iden-type-list': [talkerInformation[ctrTalker].streamIdTypes],
-                                'cb-sequence-type-list': [talkerInformation[ctrTalker].identificationTypes]
+                                'vlan-tag-capable': talkerInformation[ctrTalker].request.vlanCapable,
+                                'cb-stream-iden-type-list': [talkerInformation[ctrTalker].request.streamIdTypes],
+                                'cb-sequence-type-list': [talkerInformation[ctrTalker].request.identificationTypes]
                             }
                         },
                         'listeners-list': [{
                             'end-station-interfaces': [{
-                                'mac-address': listenerInformation[ctrListener].macAddress,
-                                'interface-name': listenerInformation[ctrListener].interfaceName
+                                'mac-address': listenerInformation[ctrListener].request.macAddress,
+                                'interface-name': listenerInformation[ctrListener].request.interfaceName
                             }],
                             'user-to-network-requirements': {
-                                'num-seamless-trees': listenerInformation[ctrListener].redundancy ? listenerInformation[ctrListener].redundancy = 2 : null,
-                                'max-latency': listenerInformation[ctrListener].maxDelay
+                                'num-seamless-trees': listenerInformation[ctrListener].request.redundancy ? listenerInformation[ctrListener].request.redundancy = 2 : null,
+                                'max-latency': listenerInformation[ctrListener].request.maxDelay
                             },
                             'interface-capabilities':  { 
-                                'vlan-tag-capable': listenerInformation[ctrListener].vlanCapable,
-                                'cb-stream-iden-type-list': [listenerInformation[ctrListener].streamIdTypes],
-                                'cb-sequence-type-list': [listenerInformation[ctrListener].identificationTypes]
+                                'vlan-tag-capable': listenerInformation[ctrListener].request.vlanCapable,
+                                'cb-stream-iden-type-list': [listenerInformation[ctrListener].request.streamIdTypes],
+                                'cb-sequence-type-list': [listenerInformation[ctrListener].request.identificationTypes]
                             }
                         }]
                     }
@@ -118,5 +127,30 @@ function generateUniGroups(ctrTalker, ctrListener) {
         return streamInformation
 }
 
+function parseConfigurationData() {
+    let peerStatus = config["ieee802-dot1q-tsn-types-upc-version:stream-list"][0]["configuration"]["status-info"]
+    if(peerStatus["failure-code"] != 0) {
+    //TODO: handle error codes
+    return false;
+    }
+    else {
+        let ctrTalker = arrayUtils.indexGetter(talkerInformation, config["ieee802-dot1q-tsn-types-upc-version:stream-list"]["stream-id"]);
+        let ctrListener = arrayUtils.indexGetter(listenerInformation, config["ieee802-dot1q-tsn-types-upc-version:stream-list"]["stream-id"]);
+        
+        talkerInformation[ctrTalker].config = {
+            "latency": config["ieee802-dot1q-tsn-types-upc-version:stream-list"][0]["configuration"]["talker"]["accumulated-latency"],
+            "interface-configuration": config["ieee802-dot1q-tsn-types-upc-version:stream-list"][0]["configuration"]["talker"]["interface-configuration"]
+        }
+
+        listenerInformation[ctrListener].config = {
+            "latency": config["ieee802-dot1q-tsn-types-upc-version:stream-list"][0]["configuration"]["listener-list"]["accumulated-latency"],
+            "interface-configuration": config["ieee802-dot1q-tsn-types-upc-version:stream-list"][0]["configuration"]["listener-list"]["interface-configuration"]
+        }
+        config = null;
+        return true;
+    }
+    
+
+}
 
 module.exports.receiveDataFromOpcUaServer = receiveDataFromOpcUaServer;
