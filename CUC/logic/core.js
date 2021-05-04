@@ -1,5 +1,6 @@
 const restconfClient = require('./../restconf-client/restconf-client.js');
-const arrayUtils = require('./../utils/arrayUtils.js')
+const arrayUtils = require('./../utils/arrayUtils.js');
+const gateControlListUtils = require('./../utils/gate-control-list/gateControlListUtils');
 let talkerInformation = [];
 let listenerInformation = [];
 
@@ -19,12 +20,14 @@ function receiveDataFromOpcUaServer(receivedData) {
         if (receivedData.request.priority == null) return -1;
         if (receivedData.request.intervalNumerator == null) return -1;
         if (receivedData.request.intervalDenominator == null) return -1;
+        receivedData.request.interval = receivedData.request.intervalNumerator / receivedData.request.intervalDenominator;
         if (receivedData.request.maxFrameNumber == null) return -1;
         if (receivedData.request.maxFrameSize == null) return -1;
         if (receivedData.request.transmissionSelection == null) return -1;
         if (receivedData.request.earliestTransmitOffset == null) return -1;
         if (receivedData.request.latestTransmitOffset == null) return -1;
         if (receivedData.request.jitter == null) return -1;
+        
         talkerInformation.push(receivedData);
     } else{
         listenerInformation.push(receivedData);
@@ -36,6 +39,8 @@ function receiveDataFromOpcUaServer(receivedData) {
         let configDataReady = parseConfigurationData();
         if(configDataReady) {
             //Generate gate control list
+            gateControlListUtils.generateGateControlList(talkerInformation, true);
+            gateControlListUtils.generateGateControlList(listenerInformation, false);
         } else {
             //TODO: handle errors
         }
