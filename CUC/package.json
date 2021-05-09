@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "buffer-xor": "^2.0.2",
+    "node-bitarray": "^0.1.0",
     "node-opcua": "^2.36.0",
     "node-rest-client": "^3.1.0",
     "yang-js": "^0.24.64"

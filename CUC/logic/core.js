@@ -39,8 +39,10 @@ function receiveDataFromOpcUaServer(receivedData) {
         let configDataReady = parseConfigurationData();
         if(configDataReady) {
             //Generate gate control list
-            gateControlListUtils.generateGateControlList(talkerInformation, true);
-            gateControlListUtils.generateGateControlList(listenerInformation, false);
+            let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation, true);
+            let listenerConfig = gateControlListUtils.generateGateControlList(listenerInformation, false);
+            //Send the config to endpoints
+            talkerConfig['mac-address'];
         } else {
             //TODO: handle errors
         }
