@@ -89,6 +89,8 @@ function computeGCLTalker(list) {
 }
 
 function computeGCLListener(list) {
+  //From traffic-specification and config response values, a simple GCL can be generated.
+    //1 TSN flow escenario. +1 flow scenario is not implemented yet.
     var request, interval, frameSize, frameNumber, vlanTag, timeOffset;
     if(list.streamDetails.length < 2) {
     //Interval = TAS period

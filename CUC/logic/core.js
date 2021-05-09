@@ -150,8 +150,8 @@ function parseConfigurationData() {
         }
 
         listenerInformation[ctrListener].config = {
-            "latency": config["ieee802-dot1q-tsn-types-upc-version:stream-list"][0]["configuration"]["listener-list"]["accumulated-latency"],
-            "interface-configuration": config["ieee802-dot1q-tsn-types-upc-version:stream-list"][0]["configuration"]["listener-list"]["interface-configuration"]
+            "latency": config["ieee802-dot1q-tsn-types-upc-version:stream-list"][0]["configuration"]["listener-list"][0]["accumulated-latency"],
+            "interface-configuration": config["ieee802-dot1q-tsn-types-upc-version:stream-list"][0]["configuration"]["listener-list"][0]["interface-configuration"]
         }
         config = null;
         return true;
