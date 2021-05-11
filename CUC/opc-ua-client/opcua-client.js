@@ -7,7 +7,7 @@ const {
     DataType
 } = require("node-opcua");
 
-
+const session;
 async function connectOpcUaServer(endpointUrl) {
 
     const client = OPCUAClient.create({
@@ -22,7 +22,7 @@ async function connectOpcUaServer(endpointUrl) {
 
     await client.connect(endpointUrl);
 
-    const session = await client.createSession(); 
+    session = await client.createSession(); 
 
     const streamId = await session.readVariableValue("ns=1;i=1001")
     const endpointType = await session.readVariableValue("ns=1;i=1002");
@@ -87,37 +87,10 @@ async function connectOpcUaServer(endpointUrl) {
     
 
     logicHandler.receiveDataFromOpcUaServer(dataValue);
-    //TODO Subscription to some content. Not yet considered
-    /*
-    const subscription = await session.createSubscription2({
-        requestedPublishingInterval: 1000,
-        requestedLifetimeCount: 100, // 1000ms *100 every 2 minutes or so
-        requestedMaxKeepAliveCount: 10,// every 10 seconds
-        maxNotificationsPerPublish: 10,
-        publishingEnabled: true,
-        priority: 10
-    });
-
-    subscription
-        .on("started", () => console.log("subscription started - subscriptionId=", subscription.subscriptionId))
-        .on("keepalive", () => console.log("keepalive"))
-        .on("terminated", () => console.log("subscription terminated"));
-    const monitoredItem = await subscription.monitor({
-        nodeId: nodeId,
-        attributeId: AttributeIds.Value
-    },
-        {
-            samplingInterval: 1000,
-            discardOldest: true,
-            queueSize: 10
-        }, TimestampsToReturn.Both);
-
-
-    monitoredItem.on("changed", (dataValue) =>
-        console.log(` value = ${dataValue.value.value.toString()}`));
-
-    await subscription.terminate();
-    */
+}
+async function sendConfigToEndpoints(endpointUrl, config) {
+    //TODO
 }
 
 module.exports.connectOpcUaServer = connectOpcUaServer;
+module.exports.sendConfigToEndpoints = sendConfigToEndpoints;

@@ -1,6 +1,7 @@
 const restconfClient = require('./../restconf-client/restconf-client.js');
 const arrayUtils = require('./../utils/arrayUtils.js');
 const gateControlListUtils = require('./../utils/gate-control-list/gateControlListUtils');
+const opcUaClient = require('../opc-ua-client/opcua-client');
 let talkerInformation = [];
 let listenerInformation = [];
 
@@ -39,10 +40,14 @@ function receiveDataFromOpcUaServer(receivedData) {
         let configDataReady = parseConfigurationData();
         if(configDataReady) {
             //Generate gate control list
-            let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation, true);
-            let listenerConfig = gateControlListUtils.generateGateControlList(listenerInformation, false);
+            let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation, true, null);
+            let listenerConfig = gateControlListUtils.generateGateControlList(listenerInformation, false, talkerConfig);
             //Send the config to endpoints
-            talkerConfig['mac-address'];
+            let talkerUrl;
+            opcUaClient.sendConfigToEndpoints(talkerUrl, talkerConfig);
+
+            let listenerUrl;
+            opcUaClient.sendConfigToEndpoints (listenerUrl, listenerConfig);
         } else {
             //TODO: handle errors
         }

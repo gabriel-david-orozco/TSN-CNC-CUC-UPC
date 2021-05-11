@@ -88,73 +88,15 @@ function computeGCLTalker(list) {
     }
 }
 
-function computeGCLListener(list) {
-  //From traffic-specification and config response values, a simple GCL can be generated.
-    //1 TSN flow escenario. +1 flow scenario is not implemented yet.
-    var request, interval, frameSize, frameNumber, vlanTag, timeOffset;
+function computeGCLListener(list, talkerInfo) {
+    //TODO: Get the talker config that coincides in streamIds, reject others.
+
+    var interval;
     if(list.streamDetails.length < 2) {
     //Interval = TAS period
-        request = list.streamDetails[0].request;
-        interval = request.interval;
-        frameSize = request.maxFrameSize;
-        frameNumber = request.maxFrameNumber;
-        let configs = list.streamDetails[0].config['interface-configuration']['interface-list'][0]['config-list'];
-        for (let i=0; i<configs.length; i++) {
-            switch(Object.keys(configs[i])[1]) {
-                case 'ieee802-vlan-tag':
-                    vlanTag = configs[i]['ieee802-vlan-tag'];
-                    break;
-                case 'time-aware-offset':
-                    timeOffset = configs[i]['time-aware-offset'];
-                    break;
-            }
-        }
-        //With time aware offset, vlan info, traffic specification and interval it is possible to build a GCL for the endpoint.
-
-        //Burst transmit time. 100Mbps assumed = 12.5MBps.
-        let timeEmitting = frameSize*frameNumber/(12.5) * NANOSECONDS /  MEGA;
-
-        //Fit it in the interval with time-aware-offset
-        let buffer255 = bitUtils.parse(255);
-        let bufferPriority7 = bitUtils.parse(128);
-        let vlanPriority = bitUtils.parse(1 << vlanTag['priority-code-point']);
-        vlanPriority = bitUtils.or(bufferPriority7, vlanPriority);
-        interval = interval * NANOSECONDS //Second to ns
-        let gateControlList = {
-            interval: interval,
-            states: [] 
-        }
-        //Set the gate states in order to permit the 'bitUtils.xor(buffer255, vlanPriority);vlanPriorityId' queue to transmit at that specific time interval.
-        gateControlTmp = bitUtils.not(bitUtils.and(buffer255, vlanPriority));
-        if(timeOffset<(0.05*interval)) {
-            gateControlList.states.push({
-                duration: timeEmitting,
-                gateStates: vlanPriority
-            });
-            gateControlList.states.push({
-                duration: interval - timeEmitting,
-                gateStates: gateControlTmp
-            });
-            
-        } else //Worth it to spend time emitting best effort traffic.
-        {
-            states.push({
-                duration: timeOffset,
-                gateStates: gateControlTmp
-            });
-            states.push({
-                duration: timeEmitting,
-                gateStates: vlanPriority
-            });
-            states.push({
-                duration: interval - timeOffset - timeEmitting,
-                gateStates: vlanPriority
-            });            
-        }
-        //If conflict with other priorities, CBS should be handled. (Possible TODO: )
-    console.log("GCL generated")
-    return gateControlList;
-
+        //Get GCL from talker.
+        let gateControlList = talkerInfo[0].gcl;
+        return gateControlList;  
     } else {
         //1. Get shortest interval
         var ctr = 0;
@@ -168,7 +110,7 @@ function computeGCLListener(list) {
     }
 }
 
-function generateGateControlList(streams, isTalker) {
+function generateGateControlList(streams, isTalker, talkerInfo) {
     //Locate same interfaces + name
     let gateControlListArray = [];
     streams.forEach(function(item) {
@@ -183,8 +125,11 @@ function generateGateControlList(streams, isTalker) {
        }
     }
     else {
-        for(var i = 0; i<gateControlListArray.length; i++)
-        computeGCLListener(gateControlListArray[i]);
+        for(var i = 0; i<gateControlListArray.length; i++) {
+            let gcl = computeGCLListener(gateControlListArray[i], talkerInfo);
+            //For 2 endpoints, GCL will always coincide with a time offset.
+            gateControlListArray[i].gcl = gcl;
+        }
     }
     return gateControlListArray;
 }
