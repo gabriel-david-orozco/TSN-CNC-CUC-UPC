@@ -19,23 +19,38 @@ function post_initialize() {
         const addressSpace = server.engine.addressSpace;
         const namespace = addressSpace.getOwnNamespace();
     
-        // declare a new object
+        // Declare Interface object
         const interface = namespace.addObject({
             organizedBy: addressSpace.rootFolder.objects,
             browseName: "TSNInterface"
         });
+
+        //Declare InterfaceConfig for retrieved config
+        const interfaceConfig = namespace.addObjectType({
+            organizedBy: addressSpace.rootFolder.objects,
+            browseName: "TSNInterfaceConfig"
+        });
     
-        // add some variables
+        // Interface specifications
         let streamId = "9a-f4-27-E7-7D-b3:E5-e5";
         let endpointType = "LISTENER";
         let macAddress = "000102";
         let interfaceName = "eth0";
+        //Traffic requirements
         let redundancy = true;
         let maxDelay = 10;
-
+        
         let vlanCapable = true;
         let streamIdTypes = 60;
         let identificationTypes = 60;
+        //Config retrieved from CUC
+        let gcl;
+        let latency;
+        let vlanTag;
+
+
+
+
         
         namespace.addVariable({
             componentOf: interface,
@@ -136,7 +151,23 @@ function post_initialize() {
             }
         });
 
+        namespace.addVariable({
+            componentOf: interfaceConfig,
+            browseName: "latency",
+            dataType: "UInt32",
+            value: {
+                get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.Int32, value: latency });
+                },
+                set: function(value) {
+                    latency = value;
+                }
+            }
+
+        })
+
         if(endpointType === "TALKER") {
+            //Traffic specification
             let priority = 5;
             let intervalNumerator = 1;
             let intervalDenominator = 1;
@@ -146,6 +177,9 @@ function post_initialize() {
             let earliestTransmitOffset = 10;
             let latestTransmitOffset = 30;
             let jitter = 5;
+
+            //Config retrieved from CUC for Talker
+            let timeAwareOffset;
 
             namespace.addVariable({
                 componentOf: interface,

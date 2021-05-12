@@ -24,6 +24,12 @@ function post_initialize() {
             organizedBy: addressSpace.rootFolder.objects,
             browseName: "TSNInterface"
         });
+
+         //Declare InterfaceConfig for retrieved config
+         const interfaceConfig = namespace.addObjectType({
+            organizedBy: addressSpace.rootFolder.objects,
+            browseName: "TSNInterfaceConfig"
+        });
     
         // add some variables
         let streamId = "9a-f4-27-E7-7D-b3:E5-e5";
@@ -135,6 +141,21 @@ function post_initialize() {
                 }
             }
         });
+
+        namespace.addVariable({
+            componentOf: interfaceConfig,
+            browseName: "latency",
+            dataType: "UInt32",
+            value: {
+                get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.Int32, value: latency });
+                },
+                set: function(value) {
+                    latency = value;
+                }
+            }
+
+        })
 
         if(endpointType === "TALKER") {
             let priority = 5;

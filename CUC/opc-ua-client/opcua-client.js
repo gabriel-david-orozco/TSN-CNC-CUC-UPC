@@ -7,7 +7,7 @@ const {
     DataType
 } = require("node-opcua");
 
-const session;
+var session;
 async function connectOpcUaServer(endpointUrl) {
 
     const client = OPCUAClient.create({
@@ -23,7 +23,7 @@ async function connectOpcUaServer(endpointUrl) {
     await client.connect(endpointUrl);
 
     session = await client.createSession(); 
-
+    const tsnInterface = await session.readVariableValue("ns=1;i=1000")
     const streamId = await session.readVariableValue("ns=1;i=1001")
     const endpointType = await session.readVariableValue("ns=1;i=1002");
     const macAddress = await session.readVariableValue("ns=1;i=1003");
