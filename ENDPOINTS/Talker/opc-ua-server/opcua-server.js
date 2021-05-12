@@ -26,22 +26,28 @@ function post_initialize() {
         });
 
          //Declare InterfaceConfig for retrieved config
-         const interfaceConfig = namespace.addObjectType({
+         const interfaceConfig = namespace.addObject({
             organizedBy: addressSpace.rootFolder.objects,
             browseName: "TSNInterfaceConfig"
         });
     
-        // add some variables
+        // Interface specifications
         let streamId = "9a-f4-27-E7-7D-b3:E5-e5";
         let endpointType = "TALKER";
         let macAddress = "000102";
         let interfaceName = "eth0";
+        //Traffic requirements
         let redundancy = true;
         let maxDelay = 10;
 
         let vlanCapable = true;
         let streamIdTypes = 60;
         let identificationTypes = 60;
+         //Config retrieved from CUC
+         let gcl = [0x08];
+         let latency = 40;
+         let vlanPrioValue = 7;
+         let vlanIdValue = 4567;
         
         namespace.addVariable({
             componentOf: interface,
@@ -154,8 +160,49 @@ function post_initialize() {
                     latency = value;
                 }
             }
+        });
+        
+        namespace.addVariable({ //TODO
+            componentOf: interfaceConfig,
+            browseName: "gcl",
+            dataType: "UInt32",
+            value: {
+                get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.Byte, arrayType: opcua.VariantArrayType.Array, value: gcl });
+                },
+                set: function(value) {
+                    gcl = value;
+                }
+            }
+        });
 
-        })
+        namespace.addVariable({
+            componentOf: interfaceConfig,
+            browseName: "vlanPrioValue",
+            dataType: "UInt32",
+            value: {
+                get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.Int32, value: vlanPrioValue });
+                },
+                set: function(value) {
+                    vlanPrioValue = value;
+                }
+            }
+        });
+
+        namespace.addVariable({
+            componentOf: interfaceConfig,
+            browseName: "vlanIdValue",
+            dataType: "UInt32",
+            value: {
+                get: function () {
+                    return new opcua.Variant({dataType: opcua.DataType.Int32, value: vlanIdValue });
+                },
+                set: function(value) {
+                    vlanIdValue = value;
+                }
+            }
+        });
 
         if(endpointType === "TALKER") {
             let priority = 5;
@@ -167,6 +214,9 @@ function post_initialize() {
             let earliestTransmitOffset = 10;
             let latestTransmitOffset = 30;
             let jitter = 5;
+
+            //Config retrieved from CUC for Talker
+            let timeAwareOffset = 40;
 
             namespace.addVariable({
                 componentOf: interface,
@@ -263,6 +313,20 @@ function post_initialize() {
                 value: {
                     get: function () {
                     return new opcua.Variant({dataType: opcua.DataType.UInt32, value: jitter });
+                    }
+                }
+            });
+
+            namespace.addVariable({
+                componentOf: interfaceConfig,
+                browseName: "tiemAwareOffset",
+                dataType: "UInt32",
+                value: {
+                    get: function () {
+                        return new opcua.Variant({dataType: opcua.DataType.Int32, value: timeAwareOffset });
+                    },
+                    set: function(value) {
+                        timeAwareOffset = value;
                     }
                 }
             });
