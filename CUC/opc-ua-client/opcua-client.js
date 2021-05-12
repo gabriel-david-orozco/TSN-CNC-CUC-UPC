@@ -23,7 +23,6 @@ async function connectOpcUaServer(endpointUrl) {
     await client.connect(endpointUrl);
 
     session = await client.createSession(); 
-    const tsnInterface = await session.readVariableValue("ns=1;i=1000")
     const streamId = await session.readVariableValue("ns=1;i=1001")
     const endpointType = await session.readVariableValue("ns=1;i=1002");
     const macAddress = await session.readVariableValue("ns=1;i=1003");
@@ -90,6 +89,7 @@ async function connectOpcUaServer(endpointUrl) {
 }
 async function sendConfigToEndpoints(endpointUrl, config) {
     //TODO
+    await session.writeSingleNode("ns=1;i=1011", config)
 }
 
 module.exports.connectOpcUaServer = connectOpcUaServer;
