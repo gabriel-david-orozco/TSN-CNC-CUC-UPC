@@ -43,11 +43,11 @@ function receiveDataFromOpcUaServer(receivedData) {
             let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation, true, null);
             let listenerConfig = gateControlListUtils.generateGateControlList(listenerInformation, false, talkerConfig);
             //Send the config to endpoints
-            let talkerUrl;
-            opcUaClient.sendConfigToEndpoints(talkerUrl, talkerConfig);
-
-            let listenerUrl;
-            opcUaClient.sendConfigToEndpoints (listenerUrl, listenerConfig);
+            let talkerUrl = "opc.tcp://localhost:4333/TSNInterface";;
+            opcUaClient.sendConfigToEndpoints(talkerUrl, talkerConfig, true);
+//TODO millorar contingut talkerConfig i listenerConfig
+            let listenerUrl = "opc.tcp://localhost:4334/TSNInterface";;
+            opcUaClient.sendConfigToEndpoints (listenerUrl, listenerConfig, false);
         } else {
             //TODO: handle errors
         }

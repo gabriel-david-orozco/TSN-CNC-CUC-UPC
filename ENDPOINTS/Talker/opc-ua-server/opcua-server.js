@@ -264,7 +264,7 @@ function post_initialize() {
         }); 
         namespace.addVariable({
             componentOf: interfaceConfig,
-            browseName: "tiemAwareOffset",
+            browseName: "timeAwareOffset",
             dataType: "UInt32",
             value: {
                 get: function () {
@@ -313,7 +313,9 @@ function post_initialize() {
                     return new opcua.Variant({dataType: opcua.DataType.Int32, value: vlanPrioValue });
                 },
                 set: function(value) {
+                    console.log(vlanprioValue)
                     vlanPrioValue = value;
+                    console.log(vlanprioValue)
                 }
             }
         });
@@ -324,10 +326,12 @@ function post_initialize() {
             dataType: "UInt32",
             value: {
                 get: function () {
+                    console.log(vlanIdValue)
                     return new opcua.Variant({dataType: opcua.DataType.Int32, value: vlanIdValue });
                 },
                 set: function(value) {
-                    vlanIdValue = value;
+                    vlanIdValue = value.value;
+                    return opcua.StatusCodes.Good;
                 }
             }
         });

@@ -40,9 +40,11 @@ function computeGCLTalker(list) {
         let vlanPriority = bitUtils.parse(1 << vlanTag['priority-code-point']);
         vlanPriority = bitUtils.or(bufferPriority7, vlanPriority);
         interval = interval * NANOSECONDS //Second to ns
+    
+        
         let gateControlList = {
             interval: interval,
-            states: [] 
+            states: [],
         }
         //Set the gate states in order to permit the 'bitUtils.xor(buffer255, vlanPriority);vlanPriorityId' queue to transmit at that specific time interval.
         gateControlTmp = bitUtils.not(bitUtils.and(buffer255, vlanPriority));
@@ -58,22 +60,32 @@ function computeGCLTalker(list) {
             
         } else //Worth it to spend time emitting best effort traffic.
         {
-            states.push({
+            gateControlList. states.push({
                 duration: timeOffset,
                 gateStates: gateControlTmp
             });
-            states.push({
+            gateControlList.states.push({
                 duration: timeEmitting,
                 gateStates: vlanPriority
             });
-            states.push({
+            gateControlList.states.push({
                 duration: interval - timeOffset - timeEmitting,
                 gateStates: vlanPriority
             });            
         }
         //If conflict with other priorities, CBS should be handled. (Possible TODO: )
     console.log("GCL generated")
-    return gateControlList;
+
+    let talkerConfig = {
+        gcl: gateControlList,
+        vlanId: vlanTag['vlan-id'],
+        streamId: request.streamId,
+        interface: request.interfaceName,
+        macAddress: request.macAddress
+    }
+    
+
+    return talkerConfig;
 
     } else {
         //1. Get shortest interval
@@ -89,24 +101,31 @@ function computeGCLTalker(list) {
 }
 
 function computeGCLListener(list, talkerInfo) {
-    //TODO: Get the talker config that coincides in streamIds, reject others.
-
-    var interval;
     if(list.streamDetails.length < 2) {
-    //Interval = TAS period
+        let request = list.streamDetails[0].request;
+        let configs = list.streamDetails[0].config['interface-configuration']['interface-list'][0]['config-list']        //Get the talker config that coincides in streamIds, reject others.
+        let vlanTag = configs[0]['ieee802-vlan-tag']
+        let talkersSameStreamId;
+        talkerInfo.forEach(function(item) {
+            if(item.streamId === request.streamId) {
+                talkersSameStreamId = item;
+            }
+        });
+
         //Get GCL from talker.
-        let gateControlList = talkerInfo[0].gcl;
-        return gateControlList;  
-    } else {
-        //1. Get shortest interval
-        var ctr = 0;
-        interval = 9999999;
-        while(ctr < list.streamDetails.length) {
-            if(list.streamDetails[ctr].request.interval < interval)
-                interval = list.streamDetails[ctr].request.interval;
-            ctr++;
+        let gateControlList = talkersSameStreamId.gcl;
+        let listenerConfig = {
+            gcl: gateControlList,
+            vlanId: vlanTag['vlan-id'],
+            streamId: request.streamId,
+            interface: request.interfaceName,
+            macAddress: request.macAddress
+
         }
-        //TODO: 
+        return listenerConfig;  
+    
+    } else {
+        //TODO
     }
 }
 
@@ -121,14 +140,14 @@ function generateGateControlList(streams, isTalker, talkerInfo) {
     if(isTalker) {
        for(var i = 0; i<gateControlListArray.length; i++) {
            let gcl = computeGCLTalker(gateControlListArray[i]);
-           gateControlListArray[i].gcl = gcl;
+           gateControlListArray[i] = gcl;
        }
     }
     else {
         for(var i = 0; i<gateControlListArray.length; i++) {
             let gcl = computeGCLListener(gateControlListArray[i], talkerInfo);
             //For 2 endpoints, GCL will always coincide with a time offset.
-            gateControlListArray[i].gcl = gcl;
+            gateControlListArray = gcl;
         }
     }
     return gateControlListArray;

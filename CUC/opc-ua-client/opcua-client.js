@@ -7,9 +7,7 @@ const {
     DataType
 } = require("node-opcua");
 
-var session;
 async function connectOpcUaServer(endpointUrl) {
-
     const client = OPCUAClient.create({
         endpoint_must_exist: false,
         connectionStrategy: { //TODO check connection strategy since another connection handling may be performed.
@@ -22,7 +20,7 @@ async function connectOpcUaServer(endpointUrl) {
 
     await client.connect(endpointUrl);
 
-    session = await client.createSession(); 
+    const session = await client.createSession(); 
     const streamId = await session.readVariableValue("ns=1;i=1001")
     const endpointType = await session.readVariableValue("ns=1;i=1002");
     const macAddress = await session.readVariableValue("ns=1;i=1003");
@@ -87,9 +85,32 @@ async function connectOpcUaServer(endpointUrl) {
 
     logicHandler.receiveDataFromOpcUaServer(dataValue);
 }
-async function sendConfigToEndpoints(endpointUrl, config) {
-    //TODO
-    await session.writeSingleNode("ns=1;i=1011", config)
+async function sendConfigToEndpoints(endpointUrl, config, isTalker) {
+    const client = OPCUAClient.create({
+        endpoint_must_exist: false,
+        connectionStrategy: { //TODO check connection strategy since another connection handling may be performed.
+            maxRetry: 0,
+            initialDelay: 2000,
+            maxDelay: 10 * 1000
+        }
+    });
+    client.on("backoff", () => console.log("retrying connection")); //Bad case definition
+
+    await client.connect(endpointUrl);
+
+    const session = await client.createSession();
+    if(isTalker) {
+        //TODO: write all talker variables in servers
+        let dataToWrite = {
+            dataType: "UInt32",
+            value: config[0].vlanId
+        }
+        await session.writeSingleNode("ns=1;i=1024", dataToWrite, function(error, statusCode, diagnosticInfo) {
+            console.log("STOP")
+        });
+    } else {
+        //TODO: write all listener variables in servers
+    }
 }
 
 module.exports.connectOpcUaServer = connectOpcUaServer;
