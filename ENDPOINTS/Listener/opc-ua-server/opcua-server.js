@@ -269,8 +269,12 @@ function post_initialize() {
             browseName: "LaunchConfig"
         });
         launchConfig.bindMethod((callback) => {
-            console.log("HOLA");
             console.log("Handle all process to configure i210 board")
+            console.log("Interval: " + interval);
+            console.log("GCLGates: " + gclGates);
+            console.log("GCLGatesDuration: " + gclGatesTimeDuration)
+            console.log("Latency: " + latency);
+            console.log("Vlan ID: " + vlanIdValue);
         })
         /*namespace.addVariable({
             componentOf: interfaceConfig,
