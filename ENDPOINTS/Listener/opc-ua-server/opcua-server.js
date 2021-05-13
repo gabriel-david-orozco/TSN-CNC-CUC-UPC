@@ -5,10 +5,10 @@ const config = require('../config.json');
 
 // Let's create an instance of OPCUAServer
 const server = new opcua.OPCUAServer({
-    port: 4333, // the port of the listening socket of the server
+    port: 4334, // the port of the listening socket of the server
     resourcePath: "/TSNInterface", // this path will be added to the endpoint resource name
      buildInfo : {
-        productName: "TSNTalker",
+        productName: "TSNListener",
         buildNumber: "0001",
         buildDate: new Date(2021,4,4)
     }
