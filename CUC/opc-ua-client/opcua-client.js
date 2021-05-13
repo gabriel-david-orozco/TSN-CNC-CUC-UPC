@@ -115,6 +115,18 @@ async function sendConfigToEndpoints(endpointUrl, config, isTalker) {
         });
     } else {
         //TODO: write all listener variables in servers
+        await session.writeSingleNode("ns=1;i=1011", {
+            dataType: "UInt32",
+            value: config[0].latency
+        });
+        await session.writeSingleNode("ns=1;i=1012", {
+            dataType: "UInt32",
+            value: config[0].gcl
+        });
+        await session.writeSingleNode("ns=1;i=1013", {
+            dataType: "UInt32",
+            value: config[0].vlanId
+        });
     }
 }
 
