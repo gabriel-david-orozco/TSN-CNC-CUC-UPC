@@ -266,10 +266,10 @@ function post_initialize() {
             browseName: "TSNInterfaceConfig"
         }); 
         const launchConfig = namespace.addMethod(interfaceConfig, {
-
+            browseName: "LaunchConfig"
         });
-        launchConfig.bindMethod((callback) {
-            console.log("HOLA")
+        launchConfig.bindMethod((callback) => {
+            console.log("HOLA");
         })
         /*namespace.addVariable({
             componentOf: interfaceConfig,
@@ -279,7 +279,7 @@ function post_initialize() {
                 get: function () {
                     return timeAwareOffset;
                 },
-                set: function(value) {
+                set: function(value) {          
                     timeAwareOffset = value;
                     return opcua.StatusCodes.Good;
                 }
