@@ -42,7 +42,6 @@ function post_initialize() {
          //Config retrieved from CUC
          let gcl = new opcua.Variant({dataType: opcua.DataType.UInt32, arrayType: opcua.VariantArrayType.Array, value: [0x08]});;
          let latency = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 40});
-         let vlanPrioValue = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 7});
          let vlanIdValue = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 4567});
         
         namespace.addVariable({
@@ -144,7 +143,7 @@ function post_initialize() {
             }
         });
 
-        let timeAwareOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 40});
+        //let timeAwareOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 40});
         if(endpointType.value === "TALKER") {
             let priority = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 5});
             let intervalNumerator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1});
@@ -264,7 +263,7 @@ function post_initialize() {
             organizedBy: addressSpace.rootFolder.objects,
             browseName: "TSNInterfaceConfig"
         }); 
-        namespace.addVariable({
+        /*namespace.addVariable({
             componentOf: interfaceConfig,
             browseName: "timeAwareOffset",
             dataType: "UInt32",
@@ -277,7 +276,7 @@ function post_initialize() {
                     return opcua.StatusCodes.Good;
                 }
             }
-        });
+        });*/
 
         namespace.addVariable({
             componentOf: interfaceConfig,
@@ -304,21 +303,6 @@ function post_initialize() {
                 },
                 set: function(value) {
                     gcl = value.value;
-                    return opcua.StatusCodes.Good;
-                }
-            }
-        });
-
-        namespace.addVariable({
-            componentOf: interfaceConfig,
-            browseName: "vlanPrioValue",
-            dataType: "UInt32",
-            value: {
-                get: function () {
-                    return vlanPrioValue;
-                },
-                set: function(value) {
-                    vlanPrioValue = value.value;
                     return opcua.StatusCodes.Good;
                 }
             }
