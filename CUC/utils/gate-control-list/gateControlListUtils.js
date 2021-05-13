@@ -19,6 +19,7 @@ function computeGCLTalker(list) {
         frameSize = request.maxFrameSize;
         frameNumber = request.maxFrameNumber;
         let configs = list.streamDetails[0].config['interface-configuration']['interface-list'][0]['config-list'];
+        let latency = list.streamDetails[0].config.latency;
         for (let i=0; i<configs.length; i++) {
             switch(Object.keys(configs[i])[1]) {
                 case 'ieee802-vlan-tag':
@@ -81,7 +82,9 @@ function computeGCLTalker(list) {
         vlanId: vlanTag['vlan-id'],
         streamId: request.streamId,
         interface: request.interfaceName,
-        macAddress: request.macAddress
+        macAddress: request.macAddress,
+        timeOffset: timeOffset,
+        latency: latency
     }
     
 
@@ -104,6 +107,7 @@ function computeGCLListener(list, talkerInfo) {
     if(list.streamDetails.length < 2) {
         let request = list.streamDetails[0].request;
         let configs = list.streamDetails[0].config['interface-configuration']['interface-list'][0]['config-list']        //Get the talker config that coincides in streamIds, reject others.
+        let latency = list.streamDetails[0].config.latency;
         let vlanTag = configs[0]['ieee802-vlan-tag']
         let talkersSameStreamId;
         talkerInfo.forEach(function(item) {
@@ -119,9 +123,10 @@ function computeGCLListener(list, talkerInfo) {
             vlanId: vlanTag['vlan-id'],
             streamId: request.streamId,
             interface: request.interfaceName,
-            macAddress: request.macAddress
-
+            macAddress: request.macAddress,
+            latency: latency
         }
+        
         return listenerConfig;  
     
     } else {

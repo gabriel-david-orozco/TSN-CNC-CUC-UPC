@@ -101,12 +101,17 @@ async function sendConfigToEndpoints(endpointUrl, config, isTalker) {
     const session = await client.createSession();
     if(isTalker) {
         //TODO: write all talker variables in servers
-        let dataToWrite = {
+        await session.writeSingleNode("ns=1;i=1020", {
+            dataType: "UInt32",
+            value: config[0].latency
+        });
+        await session.writeSingleNode("ns=1;i=1021", {
+            dataType: "UInt32",
+            value: config[0].gcl
+        });
+        await session.writeSingleNode("ns=1;i=1022", {
             dataType: "UInt32",
             value: config[0].vlanId
-        }
-        await session.writeSingleNode("ns=1;i=1024", dataToWrite, function(error, statusCode, diagnosticInfo) {
-            console.log("STOP")
         });
     } else {
         //TODO: write all listener variables in servers

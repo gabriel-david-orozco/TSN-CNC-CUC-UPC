@@ -1,5 +1,7 @@
 /*global require,setInterval,console */
 const opcua = require("node-opcua");
+const config = require('../config.json');
+
 
 // Let's create an instance of OPCUAServer
 const server = new opcua.OPCUAServer({
@@ -26,22 +28,21 @@ function post_initialize() {
         });
     
         // Interface specifications
-        let streamId = "9a-f4-27-E7-7D-b3:E5-e5";
-        let endpointType = "TALKER";
-        let macAddress = "000102";
-        let interfaceName = "eth0";
+        let streamId = new opcua.Variant({dataType: opcua.DataType.String, value: config.streamId});
+        let endpointType = new opcua.Variant({dataType: opcua.DataType.String, value: config.type});
+        let macAddress = new opcua.Variant({dataType: opcua.DataType.String, value: config.macAdress});
+        let interfaceName = new opcua.Variant({dataType: opcua.DataType.String, value: config.interface});
         //Traffic requirements
-        let redundancy = true;
-        let maxDelay = 10;
+        let redundancy = new opcua.Variant({dataType: opcua.DataType.Boolean, value: false});
+        let maxDelay = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 10});
 
-        let vlanCapable = true;
-        let streamIdTypes = 60;
-        let identificationTypes = 60;
+        let vlanCapable = new opcua.Variant({dataType: opcua.DataType.Boolean, value: true});
+        let streamIdTypes = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 60});
+        let identificationTypes = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 60});
          //Config retrieved from CUC
-         let gcl = [0x08];
-         let latency = 40;
-         let vlanPrioValue = 7;
-         let vlanIdValue = 4567;
+         let gcl = new opcua.Variant({dataType: opcua.DataType.UInt32, arrayType: opcua.VariantArrayType.Array, value: [0x08]});;
+         let latency = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 40});
+         let vlanIdValue = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 4567});
         
         namespace.addVariable({
             componentOf: interface,
@@ -49,7 +50,7 @@ function post_initialize() {
             dataType: "String",
             value: {
                 get: function () {
-                return new opcua.Variant({dataType: opcua.DataType.String, value: streamId });
+                return streamId;
                 }
             }
         });
@@ -60,7 +61,7 @@ function post_initialize() {
             dataType: "String",
             value: {
                 get: function () {
-                return new opcua.Variant({dataType: opcua.DataType.String, value: endpointType });
+                return endpointType;
                 }
             }
         });
@@ -71,7 +72,7 @@ function post_initialize() {
             dataType: "String",
             value: {
                 get: function () {
-                return new opcua.Variant({dataType: opcua.DataType.String, value: macAddress });
+                return macAddress;
                 }
             }
         });
@@ -82,7 +83,7 @@ function post_initialize() {
             dataType: "String",
             value: {
                 get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.String, value: interfaceName });
+                    return interfaceName;
                 }
             }
         });
@@ -93,7 +94,7 @@ function post_initialize() {
             dataType: "Boolean",
             value: {
                 get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.Boolean, value: redundancy });
+                    return redundancy;
                 }
             }
         });
@@ -104,7 +105,7 @@ function post_initialize() {
             dataType: "UInt32",
             value: {
                 get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: maxDelay });
+                    return maxDelay;
                 }
             }
         });
@@ -115,7 +116,7 @@ function post_initialize() {
             dataType: "Boolean",
             value: {
                 get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.Boolean, value: vlanCapable });
+                    return vlanCapable;
                 }
             }
         });
@@ -123,10 +124,10 @@ function post_initialize() {
         namespace.addVariable({
             componentOf: interface,
             browseName: "streamIdTypes",
-            dataType: "String",
+            dataType: "UInt32",
             value: {
                 get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.Int32, value: streamIdTypes });
+                    return streamIdTypes;
                 }
             }
         });
@@ -134,25 +135,25 @@ function post_initialize() {
         namespace.addVariable({
             componentOf: interface,
             browseName: "identificationTypes",
-            dataType: "String",
+            dataType: "UInt32",
             value: {
                 get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.Int32, value: identificationTypes });
+                    return identificationTypes;
                 }
             }
         });
 
-        let timeAwareOffset = 40;
-        if(endpointType === "TALKER") {
-            let priority = 5;
-            let intervalNumerator = 1;
-            let intervalDenominator = 1;
-            let maxFrameNumber = 10;
-            let maxFrameSize = 1518;
-            let transmissionSelection = 0;
-            let earliestTransmitOffset = 10;
-            let latestTransmitOffset = 30;
-            let jitter = 5;
+        //let timeAwareOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 40});
+        if(endpointType.value === "TALKER") {
+            let priority = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 5});
+            let intervalNumerator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1});
+            let intervalDenominator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1});
+            let maxFrameNumber = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 10});
+            let maxFrameSize = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1518});
+            let transmissionSelection =new opcua.Variant({dataType: opcua.DataType.UInt32, value: 0});
+            let earliestTransmitOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 10});
+            let latestTransmitOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 30});
+            let jitter = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 5});
 
             //Config retrieved from CUC for Talker
             
@@ -163,7 +164,7 @@ function post_initialize() {
                 dataType: "UInt32",
                 value: {
                     get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: priority });
+                    return priority;
                     }
                 }
             });
@@ -174,7 +175,7 @@ function post_initialize() {
                 dataType: "UInt32",
                 value: {
                     get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: intervalNumerator });
+                    return intervalNumerator;
                     }
                 }
             });
@@ -185,7 +186,7 @@ function post_initialize() {
                 dataType: "UInt32",
                 value: {
                     get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: intervalDenominator });
+                    return intervalDenominator;
                     }
                 }
             });
@@ -196,7 +197,7 @@ function post_initialize() {
                 dataType: "UInt32",
                 value: {
                     get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: maxFrameNumber });
+                    return maxFrameNumber;
                     }
                 }
             });
@@ -207,7 +208,7 @@ function post_initialize() {
                 dataType: "UInt32",
                 value: {
                     get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: maxFrameSize });
+                    return maxFrameSize;
                     }
                 }
             });
@@ -218,7 +219,7 @@ function post_initialize() {
                 dataType: "UInt32",
                 value: {
                     get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: transmissionSelection });
+                    return transmissionSelection;
                     }
                 }
             });
@@ -229,7 +230,7 @@ function post_initialize() {
                 dataType: "UInt32",
                 value: {
                     get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: earliestTransmitOffset });
+                    return earliestTransmitOffset;
                     }
                 }
             });
@@ -240,7 +241,7 @@ function post_initialize() {
                 dataType: "UInt32",
                 value: {
                     get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: latestTransmitOffset });
+                    return latestTransmitOffset;
                     }
                 }
             });
@@ -251,7 +252,7 @@ function post_initialize() {
                 dataType: "UInt32",
                 value: {
                     get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.UInt32, value: jitter });
+                    return jitter;
                     }
                 }
             });
@@ -262,19 +263,20 @@ function post_initialize() {
             organizedBy: addressSpace.rootFolder.objects,
             browseName: "TSNInterfaceConfig"
         }); 
-        namespace.addVariable({
+        /*namespace.addVariable({
             componentOf: interfaceConfig,
             browseName: "timeAwareOffset",
             dataType: "UInt32",
             value: {
                 get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.Int32, value: timeAwareOffset });
+                    return timeAwareOffset;
                 },
                 set: function(value) {
                     timeAwareOffset = value;
+                    return opcua.StatusCodes.Good;
                 }
             }
-        });
+        });*/
 
         namespace.addVariable({
             componentOf: interfaceConfig,
@@ -282,10 +284,11 @@ function post_initialize() {
             dataType: "UInt32",
             value: {
                 get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.Int32, value: latency });
+                    return latency;
                 },
                 set: function(value) {
-                    latency = value;
+                    latency = value.value;
+                    return opcua.StatusCodes.Good;
                 }
             }
         });
@@ -296,26 +299,11 @@ function post_initialize() {
             dataType: "UInt32",
             value: {
                 get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.Byte, arrayType: opcua.VariantArrayType.Array, value: gcl });
+                    return gcl;
                 },
                 set: function(value) {
-                    gcl = value;
-                }
-            }
-        });
-
-        namespace.addVariable({
-            componentOf: interfaceConfig,
-            browseName: "vlanPrioValue",
-            dataType: "UInt32",
-            value: {
-                get: function () {
-                    return new opcua.Variant({dataType: opcua.DataType.Int32, value: vlanPrioValue });
-                },
-                set: function(value) {
-                    console.log(vlanprioValue)
-                    vlanPrioValue = value;
-                    console.log(vlanprioValue)
+                    gcl = value.value;
+                    return opcua.StatusCodes.Good;
                 }
             }
         });
@@ -327,7 +315,7 @@ function post_initialize() {
             value: {
                 get: function () {
                     console.log(vlanIdValue)
-                    return new opcua.Variant({dataType: opcua.DataType.Int32, value: vlanIdValue });
+                    return vlanIdValue;
                 },
                 set: function(value) {
                     vlanIdValue = value.value;
