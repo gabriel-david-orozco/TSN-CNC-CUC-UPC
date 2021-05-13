@@ -107,12 +107,25 @@ async function sendConfigToEndpoints(endpointUrl, config, isTalker) {
         });
         await session.writeSingleNode("ns=1;i=1021", {
             dataType: "UInt32",
-            value: config[0].gcl
+            value: config[0].gcl.interval
         });
         await session.writeSingleNode("ns=1;i=1022", {
             dataType: "UInt32",
+            arrayType: "Array",
+            value: config[0].gcl.states
+        });
+        await session.writeSingleNode("ns=1;i=1023", {
+            dataType: "UInt32",
+            arrayType: "Array",
+            value: config[0].gcl.duration
+        });
+        await session.writeSingleNode("ns=1;i=1024", {
+            dataType: "UInt32",
             value: config[0].vlanId
         });
+
+        await session.call({objectId: "ns=;i=",
+            methodId: "ns=;i="})
     } else {
         //TODO: write all listener variables in servers
         await session.writeSingleNode("ns=1;i=1011", {
@@ -121,12 +134,24 @@ async function sendConfigToEndpoints(endpointUrl, config, isTalker) {
         });
         await session.writeSingleNode("ns=1;i=1012", {
             dataType: "UInt32",
-            value: config[0].gcl
+            value: config[0].gcl.interval
         });
         await session.writeSingleNode("ns=1;i=1013", {
             dataType: "UInt32",
+            arrayType: "Array",
+            value: config[0].gcl.states
+        });
+        await session.writeSingleNode("ns=1;i=1014", {
+            dataType: "UInt32",
+            arrayType: "Array",
+            value: config[0].gcl.duration
+        });
+        await session.writeSingleNode("ns=1;i=1015", {
+            dataType: "UInt32",
             value: config[0].vlanId
         });
+        await session.call({objectId: "ns=;i=",
+            methodId: "ns=;i="})
     }
 }
 

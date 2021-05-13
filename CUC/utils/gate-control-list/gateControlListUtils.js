@@ -2,8 +2,6 @@
  * This module is being strictly tested for 1 TSN flow per endpoint.
  * More flows need to be tested / enhancanced by the new code tenant.
  */
-var xor = require('buffer-xor');
-var bitUtils = require('node-bitarray');
 const arrayUtils = require('./../arrayUtils');
 const NANOSECONDS = 1000000000;
 const MEGA = 1000000;
@@ -36,43 +34,35 @@ function computeGCLTalker(list) {
         let timeEmitting = frameSize*frameNumber/(12.5) * NANOSECONDS /  MEGA;
 
         //Fit it in the interval with time-aware-offset
-        let buffer255 = bitUtils.parse(255);
-        let bufferPriority7 = bitUtils.parse(128);
-        let vlanPriority = bitUtils.parse(1 << vlanTag['priority-code-point']);
-        vlanPriority = bitUtils.or(bufferPriority7, vlanPriority);
+        let vlanPriority = 128 | Math.pow(2, vlanTag['priority-code-point']);
         interval = interval * NANOSECONDS //Second to ns
     
         
         let gateControlList = {
             interval: interval,
             states: [],
+            duration: []
         }
-        //Set the gate states in order to permit the 'bitUtils.xor(buffer255, vlanPriority);vlanPriorityId' queue to transmit at that specific time interval.
-        gateControlTmp = bitUtils.not(bitUtils.and(buffer255, vlanPriority));
+        //Set the gate states in order to permit the 'vlanPriorityId' queue to transmit at that specific time interval.
+        gateControlTmp = 255 - vlanPriority;
+        gateControlTmp = 128 | gateControlTmp;
         if(timeOffset<(0.05*interval)) {
-            gateControlList.states.push({
-                duration: timeEmitting,
-                gateStates: vlanPriority
-            });
-            gateControlList.states.push({
-                duration: interval - timeEmitting,
-                gateStates: gateControlTmp
-            });
+            gateControlList.states.push(vlanPriority);
+            gateControlList.duration.push(timeEmitting);
+
+            gateControlList.states.push(gateControlTmp);
+            gateControlList.duration.push(interval - timeEmitting);
             
         } else //Worth it to spend time emitting best effort traffic.
         {
-            gateControlList. states.push({
-                duration: timeOffset,
-                gateStates: gateControlTmp
-            });
-            gateControlList.states.push({
-                duration: timeEmitting,
-                gateStates: vlanPriority
-            });
-            gateControlList.states.push({
-                duration: interval - timeOffset - timeEmitting,
-                gateStates: vlanPriority
-            });            
+            gateControlList.states.push(gateControlTmp);
+            gateControlList.duration.push(timeOffset);
+
+            gateControlList.states.push(vlanPriority);
+            gateControlList.duration.push(timeEmitting);
+ 
+            gateControlList.states.push(gateControlTmp);
+            gateControlList.duration.push(interval - timeOffset - timeEmitting);        
         }
         //If conflict with other priorities, CBS should be handled. (Possible TODO: )
     console.log("GCL generated")
@@ -152,7 +142,7 @@ function generateGateControlList(streams, isTalker, talkerInfo) {
         for(var i = 0; i<gateControlListArray.length; i++) {
             let gcl = computeGCLListener(gateControlListArray[i], talkerInfo);
             //For 2 endpoints, GCL will always coincide with a time offset.
-            gateControlListArray = gcl;
+            gateControlListArray[i] = gcl;
         }
     }
     return gateControlListArray;

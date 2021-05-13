@@ -109,7 +109,7 @@ function generateUniGroups(ctrTalker, ctrListener) {
                                 }
                             },
                             'user-to-network-requirements': {
-                                'num-seamless-trees': talkerInformation[ctrTalker].request.redundancy ? talkerInformation[ctrTalker].request.redundancy = 2 : null,
+                                'num-seamless-trees': talkerInformation[ctrTalker].request.redundancy ? talkerInformation[ctrTalker].request.redundancy = 2 : 1,
                                 'max-latency': talkerInformation[ctrTalker].request.maxDelay
                             },
                             'interface-capabilities': { 
@@ -124,7 +124,7 @@ function generateUniGroups(ctrTalker, ctrListener) {
                                 'interface-name': listenerInformation[ctrListener].request.interfaceName
                             }],
                             'user-to-network-requirements': {
-                                'num-seamless-trees': listenerInformation[ctrListener].request.redundancy ? listenerInformation[ctrListener].request.redundancy = 2 : null,
+                                'num-seamless-trees': listenerInformation[ctrListener].request.redundancy ? listenerInformation[ctrListener].request.redundancy = 2 : 1,
                                 'max-latency': listenerInformation[ctrListener].request.maxDelay
                             },
                             'interface-capabilities':  { 

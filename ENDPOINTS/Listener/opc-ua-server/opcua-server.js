@@ -30,7 +30,7 @@ function post_initialize() {
         // Interface specifications
         let streamId = new opcua.Variant({dataType: opcua.DataType.String, value: config.streamId});
         let endpointType = new opcua.Variant({dataType: opcua.DataType.String, value: config.type});
-        let macAddress = new opcua.Variant({dataType: opcua.DataType.String, value: config.macAdress});
+        let macAddress = new opcua.Variant({dataType: opcua.DataType.String, value: config.macAddress});
         let interfaceName = new opcua.Variant({dataType: opcua.DataType.String, value: config.interface});
         //Traffic requirements
         let redundancy = new opcua.Variant({dataType: opcua.DataType.Boolean, value: false});
@@ -40,7 +40,9 @@ function post_initialize() {
         let streamIdTypes = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 60});
         let identificationTypes = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 60});
          //Config retrieved from CUC
-         let gcl = new opcua.Variant({dataType: opcua.DataType.UInt32, arrayType: opcua.VariantArrayType.Array, value: [0x08]});;
+         let interval = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 0});
+         let gclGates = new opcua.Variant({dataType: opcua.DataType.UInt32, arrayType: opcua.VariantArrayType.Array, value: [0x00]});
+         let gclGatesTimeDuration = new opcua.Variant({dataType: opcua.DataType.UInt32, arrayType: opcua.VariantArrayType.Array, value: [0x00]});
          let latency = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 40});
          let vlanIdValue = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 4567});
         
@@ -292,17 +294,45 @@ function post_initialize() {
                 }
             }
         });
-        
         namespace.addVariable({ //TODO
             componentOf: interfaceConfig,
-            browseName: "gcl",
+            browseName: "interval",
             dataType: "UInt32",
             value: {
                 get: function () {
-                    return gcl;
+                    return interval;
                 },
                 set: function(value) {
-                    gcl = value.value;
+                    interval = value.value;
+                    return opcua.StatusCodes.Good;
+                }
+            }
+        });
+        namespace.addVariable({ //TODO
+            componentOf: interfaceConfig,
+            browseName: "gclGates",
+            dataType: "UInt32",
+            value: {
+                get: function () {
+                    return gclGates;
+                },
+                set: function(value) {
+                    gclGates = value.value;
+                    return opcua.StatusCodes.Good;
+                }
+            }
+        });
+
+        namespace.addVariable({ //TODO
+            componentOf: interfaceConfig,
+            browseName: "gclGatesTimeDuration",
+            dataType: "UInt32",
+            value: {
+                get: function () {
+                    return gclGatesTimeDuration;
+                },
+                set: function(value) {
+                    gclGatesTimeDuration = value.value;
                     return opcua.StatusCodes.Good;
                 }
             }
