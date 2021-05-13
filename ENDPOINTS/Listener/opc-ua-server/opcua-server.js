@@ -265,6 +265,13 @@ function post_initialize() {
             organizedBy: addressSpace.rootFolder.objects,
             browseName: "TSNInterfaceConfig"
         }); 
+        const launchConfig = namespace.addMethod(interfaceConfig, {
+            browseName: "LaunchConfig"
+        });
+        launchConfig.bindMethod((callback) => {
+            console.log("HOLA");
+            console.log("Handle all process to configure i210 board")
+        })
         /*namespace.addVariable({
             componentOf: interfaceConfig,
             browseName: "timeAwareOffset",
@@ -273,7 +280,7 @@ function post_initialize() {
                 get: function () {
                     return timeAwareOffset;
                 },
-                set: function(value) {
+                set: function(value) {          
                     timeAwareOffset = value;
                     return opcua.StatusCodes.Good;
                 }
@@ -318,6 +325,7 @@ function post_initialize() {
                 },
                 set: function(value) {
                     gclGates = value.value;
+                    console.log(gclGates)
                     return opcua.StatusCodes.Good;
                 }
             }

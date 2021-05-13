@@ -270,6 +270,7 @@ function post_initialize() {
         });
         launchConfig.bindMethod((callback) => {
             console.log("HOLA");
+            console.log("Handle all process to configure i210 board")
         })
         /*namespace.addVariable({
             componentOf: interfaceConfig,
