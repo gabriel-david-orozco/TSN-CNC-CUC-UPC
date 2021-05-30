@@ -92,7 +92,7 @@ function computeGCLTalker(list) {
     }
 }
 
-function computeGCLListener(list, talkerInfo) {
+/*function computeGCLListener(list, talkerInfo) {
     if(list.streamDetails.length < 2) {
         let request = list.streamDetails[0].request;
         let configs = list.streamDetails[0].config['interface-configuration']['interface-list'][0]['config-list']        //Get the talker config that coincides in streamIds, reject others.
@@ -121,9 +121,9 @@ function computeGCLListener(list, talkerInfo) {
     } else {
         //TODO
     }
-}
+}*/
 
-function generateGateControlList(streams, isTalker, talkerInfo) {
+function generateGateControlList(streams) {
     //Locate same interfaces + name
     let gateControlListArray = [];
     streams.forEach(function(item) {
@@ -131,19 +131,10 @@ function generateGateControlList(streams, isTalker, talkerInfo) {
         arrayUtils.macCompare(item, gateControlListArray);
     });
     //Compute each element in gateControlListArray
-    if(isTalker) {
        for(var i = 0; i<gateControlListArray.length; i++) {
            let gcl = computeGCLTalker(gateControlListArray[i]);
            gateControlListArray[i] = gcl;
        }
-    }
-    else {
-        for(var i = 0; i<gateControlListArray.length; i++) {
-            let gcl = computeGCLListener(gateControlListArray[i], talkerInfo);
-            //For 2 endpoints, GCL will always coincide with a time offset.
-            gateControlListArray[i] = gcl;
-        }
-    }
     return gateControlListArray;
 }
 

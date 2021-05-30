@@ -61,7 +61,7 @@ function generateGclAndSendConfig() {
     let configDataReady = parseConfigurationData();
     if(configDataReady) {
         //Generate gate control list
-        let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation, true, null);
+        let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation);
         let listenerInterval = talkerConfig[0].gcl.interval;
         //Send the config to endpoints
         let talkerUrl = "opc.tcp://localhost:4333/TSNInterface";;
@@ -71,6 +71,7 @@ function generateGclAndSendConfig() {
         opcUaClient.sendConfigToEndpoints (listenerUrl, listenerInterval, false);
     } else {
         //TODO: handle errors
+        console.log("An error occured parsing the configuration data")
     }
 }
 

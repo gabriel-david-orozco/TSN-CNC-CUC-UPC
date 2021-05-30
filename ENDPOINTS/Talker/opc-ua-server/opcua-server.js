@@ -49,8 +49,8 @@ async function configureInterface (interfaceName, gclGates, gclGatesTimeDuration
     queues 1@0 1@1 2@2 
     base-time 1536883100000000000`;
 
-    for(let i=0; i<gclGates.length; i++) {
-        taprio = taprio + " sched-entry S "+gclGates[i]+" "+gclGatesTimeDuration[i];
+    for(let i=0; i<gclGates.value.length; i++) {
+        taprio = taprio + " sched-entry S "+gclGates.value[i]+" "+gclGatesTimeDuration.value[i];
     }
     taprio = taprio + " clockid CLOCK_TAI";
     
