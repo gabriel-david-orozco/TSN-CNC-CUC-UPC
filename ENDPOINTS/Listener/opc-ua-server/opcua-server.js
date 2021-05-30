@@ -180,4 +180,5 @@ function post_initialize() {
         console.log(" the primary server endpoint url is ", endpointUrl );
     });
 }
-server.initialize(post_initialize);
+
+module.exports.initServer = server.initialize(post_initialize);
