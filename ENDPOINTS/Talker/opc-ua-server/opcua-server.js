@@ -355,7 +355,7 @@ function post_initialize() {
                     return interval;
                 },
                 set: function(value) {
-                    interval = value.value;
+                    interval.value = value.value;
                     return opcua.StatusCodes.Good;
                 }
             }
@@ -369,7 +369,7 @@ function post_initialize() {
                     return gclGates;
                 },
                 set: function(value) {
-                    gclGates = value.value;
+                    gclGates.value = value.value;
                     return opcua.StatusCodes.Good;
                 }
             }
@@ -384,7 +384,7 @@ function post_initialize() {
                     return gclGatesTimeDuration;
                 },
                 set: function(value) {
-                    gclGatesTimeDuration = value.value;
+                    gclGatesTimeDuration.value = value.value;
                     return opcua.StatusCodes.Good;
                 }
             }
@@ -400,7 +400,7 @@ function post_initialize() {
                     return vlanIdValue;
                 },
                 set: function(value) {
-                    vlanIdValue = value.value;
+                    vlanIdValue.value = value.value;
                     return opcua.StatusCodes.Good;
                 }
             }
