@@ -1,7 +1,8 @@
 
 const opcua = require("node-opcua");
 
-async function connectOpcUaServer(endpointUrl) {
+async function connectOpcUaServer(endpointUrl, interval) {
+    console.log("Creating subscription: "+interval+" time interval")
     const client = opcua.OPCUAClient.create({
         endpoint_must_exist: false,
         connectionStrategy: { //TODO check connection strategy since another connection handling may be performed.
@@ -15,14 +16,14 @@ async function connectOpcUaServer(endpointUrl) {
     await client.connect(endpointUrl);
 
     const session = await client.createSession(); 
-    const subscription = ClientSubscription.create(session, {
+    const subscription = opcua.ClientSubscription.create(session, {
         //TODO
-        requestedPublishingInterval: 1000,
+        requestedPublishingInterval: interval/1000000,
         requestedLifetimeCount:      100,
         requestedMaxKeepAliveCount:   10,
-        maxNotificationsPerPublish:  100,
+        maxNotificationsPerPublish:  1,
         publishingEnabled: true,
-        priority: 10
+        priority: 0
     });
     
     subscription.on("started", function() {
@@ -33,8 +34,8 @@ async function connectOpcUaServer(endpointUrl) {
        console.log("terminated");
     });
 
-    const monitoredItem  = the_subscription.monitor({
-        nodeId: opcua.resolveNodeId("ns=1;i="),
+    const monitoredItem  = await subscription.monitor({
+        nodeId: opcua.resolveNodeId("ns=1;i=1027"),
         attributeId: opcua.AttributeIds.Value
         },
         {
@@ -47,7 +48,7 @@ async function connectOpcUaServer(endpointUrl) {
     console.log("-------------------------------------");
 
     monitoredItem.on("changed", function(dataValue) {
-        console.log("monitored item changed:  % free mem = ", dataValue.value.value);
+        //console.log(dataValue.value.value);
     });
 }
 

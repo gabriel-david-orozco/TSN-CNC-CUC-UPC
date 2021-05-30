@@ -41,7 +41,7 @@ function receiveDataFromOpcUaServer(receivedData) {
         if(configDataReady) {
             //Generate gate control list
             let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation, true, null);
-            let listenerInterval = talkerConfig.config[0].interval;
+            let listenerInterval = talkerConfig[0].gcl.interval;
             //Send the config to endpoints
             let talkerUrl = "opc.tcp://localhost:4333/TSNInterface";;
             opcUaClient.sendConfigToEndpoints(talkerUrl, talkerConfig, true);

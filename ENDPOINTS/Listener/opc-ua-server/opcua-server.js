@@ -1,7 +1,7 @@
 /*global require,setInterval,console */
 const opcua = require("node-opcua");
 const config = require('../config.json');
-const subscriptionClient = require('../opc-ua-client/opc-ua-client-sunscription');
+const subscriptionClient = require('../opc-ua-client/opc-ua-client-subscription');
 
 
 // Let's create an instance of OPCUAServer
@@ -142,16 +142,31 @@ function post_initialize() {
 
 
         //Declare SubscriptionObject to manage subscription
-        const interfaceConfig = namespace.addObject({
+        let interval;
+        const subscribeClientObject = namespace.addObject({
             organizedBy: addressSpace.rootFolder.objects,
             browseName: "SubscribeClientObject"
         }); 
-        const launchConfig = namespace.addMethod(interfaceConfig, {
+        namespace.addVariable({
+            componentOf: subscribeClientObject,
+            browseName: "interval",
+            dataType: "UInt32",
+            value: {
+                get: function () {
+                    return identificationTypes;
+                },
+                set: function(intervalValue) {
+                    interval = intervalValue.value;
+                    return opcua.StatusCodes.Good;
+                }
+            }
+        });
+        const launchConfig = namespace.addMethod(subscribeClientObject, {
             browseName: "InitSubscription"
         });
         launchConfig.bindMethod((callback) => {
             //Create opcUA client that requests subcription data and prints it
-            subscriptionClient.connectOpcUaServer("opc.tcp://localhost:4333/TSNInterface")
+            subscriptionClient.connectOpcUaServer("opc.tcp://localhost:4333/TSNInterface", interval)
         })
 
         

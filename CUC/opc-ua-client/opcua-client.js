@@ -127,12 +127,12 @@ async function sendConfigToEndpoints(endpointUrl, config, isTalker) {
         await session.call({objectId: "ns=1;i=1019",
             methodId: "ns=1;i=1020"})
     } else { //LISTENER
-        /*await session.writeSingleNode("ns=1;i=TODO", {
+        await session.writeSingleNode("ns=1;i=1011", {
             dataType: "UInt32",
             value: config
         });
-        await session.call({objectId: "ns=1;i=TODO",
-            methodId: "ns=1;i=TODO"})*/ 
+        await session.call({objectId: "ns=1;i=1010",
+            methodId: "ns=1;i=1012"});
     }
         
 }
