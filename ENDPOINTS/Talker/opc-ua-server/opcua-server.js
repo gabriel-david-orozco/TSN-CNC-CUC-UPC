@@ -318,20 +318,7 @@ function post_initialize() {
         launchConfig.bindMethod((callback) => {
             configureInterface(interfaceName, gclGates, gclGatesTimeDuration, interval, latency, vlanIdValue);
         })
-        /*namespace.addVariable({
-            componentOf: interfaceConfig,
-            browseName: "timeAwareOffset",
-            dataType: "UInt32",
-            value: {
-                get: function () {
-                    return timeAwareOffset;
-                },
-                set: function(value) {          
-                    timeAwareOffset = value;
-                    return opcua.StatusCodes.Good;
-                }
-            }
-        });*/
+        /*TODO: CBS and ETF configuring */
 
         namespace.addVariable({
             componentOf: interfaceConfig,

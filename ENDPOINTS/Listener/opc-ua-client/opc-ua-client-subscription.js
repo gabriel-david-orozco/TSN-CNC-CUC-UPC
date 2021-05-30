@@ -1,4 +1,3 @@
-
 const opcua = require("node-opcua");
 
 async function connectOpcUaServer(endpointUrl, interval) {
@@ -17,7 +16,6 @@ async function connectOpcUaServer(endpointUrl, interval) {
 
     const session = await client.createSession(); 
     const subscription = opcua.ClientSubscription.create(session, {
-        //TODO
         requestedPublishingInterval: interval/1000000,
         requestedLifetimeCount:      100,
         requestedMaxKeepAliveCount:   10,

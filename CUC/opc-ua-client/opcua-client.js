@@ -1,10 +1,5 @@
-const logicHandler = require('../logic/core.js');
 const {
     OPCUAClient,
-    AttributeIds,
-    TimestampsToReturn,
-    StatusCodes,
-    DataType
 } = require("node-opcua");
 
 async function connectOpcUaServer(endpointUrl) {
@@ -82,8 +77,7 @@ async function connectOpcUaServer(endpointUrl) {
          };
     }
     
-
-    logicHandler.receiveDataFromOpcUaServer(dataValue);
+    return dataValue;
 }
 async function sendConfigToEndpoints(endpointUrl, config, isTalker) {
     const client = OPCUAClient.create({

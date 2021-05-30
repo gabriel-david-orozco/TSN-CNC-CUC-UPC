@@ -33,27 +33,7 @@ function receiveDataFromOpcUaServer(receivedData) {
     } else{
         listenerInformation.push(receivedData);
     }
-    //Check content of streamInformation variable
-    let responseReceived = checkStreamInformationReadyAndSend(receivedData.streamId); //ID should be compliant with stream-id-type of the YANG module
-    if(responseReceived) {
-        //TODO: parse response into talkerInformation and listenerInformation variables
-        let configDataReady = parseConfigurationData();
-        if(configDataReady) {
-            //Generate gate control list
-            let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation, true, null);
-            let listenerInterval = talkerConfig[0].gcl.interval;
-            //Send the config to endpoints
-            let talkerUrl = "opc.tcp://localhost:4333/TSNInterface";;
-            opcUaClient.sendConfigToEndpoints(talkerUrl, talkerConfig, true);
-
-            let listenerUrl = "opc.tcp://localhost:4334/TSNInterface";;
-            opcUaClient.sendConfigToEndpoints (listenerUrl, listenerInterval, false);
-        } else {
-            //TODO: handle errors
-        }
-    } else {
-        //TODO: handle error
-    }
+    return receivedData.streamId;
 }
 
 function checkStreamInformationReadyAndSend(idStream) {
@@ -73,6 +53,24 @@ function checkStreamInformationReadyAndSend(idStream) {
         return true;
     } else {
         return false;
+    }
+}
+
+function generateGclAndSendConfig() {
+    //TODO: parse response into talkerInformation and listenerInformation variables
+    let configDataReady = parseConfigurationData();
+    if(configDataReady) {
+        //Generate gate control list
+        let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation, true, null);
+        let listenerInterval = talkerConfig[0].gcl.interval;
+        //Send the config to endpoints
+        let talkerUrl = "opc.tcp://localhost:4333/TSNInterface";;
+        opcUaClient.sendConfigToEndpoints(talkerUrl, talkerConfig, true);
+
+        let listenerUrl = "opc.tcp://localhost:4334/TSNInterface";;
+        opcUaClient.sendConfigToEndpoints (listenerUrl, listenerInterval, false);
+    } else {
+        //TODO: handle errors
     }
 }
 
@@ -166,3 +164,5 @@ function parseConfigurationData() {
 }
 
 module.exports.receiveDataFromOpcUaServer = receiveDataFromOpcUaServer;
+module.exports.checkStreamInformationReadyAndSend = checkStreamInformationReadyAndSend;
+module.exports.generateGclAndSendConfig = generateGclAndSendConfig;
