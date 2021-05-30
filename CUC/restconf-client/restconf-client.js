@@ -2,15 +2,16 @@ const fs = require('fs');
 const path = require('path');
 const http2 = require('http2');
 
-const client = http2.connect('https://127.0.0.1:8443', {
-    ca: fs.readFileSync(path.resolve(__dirname, "../resources/ca.pem")),
-    cert: fs.readFileSync(path.resolve(__dirname, "../resources/client-certificate.pem")),
-    key: fs.readFileSync(path.resolve(__dirname, "../resources/client-key.pem")) 
-});
-client.on('error', (err) => console.error(err));
+var client;
 
 
 function restconfRequest(body) {
+    client= http2.connect('https://127.0.0.1:8443', {
+      ca: fs.readFileSync(path.resolve(__dirname, "../resources/ca.pem")),
+      cert: fs.readFileSync(path.resolve(__dirname, "../resources/client-certificate.pem")),
+      key: fs.readFileSync(path.resolve(__dirname, "../resources/client-key.pem")) 
+    });
+    client.on('error', (err) => console.error(err));
     let buffer = Buffer.from(JSON.stringify(body));
 
     const req = client.request({

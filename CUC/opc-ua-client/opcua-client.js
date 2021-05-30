@@ -126,33 +126,15 @@ async function sendConfigToEndpoints(endpointUrl, config, isTalker) {
 
         await session.call({objectId: "ns=1;i=1019",
             methodId: "ns=1;i=1020"})
-    } else {
-        //TODO: write all listener variables in servers
-        await session.writeSingleNode("ns=1;i=1012", {
+    } else { //LISTENER
+        /*await session.writeSingleNode("ns=1;i=TODO", {
             dataType: "UInt32",
-            value: config[0].latency
+            value: config
         });
-        await session.writeSingleNode("ns=1;i=1013", {
-            dataType: "UInt32",
-            value: config[0].gcl.interval
-        });
-        await session.writeSingleNode("ns=1;i=1014", {
-            dataType: "UInt32",
-            arrayType: "Array",
-            value: config[0].gcl.states
-        });
-        await session.writeSingleNode("ns=1;i=1015", {
-            dataType: "UInt32",
-            arrayType: "Array",
-            value: config[0].gcl.duration
-        });
-        await session.writeSingleNode("ns=1;i=1016", {
-            dataType: "UInt32",
-            value: config[0].vlanId
-        });
-        await session.call({objectId: "ns=1;i=1010",
-            methodId: "ns=1;i=1011"})
+        await session.call({objectId: "ns=1;i=TODO",
+            methodId: "ns=1;i=TODO"})*/ 
     }
+        
 }
 
 module.exports.connectOpcUaServer = connectOpcUaServer;
