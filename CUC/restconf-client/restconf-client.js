@@ -6,7 +6,7 @@ var client;
 
 
 function restconfRequest(body) {
-    client= http2.connect('https://127.0.0.1:8443', {
+    /*client= http2.connect('https://127.0.0.1:8443', {
       ca: fs.readFileSync(path.resolve(__dirname, "../resources/ca.pem")),
       cert: fs.readFileSync(path.resolve(__dirname, "../resources/client-certificate.pem")),
       key: fs.readFileSync(path.resolve(__dirname, "../resources/client-key.pem")) 
@@ -34,7 +34,7 @@ function restconfRequest(body) {
       client.close();
     });
     req.write(buffer);
-    req.end();
+    req.end();*/
 }
 
 module.exports.restconfRequest = restconfRequest;

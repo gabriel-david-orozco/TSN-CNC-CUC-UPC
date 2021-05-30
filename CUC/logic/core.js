@@ -47,7 +47,7 @@ function checkStreamInformationReadyAndSend(idStream) {
     {
         let uniGroups = generateUniGroups(ctrTalker, ctrListener)
         //Once they are ready, send them to the restConfServer (CNC)
-        //restconfClient.restconfRequest(uniGroups);
+        restconfClient.restconfRequest(uniGroups);
         //TODO: Maybe the response needs to be polled by a GET with a given stream ID.
         config = require('../utils/yang/json-samples/cncResponse.json');
         return true;
