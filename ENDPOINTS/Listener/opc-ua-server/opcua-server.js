@@ -24,7 +24,7 @@ function post_initialize() {
         // declare a new object
         const interface = namespace.addObject({
             organizedBy: addressSpace.rootFolder.objects,
-            browseName: "TSNInterface"
+            browseName: "EndpointFeatures"
         });
     
         // Interface specifications
@@ -39,12 +39,6 @@ function post_initialize() {
         let vlanCapable = new opcua.Variant({dataType: opcua.DataType.Boolean, value: true});
         let streamIdTypes = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 60});
         let identificationTypes = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 60});
-         //Config retrieved from CUC
-         let interval = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 0});
-         let gclGates = new opcua.Variant({dataType: opcua.DataType.UInt32, arrayType: opcua.VariantArrayType.Array, value: [0x00]});
-         let gclGatesTimeDuration = new opcua.Variant({dataType: opcua.DataType.UInt32, arrayType: opcua.VariantArrayType.Array, value: [0x00]});
-         let latency = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 40});
-         let vlanIdValue = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 4567});
         
         namespace.addVariable({
             componentOf: interface,
@@ -145,226 +139,20 @@ function post_initialize() {
             }
         });
 
-        //let timeAwareOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 40});
-        if(endpointType.value === "TALKER") {
-            let priority = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 5});
-            let intervalNumerator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1});
-            let intervalDenominator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1});
-            let maxFrameNumber = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 10});
-            let maxFrameSize = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1518});
-            let transmissionSelection =new opcua.Variant({dataType: opcua.DataType.UInt32, value: 0});
-            let earliestTransmitOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 10});
-            let latestTransmitOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 30});
-            let jitter = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 5});
 
-            //Config retrieved from CUC for Talker
-            
-
-            namespace.addVariable({
-                componentOf: interface,
-                browseName: "priority",
-                dataType: "UInt32",
-                value: {
-                    get: function () {
-                    return priority;
-                    }
-                }
-            });
-
-            namespace.addVariable({
-                componentOf: interface,
-                browseName: "intervalNumerator",
-                dataType: "UInt32",
-                value: {
-                    get: function () {
-                    return intervalNumerator;
-                    }
-                }
-            });
-
-            namespace.addVariable({
-                componentOf: interface,
-                browseName: "intervalDenominator",
-                dataType: "UInt32",
-                value: {
-                    get: function () {
-                    return intervalDenominator;
-                    }
-                }
-            });
-
-            namespace.addVariable({
-                componentOf: interface,
-                browseName: "maxFrameNumber",
-                dataType: "UInt32",
-                value: {
-                    get: function () {
-                    return maxFrameNumber;
-                    }
-                }
-            });
-
-            namespace.addVariable({
-                componentOf: interface,
-                browseName: "maxFrameSize",
-                dataType: "UInt32",
-                value: {
-                    get: function () {
-                    return maxFrameSize;
-                    }
-                }
-            });
-
-            namespace.addVariable({
-                componentOf: interface,
-                browseName: "transmissionSelection",
-                dataType: "UInt32",
-                value: {
-                    get: function () {
-                    return transmissionSelection;
-                    }
-                }
-            });
-
-            namespace.addVariable({
-                componentOf: interface,
-                browseName: "earliestTransmitOffset",
-                dataType: "UInt32",
-                value: {
-                    get: function () {
-                    return earliestTransmitOffset;
-                    }
-                }
-            });
-
-            namespace.addVariable({
-                componentOf: interface,
-                browseName: "latesTransmitOffset",
-                dataType: "UInt32",
-                value: {
-                    get: function () {
-                    return latestTransmitOffset;
-                    }
-                }
-            });
-
-            namespace.addVariable({
-                componentOf: interface,
-                browseName: "jitter",
-                dataType: "UInt32",
-                value: {
-                    get: function () {
-                    return jitter;
-                    }
-                }
-            });
-        }
-
-        //Declare InterfaceConfig for retrieved config
+        //Declare SubscriptionObject to manage subscription
         const interfaceConfig = namespace.addObject({
             organizedBy: addressSpace.rootFolder.objects,
-            browseName: "TSNInterfaceConfig"
+            browseName: "SubscribeClientObject"
         }); 
         const launchConfig = namespace.addMethod(interfaceConfig, {
-            browseName: "LaunchConfig"
+            browseName: "InitSubscription"
         });
         launchConfig.bindMethod((callback) => {
-            console.log("Handle all process to configure i210 board")
-            console.log("Interval: " + interval);
-            console.log("GCLGates: " + gclGates);
-            console.log("GCLGatesDuration: " + gclGatesTimeDuration)
-            console.log("Latency: " + latency);
-            console.log("Vlan ID: " + vlanIdValue);
+            //TODO create opcUA client that requests subcription data and prints it
         })
-        /*namespace.addVariable({
-            componentOf: interfaceConfig,
-            browseName: "timeAwareOffset",
-            dataType: "UInt32",
-            value: {
-                get: function () {
-                    return timeAwareOffset;
-                },
-                set: function(value) {          
-                    timeAwareOffset = value;
-                    return opcua.StatusCodes.Good;
-                }
-            }
-        });*/
 
-        namespace.addVariable({
-            componentOf: interfaceConfig,
-            browseName: "latency",
-            dataType: "UInt32",
-            value: {
-                get: function () {
-                    return latency;
-                },
-                set: function(value) {
-                    latency = value.value;
-                    return opcua.StatusCodes.Good;
-                }
-            }
-        });
-        namespace.addVariable({ //TODO
-            componentOf: interfaceConfig,
-            browseName: "interval",
-            dataType: "UInt32",
-            value: {
-                get: function () {
-                    return interval;
-                },
-                set: function(value) {
-                    interval = value.value;
-                    return opcua.StatusCodes.Good;
-                }
-            }
-        });
-        namespace.addVariable({ //TODO
-            componentOf: interfaceConfig,
-            browseName: "gclGates",
-            dataType: "UInt32",
-            value: {
-                get: function () {
-                    return gclGates;
-                },
-                set: function(value) {
-                    gclGates = value.value;
-                    console.log(gclGates)
-                    return opcua.StatusCodes.Good;
-                }
-            }
-        });
-
-        namespace.addVariable({ //TODO
-            componentOf: interfaceConfig,
-            browseName: "gclGatesTimeDuration",
-            dataType: "UInt32",
-            value: {
-                get: function () {
-                    return gclGatesTimeDuration;
-                },
-                set: function(value) {
-                    gclGatesTimeDuration = value.value;
-                    return opcua.StatusCodes.Good;
-                }
-            }
-        });
-
-        namespace.addVariable({
-            componentOf: interfaceConfig,
-            browseName: "vlanIdValue",
-            dataType: "UInt32",
-            value: {
-                get: function () {
-                    console.log(vlanIdValue)
-                    return vlanIdValue;
-                },
-                set: function(value) {
-                    vlanIdValue = value.value;
-                    return opcua.StatusCodes.Good;
-                }
-            }
-        });
+        
 
     }
     construct_my_address_space(server);

@@ -2,5 +2,5 @@
     "macAddress": "000102",
     "type": "TALKER",
     "streamId": "9a-f4-27-E7-7D-b3:E5-e5",
-    "interface": "eth0"
+    "interface": "enp3s0"
 }

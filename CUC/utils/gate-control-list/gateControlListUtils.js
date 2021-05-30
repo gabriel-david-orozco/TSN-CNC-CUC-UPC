@@ -9,6 +9,7 @@ const MEGA = 1000000;
 function computeGCLTalker(list) {
     //From traffic-specification and config response values, a simple GCL can be generated.
     //1 TSN flow escenario. +1 flow scenario is not implemented yet.
+    //Current used Network Interfaces handle up to 3 different priorities.
     var request, interval, frameSize, frameNumber, vlanTag, timeOffset;
     if(list.streamDetails.length < 2) {
     //Interval = TAS period
@@ -34,7 +35,7 @@ function computeGCLTalker(list) {
         let timeEmitting = frameSize*frameNumber/(12.5) * NANOSECONDS /  MEGA;
 
         //Fit it in the interval with time-aware-offset
-        let vlanPriority = 128 | Math.pow(2, vlanTag['priority-code-point']);
+        let vlanPriority =  vlanTag['priority-code-point'];
         interval = interval * NANOSECONDS //Second to ns
     
         
@@ -44,13 +45,11 @@ function computeGCLTalker(list) {
             duration: []
         }
         //Set the gate states in order to permit the 'vlanPriorityId' queue to transmit at that specific time interval.
-        gateControlTmp = 255 - vlanPriority;
-        gateControlTmp = 128 | gateControlTmp;
         if(timeOffset<(0.05*interval)) {
             gateControlList.states.push(vlanPriority);
             gateControlList.duration.push(timeEmitting);
 
-            gateControlList.states.push(gateControlTmp);
+            gateControlList.states.push(5);
             gateControlList.duration.push(interval - timeEmitting);
             
         } else //Worth it to spend time emitting best effort traffic.

@@ -41,7 +41,7 @@ function receiveDataFromOpcUaServer(receivedData) {
         if(configDataReady) {
             //Generate gate control list
             let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation, true, null);
-            let listenerConfig = gateControlListUtils.generateGateControlList(listenerInformation, false, talkerConfig);
+            //let listenerConfig = gateControlListUtils.generateGateControlList(listenerInformation, false, talkerConfig);
             //Send the config to endpoints
             let talkerUrl = "opc.tcp://localhost:4333/TSNInterface";;
             opcUaClient.sendConfigToEndpoints(talkerUrl, talkerConfig, true);
@@ -67,7 +67,7 @@ function checkStreamInformationReadyAndSend(idStream) {
     {
         let uniGroups = generateUniGroups(ctrTalker, ctrListener)
         //Once they are ready, send them to the restConfServer (CNC)
-        restconfClient.restconfRequest(uniGroups);
+        //restconfClient.restconfRequest(uniGroups);
         //TODO: Maybe the response needs to be polled by a GET with a given stream ID.
         config = require('../utils/yang/json-samples/cncResponse.json');
         return true;
