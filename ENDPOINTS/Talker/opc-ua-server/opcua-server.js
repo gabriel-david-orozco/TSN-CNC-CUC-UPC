@@ -1,7 +1,9 @@
 /*global require,setInterval,console */
 const opcua = require("node-opcua");
 const config = require('../config.json');
-const { exec } = require("child_process");
+//const { exec } = require("child_process");
+var sudo = require('sudo-js');
+sudo.setPassword('UPC-ptp-2020!')
 const data = require('../subscriptionPayload/data.json');
 
 
@@ -30,17 +32,31 @@ async function configureInterface (interfaceName, gclGates, gclGatesTimeDuration
     }
 
     //Delete all iptables rules
-    await exec("sudo iptables -t mangle -F");
-    await exec("sudo iptables -X");
+    //await exec("sudo iptables -t mangle -F");
+    var command = "sudo iptables -t mangle -F".split(" ");
+    await sudo.exec(command);
+
+    //await exec("sudo iptables -X");
+    command = "sudo iptables -X".split(" ");
+    await sudo.exec(command);
     //Delete all qdisc configurations on device
-    await exec("sudo tc qdisc del dev "+interfaceName+"root");
+    //await exec("sudo tc qdisc del dev "+interfaceName+"root");
+    command = ("sudo tc qdisc del dev "+interfaceName+"root").split(" ");
+    sudo.exec(command, function(err, pid, result) {
+	    console.log(result);
+    });
+
+    
 
     //Map best effort priority to socket priority 3
-    await exec("sudo iptables -t mangle -A POSTROUTING -o"+interfaceName+" -j CLASSIFY --set-class 0:3");
+    //await exec("sudo iptables -t mangle -A POSTROUTING -o"+interfaceName+" -j CLASSIFY --set-class 0:3");
+    command = ("sudo iptables -t mangle -A POSTROUTING -o"+interfaceName+" -j CLASSIFY --set-class 0:3").split(" ");
+    await sudo.exec(command);
 
     //Map OPC UA publish traffic to socket priority 2
-    await exec("sudo iptables -t mangle -A POSTROUTING -o"+interfaceName+" -p udp --dport 5001 -j CLASSIFY --set-class 0:2");
-
+    //await exec("sudo iptables -t mangle -A POSTROUTING -o"+interfaceName+" -p udp --dport 5001 -j CLASSIFY --set-class 0:2");
+    command = ("sudo iptables -t mangle -A POSTROUTING -o"+interfaceName+" -p udp --dport 5001 -j CLASSIFY --set-class 0:2").split(" ");
+    await sudo.exec(command);
 
     //Prepare qdisc taprio configuration
     let taprio = `sudo tc qdisc replace dev `+interfaceName.value+` parent root handle 100 taprio 
@@ -54,13 +70,15 @@ async function configureInterface (interfaceName, gclGates, gclGatesTimeDuration
     }
     taprio = taprio + " clockid CLOCK_TAI";
     
-    await exec(taprio);
+    //await exec(taprio);
+    command = taprio.split(" ");
+    await sudo.exec(command);
 
     //TODO: prepare CBS configuration
 
     //TODO prepare ETF configuration
 
-    //Wait for Listener subscribing for the TSN flow.
+    //Done. Wait for Listener subscribing for the TSN flow.
 
 }
 function post_initialize() {
