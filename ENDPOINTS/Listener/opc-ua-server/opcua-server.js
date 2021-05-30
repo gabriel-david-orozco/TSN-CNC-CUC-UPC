@@ -1,6 +1,7 @@
 /*global require,setInterval,console */
 const opcua = require("node-opcua");
 const config = require('../config.json');
+const subscriptionClient = require('../opc-ua-client/opc-ua-client-sunscription');
 
 
 // Let's create an instance of OPCUAServer
@@ -149,7 +150,8 @@ function post_initialize() {
             browseName: "InitSubscription"
         });
         launchConfig.bindMethod((callback) => {
-            //TODO create opcUA client that requests subcription data and prints it
+            //Create opcUA client that requests subcription data and prints it
+            subscriptionClient.connectOpcUaServer("opc.tcp://localhost:4333/TSNInterface")
         })
 
         
