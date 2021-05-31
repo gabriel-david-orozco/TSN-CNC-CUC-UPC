@@ -2,6 +2,7 @@ const restconfClient = require('./../restconf-client/restconf-client.js');
 const arrayUtils = require('./../utils/arrayUtils.js');
 const gateControlListUtils = require('./../utils/gate-control-list/gateControlListUtils');
 const opcUaClient = require('../opc-ua-client/opcua-client');
+const configUrls = require('../config.json');
 let talkerInformation = [];
 let listenerInformation = [];
 
@@ -64,10 +65,10 @@ function generateGclAndSendConfig() {
         let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation);
         let listenerInterval = talkerConfig[0].gcl.interval;
         //Send the config to endpoints
-        let talkerUrl = "opc.tcp://localhost:4333/TSNInterface";;
+        let talkerUrl = configUrls.endpointUrlTalker;
         opcUaClient.sendConfigToEndpoints(talkerUrl, talkerConfig, true);
 
-        let listenerUrl = "opc.tcp://localhost:4334/TSNInterface";;
+        let listenerUrl = configUrls.endpointUrlListener;
         opcUaClient.sendConfigToEndpoints (listenerUrl, listenerInterval, false);
     } else {
         //TODO: handle errors

@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "node-opcua": "^2.37.0"
+    "node-opcua": "^2.37.0",
+    "sudo-js": "^1.0.2"
   }
 }

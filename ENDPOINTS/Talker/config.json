@@ -1,6 +1,6 @@
 {
-    "macAddress": "000102",
+    "macAddress": "6c-b3-11-52-50-dc",
     "type": "TALKER",
-    "streamId": "9a-f4-27-E7-7D-b3:E5-e5",
-    "interface": "enp3s0"
+    "streamId": "6c-b3-11-52-50-dc-ff-ff",
+    "interface": "enp2s0"
 }

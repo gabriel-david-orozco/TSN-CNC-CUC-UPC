@@ -26,51 +26,29 @@ async function configureInterface (interfaceName, gclGates, gclGatesTimeDuration
     console.log("Latency: " + latency);
     console.log("Vlan ID: " + vlanIdValue);
 
-    if(vlanIdValue != 1997 ) {
+    if(vlanIdValue.value != 1997 ) {
         //TODO: thid device should perform Stream Transformation (modify local VLAN ID to the network's VLAN ID before sending)
         console.log("Stream Transformation should be performed. Consider reconfiguring other elements to use same VLAN ID than this device.")
     }
 
-    //Delete all iptables rules
-    //await exec("sudo iptables -t mangle -F");
-    var command = "sudo iptables -t mangle -F".split(" ");
+    //Map OPC UA publish traffic to socket priority 2
+    command = ("iptables -t mangle -A POSTROUTING -o "+interfaceName.value+" -p tcp --sport 4333 -j CLASSIFY --set-class 0:2").split(" ");
     await sudo.exec(command);
 
-    //await exec("sudo iptables -X");
-    command = "sudo iptables -X".split(" ");
+    //Map best effort priority to socket priority 3
+    command = ("iptables -t mangle -A POSTROUTING -o "+interfaceName.value+" -p udp -j CLASSIFY --set-class 0:3").split(" ");
     await sudo.exec(command);
-    //Delete all qdisc configurations on device
-    //await exec("sudo tc qdisc del dev "+interfaceName+"root");
-    command = ("sudo tc qdisc del dev "+interfaceName+"root").split(" ");
-    sudo.exec(command, function(err, pid, result) {
-	    console.log(result);
-    });
 
     
 
-    //Map best effort priority to socket priority 3
-    //await exec("sudo iptables -t mangle -A POSTROUTING -o"+interfaceName+" -j CLASSIFY --set-class 0:3");
-    command = ("sudo iptables -t mangle -A POSTROUTING -o"+interfaceName+" -j CLASSIFY --set-class 0:3").split(" ");
-    await sudo.exec(command);
-
-    //Map OPC UA publish traffic to socket priority 2
-    //await exec("sudo iptables -t mangle -A POSTROUTING -o"+interfaceName+" -p udp --dport 5001 -j CLASSIFY --set-class 0:2");
-    command = ("sudo iptables -t mangle -A POSTROUTING -o"+interfaceName+" -p udp --dport 5001 -j CLASSIFY --set-class 0:2").split(" ");
-    await sudo.exec(command);
-
     //Prepare qdisc taprio configuration
-    let taprio = `sudo tc qdisc replace dev `+interfaceName.value+` parent root handle 100 taprio 
-    num_tc 3 
-    map 2 2 0 1 2 2 2 2 2 2 2 2 2 2 2 2 
-    queues 1@0 1@1 2@2 
-    base-time 1536883100000000000`;
+    let taprio = "tc qdisc replace dev "+interfaceName.value+" parent root handle 100 taprio num_tc 3 map 0 2 1 2 2 2 2 2 2 2 2 2 2 2 2 2 queues 1@0 1@1 2@2 base-time 1536883100000000000";
 
     for(let i=0; i<gclGates.value.length; i++) {
         taprio = taprio + " sched-entry S "+gclGates.value[i]+" "+gclGatesTimeDuration.value[i];
     }
     taprio = taprio + " clockid CLOCK_TAI";
     
-    //await exec(taprio);
     command = taprio.split(" ");
     await sudo.exec(command);
 
@@ -81,9 +59,18 @@ async function configureInterface (interfaceName, gclGates, gclGatesTimeDuration
     //Done. Wait for Listener subscribing for the TSN flow.
 
 }
-function post_initialize() {
+async function post_initialize() {
     console.log("initialized");
-    function construct_my_address_space(server) {
+    //Delete all iptables rules
+    //await exec("sudo iptables -t mangle -F");
+    var command = "iptables -t mangle -F".split(" ");
+    await sudo.exec(command);
+
+    //await exec("sudo iptables -X");
+    command = "iptables -X".split(" ");
+    await sudo.exec(command);
+    
+    async function construct_my_address_space(server) {
     
         const addressSpace = server.engine.addressSpace;
         const namespace = addressSpace.getOwnNamespace();
@@ -99,6 +86,12 @@ function post_initialize() {
         let endpointType = new opcua.Variant({dataType: opcua.DataType.String, value: config.type});
         let macAddress = new opcua.Variant({dataType: opcua.DataType.String, value: config.macAddress});
         let interfaceName = new opcua.Variant({dataType: opcua.DataType.String, value: config.interface});
+        
+        //Delete all qdisc configurations on device
+        //await exec("sudo tc qdisc del dev "+interfaceName+"root");
+        command = ("tc qdisc del dev "+interfaceName.value+"root").split(" ");
+        await sudo.exec(command);
+        
         //Traffic requirements
         let redundancy = new opcua.Variant({dataType: opcua.DataType.Boolean, value: false});
         let maxDelay = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 10});
@@ -212,7 +205,7 @@ function post_initialize() {
         let priority = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 5});
         let intervalNumerator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1});
         let intervalDenominator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1});
-        let maxFrameNumber = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 10});
+        let maxFrameNumber = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 7085});
         let maxFrameSize = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1518});
         let transmissionSelection =new opcua.Variant({dataType: opcua.DataType.UInt32, value: 0});
         let earliestTransmitOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 10});
@@ -323,7 +316,7 @@ function post_initialize() {
         let gclGates = new opcua.Variant({dataType: opcua.DataType.UInt32, arrayType: opcua.VariantArrayType.Array, value: [0x00]});
         let gclGatesTimeDuration = new opcua.Variant({dataType: opcua.DataType.UInt32, arrayType: opcua.VariantArrayType.Array, value: [0x00]});
         let latency = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 40}); //Information only
-        let vlanIdValue = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 4567});
+        let vlanIdValue = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1997});
 
         //Declare InterfaceConfig for retrieved config
         const interfaceConfig = namespace.addObject({
@@ -417,7 +410,23 @@ function post_initialize() {
         let rawData = new opcua.Variant({dataType: opcua.DataType.String, value:"INIT"});
         let ctr = 0;
         setInterval(function(){
-            rawData = new opcua.Variant({dataType: opcua.DataType.String, value:ctr+data.data});
+            rawData = new opcua.Variant({dataType: opcua.DataType.String, value:ctr + JSON.stringify(data)+ JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)
+                + JSON.stringify(data)+ JSON.stringify(data)});
             ctr++;
             console.log("Changed")
         }, 1*1000)

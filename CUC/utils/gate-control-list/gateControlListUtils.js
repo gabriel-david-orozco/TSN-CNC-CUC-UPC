@@ -31,8 +31,10 @@ function computeGCLTalker(list) {
         }
         //With time aware offset, vlan info, traffic specification and interval it is possible to build a GCL for the endpoint.
 
-        //Burst transmit time. 100Mbps assumed = 12.5MBps.
-        let timeEmitting = frameSize*frameNumber/(12.5) * NANOSECONDS /  MEGA;
+        //Burst transmit time. 1000Mbps assumed = 125MBps.
+        let timeEmitting = frameSize*frameNumber/(125) * NANOSECONDS /  MEGA;
+        console.log(timeEmitting);
+        if(timeEmitting < 0.1*NANOSECONDS ) timeEmitting = 0.1*NANOSECONDS;
 
         //Fit it in the interval with time-aware-offset
         let vlanPriority =  vlanTag['priority-code-point'];
