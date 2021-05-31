@@ -166,7 +166,8 @@ function post_initialize() {
         });
         launchConfig.bindMethod((callback) => {
             //Create opcUA client that requests subcription data and prints it
-            subscriptionClient.connectOpcUaServer("opc.tcp://localhost:4333/TSNInterface", interval)
+            subscriptionClient.connectOpcUaServer(config.talkerEndpointUrl, interval);
+            return opcua.StatusCodes.Good;
         })
 
         
