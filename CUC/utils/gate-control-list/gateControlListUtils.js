@@ -33,7 +33,6 @@ function computeGCLTalker(list) {
 
         //Burst transmit time. 1000Mbps assumed = 125MBps.
         let timeEmitting = frameSize*frameNumber/(125) * NANOSECONDS /  MEGA;
-        console.log(timeEmitting);
         if(timeEmitting < 0.1*NANOSECONDS ) timeEmitting = 0.1*NANOSECONDS;
 
         //Fit it in the interval with time-aware-offset
@@ -67,7 +66,8 @@ function computeGCLTalker(list) {
         }
         //If conflict with other priorities, CBS should be handled. (Possible TODO: )
     console.log("GCL generated")
-
+    console.log(gateControlList.states);
+    console.log(gateControlList.duration);
     let talkerConfig = {
         gcl: gateControlList,
         vlanId: vlanTag['vlan-id'],

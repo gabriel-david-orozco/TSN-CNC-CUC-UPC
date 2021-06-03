@@ -38,7 +38,6 @@ function receiveDataFromOpcUaServer(receivedData) {
 }
 
 function checkStreamInformationReadyAndSend(idStream) {
-    //TODO test
 
     let ctrTalker = arrayUtils.indexGetter(talkerInformation, idStream);
 
@@ -47,9 +46,11 @@ function checkStreamInformationReadyAndSend(idStream) {
     if(ctrTalker != -1 && ctrListener != -1)
     {
         let uniGroups = generateUniGroups(ctrTalker, ctrListener)
+        console.log("UNI Talker and Listener groups have been instantiated. Sending request to the CNC.")
         //Once they are ready, send them to the restConfServer (CNC)
         restconfClient.restconfRequest(uniGroups);
         //TODO: Maybe the response needs to be polled by a GET with a given stream ID.
+        console.log("***MOCKED*** Response from the CNC recevied. Parsing the configuration...")
         config = require('../utils/yang/json-samples/cncResponse.json');
         return true;
     } else {
@@ -66,9 +67,11 @@ function generateGclAndSendConfig() {
         let listenerInterval = talkerConfig[0].gcl.interval;
         //Send the config to endpoints
         let talkerUrl = configUrls.endpointUrlTalker;
+        console.log("Sending configuration to Talker...")
         opcUaClient.sendConfigToEndpoints(talkerUrl, talkerConfig, true);
 
         let listenerUrl = configUrls.endpointUrlListener;
+        console.log("Sending subscripton details on Listener...")
         opcUaClient.sendConfigToEndpoints (listenerUrl, listenerInterval, false);
     } else {
         //TODO: handle errors

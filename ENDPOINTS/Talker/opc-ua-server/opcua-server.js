@@ -18,6 +18,13 @@ const server = new opcua.OPCUAServer({
         buildDate: new Date(2021,4,4)
     }
 });
+function generatePayload() {
+    var payload = JSON.stringify(data);
+    for(let i =1; i<config.dataLength; i++) {
+        payload += JSON.stringify(data);
+    }
+    return payload;
+}
 async function configureInterface (interfaceName, gclGates, gclGatesTimeDuration, interval, latency, vlanIdValue) {
     console.log("Handle all process to configure i210 board");
     console.log("Interval: " + interval);
@@ -203,10 +210,15 @@ async function post_initialize() {
         //Talker specific variables
         //let timeAwareOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 40});
         let priority = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 5});
-        let intervalNumerator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1});
+        let intervalNumerator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: config.interval});
         let intervalDenominator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1});
-        let maxFrameNumber = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 7085});
+
+        
+        
         let maxFrameSize = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1518});
+        let maxFrameNumber = config.dataLength / maxFrameSize.value;
+        maxFrameNumber = new opcua.Variant({dataType: opcua.DataType.UInt32, value: Math.ceil(maxFrameNumber)});
+
         let transmissionSelection =new opcua.Variant({dataType: opcua.DataType.UInt32, value: 0});
         let earliestTransmitOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 10});
         let latestTransmitOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 30});
@@ -312,7 +324,7 @@ async function post_initialize() {
         });
         
         //Config retrieved from CUC for Talker
-        let interval = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 0});
+        let intervalTAS = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 0});
         let gclGates = new opcua.Variant({dataType: opcua.DataType.UInt32, arrayType: opcua.VariantArrayType.Array, value: [0x00]});
         let gclGatesTimeDuration = new opcua.Variant({dataType: opcua.DataType.UInt32, arrayType: opcua.VariantArrayType.Array, value: [0x00]});
         let latency = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 40}); //Information only
@@ -325,10 +337,11 @@ async function post_initialize() {
         }); 
         const launchConfig = namespace.addMethod(interfaceConfig, {
             browseName: "LaunchConfig"
-        })
-        launchConfig.bindMethod((callback) => {
-            configureInterface(interfaceName, gclGates, gclGatesTimeDuration, interval, latency, vlanIdValue);
-        })
+        });
+        launchConfig.bindMethod((inputArguments,context,callback) => {
+            configureInterface(interfaceName, gclGates, gclGatesTimeDuration, intervalTAS, latency, vlanIdValue);
+            callback(null);
+        });
         /*TODO: CBS and ETF configuring */
 
         namespace.addVariable({
@@ -351,10 +364,10 @@ async function post_initialize() {
             dataType: "UInt32",
             value: {
                 get: function () {
-                    return interval;
+                    return intervalTAS;
                 },
                 set: function(value) {
-                    interval.value = value.value;
+                    intervalTAS.value = value.value;
                     return opcua.StatusCodes.Good;
                 }
             }
@@ -409,25 +422,10 @@ async function post_initialize() {
         //Declare InterfaceConfig for retrieved config
         let rawData = new opcua.Variant({dataType: opcua.DataType.String, value:"INIT"});
         let ctr = 0;
-        setInterval(function(){
-            rawData = new opcua.Variant({dataType: opcua.DataType.String, value:ctr + JSON.stringify(data)+ JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)
-                + JSON.stringify(data)+ JSON.stringify(data)});
+        setInterval(function(){ //TODO calcul data 
+            rawData = new opcua.Variant({dataType: opcua.DataType.String, value:ctr + generatePayload()});
             ctr++;
+            console.log(rawData.value.length)
             console.log("Changed")
         }, 1*1000)
         const publishObject = namespace.addObject({

@@ -164,11 +164,11 @@ function post_initialize() {
         const launchConfig = namespace.addMethod(subscribeClientObject, {
             browseName: "InitSubscription"
         });
-        launchConfig.bindMethod((callback) => {
+        launchConfig.bindMethod((inputArguments,context,callback) => {
             //Create opcUA client that requests subcription data and prints it
             subscriptionClient.connectOpcUaServer(config.talkerEndpointUrl, interval);
-            return opcua.StatusCodes.Good;
-        })
+            callback(console.log("Done"));
+        });
 
         
 
