@@ -27,7 +27,7 @@ function generatePayload() {
 }
 async function configureInterface (interfaceName, gclGates, gclGatesTimeDuration, interval, latency, vlanIdValue) {
     console.log("Handle all process to configure i210 board");
-    console.log("Interval: " + interval);
+    console.log("TAS Interval: " + interval);
     console.log("GCLGates: " + gclGates);
     console.log("GCLGatesDuration: " + gclGatesTimeDuration)
     console.log("Latency: " + latency);
@@ -58,7 +58,7 @@ async function configureInterface (interfaceName, gclGates, gclGatesTimeDuration
     
     command = taprio.split(" ");
     await sudo.exec(command);
-
+    console.log("Configuration applied to the interface successfully.");
     //TODO: prepare CBS configuration
 
     //TODO prepare ETF configuration
@@ -427,7 +427,7 @@ async function post_initialize() {
             ctr++;
             console.log(rawData.value.length)
             console.log("Changed")
-        }, 1*1000)
+        }, config.interval*1000)
         const publishObject = namespace.addObject({
             organizedBy: addressSpace.rootFolder.objects,
             browseName: "PublishObject"
