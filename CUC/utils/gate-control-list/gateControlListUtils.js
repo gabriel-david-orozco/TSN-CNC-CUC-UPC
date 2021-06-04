@@ -34,11 +34,11 @@ function computeGCLTalker(list) {
         //Burst transmit time. 1000Mbps assumed = 125MBps.
         let timeEmitting = frameSize*frameNumber/(125) * NANOSECONDS /  MEGA;
         if(timeEmitting < 0.1*NANOSECONDS ) timeEmitting = 0.1*NANOSECONDS;
-
+        console.log(timeEmitting);
         //Fit it in the interval with time-aware-offset
         let vlanPriority =  vlanTag['priority-code-point'];
         interval = interval * NANOSECONDS //Second to ns
-    
+        console.log(interval)
         
         let gateControlList = {
             interval: interval,
@@ -55,6 +55,12 @@ function computeGCLTalker(list) {
             
         } else //Worth it to spend time emitting best effort traffic.
         {
+            gateControlList.states.push(vlanPriority);
+            gateControlList.duration.push(timeEmitting);
+
+            gateControlList.states.push(5);
+            gateControlList.duration.push(interval - timeEmitting);
+            /*
             gateControlList.states.push(gateControlTmp);
             gateControlList.duration.push(timeOffset);
 
@@ -62,7 +68,7 @@ function computeGCLTalker(list) {
             gateControlList.duration.push(timeEmitting);
  
             gateControlList.states.push(gateControlTmp);
-            gateControlList.duration.push(interval - timeOffset - timeEmitting);        
+            gateControlList.duration.push(interval - timeOffset - timeEmitting); */       
         }
         //If conflict with other priorities, CBS should be handled. (Possible TODO: )
     console.log("GCL generated")
