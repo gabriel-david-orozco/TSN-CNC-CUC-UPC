@@ -3,6 +3,6 @@
     "type": "TALKER",
     "streamId": "6c-b3-11-52-50-dc-ff-ff",
     "interface": "enp2s0",
-    "interval": 1,
-    "dataLength": 1
+    "interval": 0.2,
+    "dataLength": 15
 }

@@ -46,8 +46,7 @@ async function connectOpcUaServer(endpointUrl, interval) {
     console.log("-------------------------------------");
 
     monitoredItem.on("changed", function(dataValue) {
-        console.log("Received")
-        //console.log(dataValue.value.value);
+        console.log("Publish received: "+ dataValue.value.value.split('{')[0] + ", " + new Date().toISOString());
     });
 }
 

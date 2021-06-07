@@ -3,5 +3,5 @@
     "type": "LISTENER",
     "streamId": "6c-b3-11-52-50-dc-ff-ff",
     "interface": "enp3s0",
-    "talkerEndpointUrl": "opc.tcp://192.168.4.11:4333/TSNInterface"
+    "talkerEndpointUrl": "opc.tcp://192.168.4.10:4333/TSNInterface"
 }

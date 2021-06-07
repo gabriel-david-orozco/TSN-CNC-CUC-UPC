@@ -1,8 +1,8 @@
 /*global require,setInterval,console */
 const opcua = require("node-opcua");
 const config = require('../config.json');
-//const { exec } = require("child_process");
 var sudo = require('sudo-js');
+var Fraction = require('fractional').Fraction;
 sudo.setPassword('UPC-ptp-2020!')
 const data = require('../subscriptionPayload/data.json');
 
@@ -210,8 +210,10 @@ async function post_initialize() {
         //Talker specific variables
         //let timeAwareOffset = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 40});
         let priority = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 5});
-        let intervalNumerator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: config.interval});
-        let intervalDenominator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1});
+        
+        let fraction = new Fraction(config.interval);
+        let intervalNumerator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: fraction.numerator});
+        let intervalDenominator = new opcua.Variant({dataType: opcua.DataType.UInt32, value: fraction.denominator});
 
         
         
@@ -424,9 +426,8 @@ async function post_initialize() {
         let ctr = 0;
         setInterval(function(){ //TODO calcul data 
             rawData = new opcua.Variant({dataType: opcua.DataType.String, value:ctr + generatePayload()});
+            console.log("Publishing new variable change: "+ ctr + ", " + new Date().toISOString())
             ctr++;
-            console.log(rawData.value.length)
-            console.log("Changed")
         }, config.interval*1000)
         const publishObject = namespace.addObject({
             organizedBy: addressSpace.rootFolder.objects,
