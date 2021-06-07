@@ -5,10 +5,6 @@
 const arrayUtils = require('./../arrayUtils');
 const NANOSECONDS = 1000000000;
 const MEGA = 1000000;
-const Enum = require('enum');
-Enum.register();
-const SIMPLE_GCL = 0;
-const CBS_GCL = 1;
 
 function computeGCLTalker(list) {
     //From traffic-specification and config response values, a simple GCL can be generated.
