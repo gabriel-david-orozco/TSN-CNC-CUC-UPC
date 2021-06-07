@@ -12,7 +12,10 @@ async function main() {
     console.log("Listener information received. Parsing now both obtained datagroups.");
     
     let streamId = logicHandler.receiveDataFromOpcUaServer(talkerFeatures);
+    if(streamId == -1) console.log("Aborting. Obtained TSN configuration is not complete.");
     streamId = logicHandler.receiveDataFromOpcUaServer(listenerFeatures);
+    if(streamId == -1) console.log("Aborting. Obtained TSN configuration is not complete.");
+
 
     let response = logicHandler.checkStreamInformationReadyAndSend(streamId);
 
