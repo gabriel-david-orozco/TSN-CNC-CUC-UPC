@@ -79,7 +79,7 @@ async function connectOpcUaServer(endpointUrl) {
     
     return dataValue;
 }
-async function sendConfigToEndpoints(endpointUrl, config, isTalker) {
+async function sendConfigToEndpoint(endpointUrl, config, isTalker) {
     const client = OPCUAClient.create({
         endpoint_must_exist: false,
         connectionStrategy: { //TODO check connection strategy since another connection handling may be performed.
@@ -136,4 +136,4 @@ async function sendConfigToEndpoints(endpointUrl, config, isTalker) {
 }
 
 module.exports.connectOpcUaServer = connectOpcUaServer;
-module.exports.sendConfigToEndpoints = sendConfigToEndpoints;
+module.exports.sendConfigToEndpoint = sendConfigToEndpoint;

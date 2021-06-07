@@ -68,11 +68,11 @@ function generateGclAndSendConfig() {
         //Send the config to endpoints
         let talkerUrl = configUrls.endpointUrlTalker;
         console.log("Sending configuration to Talker...")
-        opcUaClient.sendConfigToEndpoints(talkerUrl, talkerConfig, true);
+        opcUaClient.sendConfigToEndpoint(talkerUrl, talkerConfig, true);
 
         let listenerUrl = configUrls.endpointUrlListener;
         console.log("Sending subscripton details on Listener...")
-        opcUaClient.sendConfigToEndpoints (listenerUrl, listenerInterval, false);
+        opcUaClient.sendConfigToEndpoint (listenerUrl, listenerInterval, false);
     } else {
         //TODO: handle errors
         console.log("An error occured parsing the configuration data")
