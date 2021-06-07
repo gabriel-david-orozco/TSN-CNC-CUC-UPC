@@ -5,6 +5,10 @@
 const arrayUtils = require('./../arrayUtils');
 const NANOSECONDS = 1000000000;
 const MEGA = 1000000;
+const Enum = require('enum');
+Enum.register();
+const SIMPLE_GCL = 0;
+const CBS_GCL = 1;
 
 function computeGCLTalker(list) {
     //From traffic-specification and config response values, a simple GCL can be generated.
@@ -96,42 +100,11 @@ function computeGCLTalker(list) {
                 interval = list.streamDetails[ctr].request.interval;
             ctr++;
         }
-        //TODO: 
+        
     }
 }
 
-/*function computeGCLListener(list, talkerInfo) {
-    if(list.streamDetails.length < 2) {
-        let request = list.streamDetails[0].request;
-        let configs = list.streamDetails[0].config['interface-configuration']['interface-list'][0]['config-list']        //Get the talker config that coincides in streamIds, reject others.
-        let latency = list.streamDetails[0].config.latency;
-        let vlanTag = configs[0]['ieee802-vlan-tag']
-        let talkersSameStreamId;
-        talkerInfo.forEach(function(item) {
-            if(item.streamId === request.streamId) {
-                talkersSameStreamId = item;
-            }
-        });
-
-        //Get GCL from talker.
-        let gateControlList = talkersSameStreamId.gcl;
-        let listenerConfig = {
-            gcl: gateControlList,
-            vlanId: vlanTag['vlan-id'],
-            streamId: request.streamId,
-            interface: request.interfaceName,
-            macAddress: request.macAddress,
-            latency: latency
-        }
-        
-        return listenerConfig;  
-    
-    } else {
-        //TODO
-    }
-}*/
-
-function generateGateControlList(streams) {
+function generateGateControlList(streams, gclType) {
     //Locate same interfaces + name
     let gateControlListArray = [];
     streams.forEach(function(item) {
@@ -140,7 +113,7 @@ function generateGateControlList(streams) {
     });
     //Compute each element in gateControlListArray
        for(var i = 0; i<gateControlListArray.length; i++) {
-           let gcl = computeGCLTalker(gateControlListArray[i]);
+           let gcl = computeGCLTalker(gateControlListArray[i], gclType);
            gateControlListArray[i] = gcl;
        }
     return gateControlListArray;

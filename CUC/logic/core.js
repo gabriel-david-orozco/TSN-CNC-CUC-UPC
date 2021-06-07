@@ -58,12 +58,12 @@ function checkStreamInformationReadyAndSend(idStream) {
     }
 }
 
-function generateGclAndSendConfig() {
+function generateGclAndSendConfig(gclType) {
     //TODO: parse response into talkerInformation and listenerInformation variables
     let configDataReady = parseConfigurationData();
     if(configDataReady) {
         //Generate gate control list
-        let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation);
+        let talkerConfig = gateControlListUtils.generateGateControlList(talkerInformation, gclType);
         let listenerInterval = talkerConfig[0].gcl.interval;
         //Send the config to endpoints
         let talkerUrl = configUrls.endpointUrlTalker;
