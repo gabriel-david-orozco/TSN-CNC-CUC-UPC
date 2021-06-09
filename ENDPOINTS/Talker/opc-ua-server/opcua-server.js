@@ -5,7 +5,7 @@ var sudo = require('sudo-js');
 var Fraction = require('fractional').Fraction;
 sudo.setPassword('UPC-ptp-2020!')
 const data = require('../subscriptionPayload/data.json');
-
+let payload = generatePayload();
 
 
 // Let's create an instance of OPCUAServer
@@ -20,7 +20,7 @@ const server = new opcua.OPCUAServer({
 });
 function generatePayload() {
     var payload = JSON.stringify(data);
-    for(let i =1; i<config.dataLength; i++) {
+    for(let i =0.5; i<config.dataLength; i = i+0.5) {
         payload += JSON.stringify(data);
     }
     return payload;
@@ -218,7 +218,8 @@ async function post_initialize() {
         
         
         let maxFrameSize = new opcua.Variant({dataType: opcua.DataType.UInt32, value: 1518});
-        let maxFrameNumber = config.dataLength / maxFrameSize.value;
+        let maxFrameNumber = config.dataLength*1000000 / maxFrameSize.value;
+        console.log(maxFrameNumber)
         maxFrameNumber = new opcua.Variant({dataType: opcua.DataType.UInt32, value: Math.ceil(maxFrameNumber)});
 
         let transmissionSelection =new opcua.Variant({dataType: opcua.DataType.UInt32, value: 0});
@@ -340,10 +341,7 @@ async function post_initialize() {
         const launchConfig = namespace.addMethod(interfaceConfig, {
             browseName: "LaunchConfig"
         });
-        launchConfig.bindMethod((inputArguments,context,callback) => {
-            configureInterface(interfaceName, gclGates, gclGatesTimeDuration, intervalTAS, latency, vlanIdValue);
-            callback(null);
-        });
+        
         /*TODO: CBS and ETF configuring */
 
         namespace.addVariable({
@@ -423,12 +421,29 @@ async function post_initialize() {
         //Object to publish
         //Declare InterfaceConfig for retrieved config
         let rawData = new opcua.Variant({dataType: opcua.DataType.String, value:"INIT"});
-        let ctr = 0;
-        setInterval(function(){ //TODO calcul data 
-            rawData = new opcua.Variant({dataType: opcua.DataType.String, value:ctr + generatePayload()});
-            console.log("Publishing new variable change: "+ ctr + ", " + new Date().toISOString())
-            ctr++;
-        }, config.interval*1000)
+        
+        function clock() {
+            
+            var startMs = Date.now(),
+                firstOffset = 1000 - startMs % 1000,
+                ctr = 0;    
+            function update(){ //TODO calcul data 
+                rawData = new opcua.Variant({dataType: opcua.DataType.String, value:ctr + generatePayload()});
+                console.log("Publishing new variable change: "+ ctr + ", " + new Date().toISOString())
+                ctr++;
+            }
+        
+            setTimeout(function () {
+                //update();
+                setInterval(update, (config.interval*1000)-1)
+            }, firstOffset-50);
+        }
+        launchConfig.bindMethod((inputArguments,context,callback) => {
+            //configureInterface(interfaceName, gclGates, gclGatesTimeDuration, intervalTAS, latency, vlanIdValue);
+            clock();
+            callback(null);
+        });
+        //clock();
         const publishObject = namespace.addObject({
             organizedBy: addressSpace.rootFolder.objects,
             browseName: "PublishObject"
