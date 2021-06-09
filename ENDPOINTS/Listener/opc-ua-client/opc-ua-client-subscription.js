@@ -16,7 +16,7 @@ async function connectOpcUaServer(endpointUrl, interval) {
 
     const session = await client.createSession(); 
     const subscription = opcua.ClientSubscription.create(session, {
-        requestedPublishingInterval: interval/1000000,
+        requestedPublishingInterval: 1,
         requestedLifetimeCount:      100,
         requestedMaxKeepAliveCount:   10,
         maxNotificationsPerPublish:  1,
