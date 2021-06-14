@@ -18,7 +18,7 @@ headers = {
 module = "ietf-interfaces:interfaces"
 
 # Remember to add the name of the interface when you discover what is the issue with the put method
-url = f"http://{device['ip']}:{device['port']}/restconf/config/network-topology:network-topology//topology/topology-netconf/node/TSN-switch2/yang-ext:mount/{module}"
+url = f"http://{device['ip']}:{device['port']}/restconf/config/network-topology:network-topology/topology/topology-netconf/node/TSN-switch2/yang-ext:mount/{module}/interface/PORT_0"
 
 payload = {
     "interface": [
@@ -27,26 +27,26 @@ payload = {
             "ieee802-dot1q-bridge:bridge-port": {},
             "type": "iana-if-type:ethernetCsmacd",
             "ieee802-dot1q-sched:gate-parameters": {
-                "admin-gate-states": 255,
-                "gate-enabled": true,
-                "admin-control-list-length": 0,
-                "config-change": false,
+                "admin-gate-states": "255",
+                "gate-enabled": "true",
+                "admin-control-list-length": "0",
+                "config-change": "false",
                 "admin-cycle-time": {
-                    "numerator": 1,
-                    "denominator": 1000
+                    "numerator": "1",
+                    "denominator": "1000"
                 },
                 "admin-base-time": {
-                    "seconds": 0,
-                    "fractional-seconds": 0
+                    "seconds": "0",
+                    "fractional-seconds": "0"
                 },
-                "admin-cycle-time-extension": 0
+                "admin-cycle-time-extension": "0"
             }
         }
     ]
 }
 requests.packages.urllib3.disable_warnings()
-response = requests.put(url, headers=headers, data=json.dumps(payload), auth=(device['username'], device['password']), verify=False)
-
+response = requests.put(url, headers=headers, json=payload, auth=(device['username'], device['password']), verify=False)
+print(response)
 if (response.status_code == 204):
    print("Successfully updated interface")
 else:
