@@ -3,10 +3,10 @@ import json
 from pprint import pprint
 
 device = {
-   "ip": "192.168.0.41",
+   "ip": "172.17.0.2",
    "username": "admin",
    "password": "admin",
-   "port": "8182",
+   "port": "8181",
 }
 
 headers = {
@@ -18,26 +18,32 @@ headers = {
 module = "ietf-interfaces:interfaces"
 
 # Remember to add the name of the interface when you discover what is the issue with the put method
-url url = f"http://{device['ip']}:{device['port']}/restconf/config/network-topology:network-topology/topology/topology-netconf/node/netopeer/yang-ext:mount/{module}"
+url = f"http://{device['ip']}:{device['port']}/restconf/config/network-topology:network-topology//topology/topology-netconf/node/TSN-switch2/yang-ext:mount/{module}"
 
 payload = {
-   "interface": [
-    {
-      "name": "Loopback10000",
-      "description": "Adding loopback10000 - changed",
-      "type": "iana-if-type:softwareLoopback",
-      "enabled": "true",
-      "ietf-ip:ipv4": {
-        "address": [
-          {
-            "ip": "192.0.2.60",
-            "netmask": "255.255.255.255"
-          }
-        ]
-      }
-    }
-  ]
- }
+    "interface": [
+        {
+            "name": "PORT_0",
+            "ieee802-dot1q-bridge:bridge-port": {},
+            "type": "iana-if-type:ethernetCsmacd",
+            "ieee802-dot1q-sched:gate-parameters": {
+                "admin-gate-states": 255,
+                "gate-enabled": true,
+                "admin-control-list-length": 0,
+                "config-change": false,
+                "admin-cycle-time": {
+                    "numerator": 1,
+                    "denominator": 1000
+                },
+                "admin-base-time": {
+                    "seconds": 0,
+                    "fractional-seconds": 0
+                },
+                "admin-cycle-time-extension": 0
+            }
+        }
+    ]
+}
 requests.packages.urllib3.disable_warnings()
 response = requests.put(url, headers=headers, data=json.dumps(payload), auth=(device['username'], device['password']), verify=False)
 
