@@ -10,7 +10,7 @@ from jetconf.data import BaseDatastore
 # ---------- User-defined handlers follow ----------
 
 # This handler will generate /example-jukebox:jukebox/library/artist-count node
-class JukeboxExampleStateHandler(StateDataContainerHandler):
+class JukeboxExampleStateHandler_configuration_talker_status(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
         # info("jukebox_example_handler, ii = {}".format(node_ii))
         # artist_list_ii = self.ds.parse_ii("/example-jukebox:jukebox/library/artist", PathFormat.URL)
