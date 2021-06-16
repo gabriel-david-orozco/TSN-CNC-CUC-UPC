@@ -13,11 +13,12 @@ from jetconf.data import BaseDatastore
 class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
 
-        payload={
+        payload={ "configuration" :{
         "status-info": {
             "talker_status": "1",
             "listener_status": "2",
             "failure-code": "0"
+            }
             }
         }
 
