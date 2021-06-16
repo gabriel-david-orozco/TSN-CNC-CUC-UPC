@@ -57,7 +57,7 @@ class CNC_RestconfStateHandler_configuration_failure_code(StateDataContainerHand
 
 # Instantiate state data handlers
 def register_state_handlers(ds: BaseDatastore):
-    configuration = CNC_RestconfStateHandler_configuration(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration")
+    configuration = CNC_RestconfStateHandler_configuration(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list")
     #configuration_status_info = CNC_RestconfStateHandler_configuration_status_info(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info")
     #configuration_talker_status = CNC_RestconfStateHandler_configuration_talker_status(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info/talker-status")
     #configuration_listener_status = CNC_RestconfStateHandler_configuration_listener_status(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info/listener-status")
