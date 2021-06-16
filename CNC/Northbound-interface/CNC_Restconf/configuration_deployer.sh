@@ -1,6 +1,7 @@
-python3 -m pip uninstall /home/jukebox-jetconf/jetconf_jukebox/jetconf_jukebox
+cd /home/jukebox-jetconf/jetconf_jukebox/
+python3 -m pip uninstall jetconf_jukebox
 rm /home/jukebox-jetconf/jetconf_jukebox/*.py
-cp *.py /home/jukebox-jetconf/jetconf_jukebox/
+cp /home/TSN-CNC-CUC-UPC/Northbound-interface/CNC_Restconf/*.py /home/jukebox-jetconf/jetconf_jukebox/
 python3 -m pip install /home/jukebox-jetconf/.
 jetconf -c /home/jetconf/data/example-config.yaml
 
