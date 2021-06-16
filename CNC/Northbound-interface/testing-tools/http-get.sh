@@ -1,1 +1,1 @@
-curl --http2 -k --cert-type PEM -E /home/jetconf/data/example-client_curl.pem -X GET https://127.0.0.1:8443/restconf/data
+curl --http2 -k --cert-type PEM -E /home/jetconf/data/example-client_curl.pem -X GET https://127.0.0.1:8443/restconf/data/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/stream-id=8c-c3-C1-1f-75-E4:5E-b3
