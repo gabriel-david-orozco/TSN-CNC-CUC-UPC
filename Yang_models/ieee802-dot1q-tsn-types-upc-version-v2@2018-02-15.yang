@@ -1510,7 +1510,6 @@ module ieee802-dot1q-tsn-types-upc-version {
       container configuration{
         config false;
         uses group-status-stream;
-        }
         action deploy-configuration{
             input{
                 leaf compute-at {
