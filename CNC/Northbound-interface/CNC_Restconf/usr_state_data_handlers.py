@@ -13,15 +13,16 @@ from jetconf.data import BaseDatastore
 class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
 
-        payload={ "configuration" :{
+        payload={
         "status-info": {
             "talker_status": "1",
             "listener_status": "2",
             "failure-code": "0"
             }
-            }
         }
-
+        #json_string = json.dumps(data)
+        print(payload)
+        print("looking for this",type(payload))
         return payload # empty
 
 # This handler will generate /ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info
