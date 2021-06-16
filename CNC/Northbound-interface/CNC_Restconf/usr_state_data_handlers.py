@@ -20,7 +20,7 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
             "failure-code": "0"
             },
         "failed-interfaces": {
-        "mac-address": "60-F2-62-74-45-F0"
+        "mac-address": "60-F2-62-74-45-F0",
         "interface-name": "eth0"
 
             }
