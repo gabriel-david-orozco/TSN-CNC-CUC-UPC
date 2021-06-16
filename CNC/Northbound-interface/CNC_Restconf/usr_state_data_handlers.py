@@ -26,8 +26,11 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
 class CNC_RestconfStateHandler_configuration_status_info(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
         payload= {
+            "talker_status": "1",
+            "listener_status": "1",
+            "failure-code": "0"
         }
-        return 1 #
+        return payload #
 
 # This handler will generate /ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info/talker-status
 class CNC_RestconfStateHandler_configuration_talker_status(StateDataContainerHandler):
