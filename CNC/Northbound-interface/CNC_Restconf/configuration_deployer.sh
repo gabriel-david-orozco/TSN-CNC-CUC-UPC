@@ -1,7 +1,7 @@
 cd /home/jukebox-jetconf/jetconf_jukebox/
 python3 -m pip uninstall jetconf_jukebox
 rm /home/jukebox-jetconf/jetconf_jukebox/*.py
-cp /home/TSN-CNC-CUC-UPC/Northbound-interface/CNC_Restconf/*.py /home/jukebox-jetconf/jetconf_jukebox/
+cp /home/TSN-CNC-CUC-UPC/CNC/Northbound-interface/CNC_Restconf/*.py /home/jukebox-jetconf/jetconf_jukebox/
 python3 -m pip install /home/jukebox-jetconf/.
 jetconf -c /home/jetconf/data/example-config.yaml
 rm -r /home/jukebox-jetconf/yang-modules/ieee802-dot1q-tsn-types-upc-version@2018-02-15.yang
