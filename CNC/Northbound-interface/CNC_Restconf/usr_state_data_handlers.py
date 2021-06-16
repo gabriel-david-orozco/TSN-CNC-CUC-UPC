@@ -13,7 +13,7 @@ import json
 class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
 
-        payload= "configuration": {
+        payload= {
         "status-info": {
             "talker_status": "1",
             "listener_status": "2",
@@ -56,7 +56,7 @@ class CNC_RestconfStateHandler_configuration_failure_code(StateDataContainerHand
 
 # Instantiate state data handlers
 def register_state_handlers(ds: BaseDatastore):
-    configuration = CNC_RestconfStateHandler_configuration(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration")
+    configuration = CNC_RestconfStateHandler_configuration(ds, "/ieee802-dot1q-tsn-types-upc-version:configuration")
     #configuration_status_info = CNC_RestconfStateHandler_configuration_status_info(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info")
     #configuration_talker_status = CNC_RestconfStateHandler_configuration_talker_status(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info/talker-status")
     #configuration_listener_status = CNC_RestconfStateHandler_configuration_listener_status(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info/listener-status")
