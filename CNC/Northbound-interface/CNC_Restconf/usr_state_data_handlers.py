@@ -13,7 +13,7 @@ import json
 class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
 
-        payload={
+        payload= { "ieee802-dot1q-tsn-types-upc-version:configuration": {
         "status-info": {
             "talker_status": "1",
             "listener_status": "2",
@@ -25,10 +25,11 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
 
             }
         }
+        }
         json_string = json.dumps(payload)
         print(payload)
         print("looking for this",type(json_string))
-        return json_string # empty
+        return payload # empty
 
 # This handler will generate /ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info
 class CNC_RestconfStateHandler_configuration_status_info(StateDataContainerHandler):
