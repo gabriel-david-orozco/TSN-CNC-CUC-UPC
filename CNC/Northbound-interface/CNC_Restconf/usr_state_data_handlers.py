@@ -26,7 +26,6 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
 class CNC_RestconfStateHandler_configuration_status_info(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
         payload= {
-            "talker_status": "1"
         }
         return 1 #
 
