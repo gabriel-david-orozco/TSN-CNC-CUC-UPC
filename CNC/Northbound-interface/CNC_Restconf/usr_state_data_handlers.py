@@ -9,30 +9,44 @@ from jetconf.data import BaseDatastore
 
 # ---------- User-defined handlers follow ----------
 
+# This handler will generate /ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration
+class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
+    def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
+        return # empty
+
+# This handler will generate /ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info
+class CNC_RestconfStateHandler_configuration_status_info(StateDataContainerHandler):
+    def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
+        return # empty
+
 # This handler will generate /ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info/talker-status
 class CNC_RestconfStateHandler_configuration_talker_status(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
-        return "2" # should be 1
+        return 1 # should be 1
 
 # This handler will generate /ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info/listener-status
 class CNC_RestconfStateHandler_configuration_listener_status(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
 
-        return "2" # should be 1
+        return 2 # should be 1
 
 # This handler will generate /ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info/failure-code
 class CNC_RestconfStateHandler_configuration_failure_code(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
 
-        return "2" # should be 0
+        return 0 # should be 0
 
 
 
 # Instantiate state data handlers
 def register_state_handlers(ds: BaseDatastore):
+    configuration = CNC_RestconfStateHandler_configuration(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list=8c-c3-C1-1f-75-E4:5E-b3/configuration/")
+    configuration_status_info = CNC_RestconfStateHandler_configuration_status_info(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list=8c-c3-C1-1f-75-E4:5E-b3/configuration/status-info")
     configuration_talker_status = CNC_RestconfStateHandler_configuration_talker_status(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list=8c-c3-C1-1f-75-E4:5E-b3/configuration/status-info/talker-status")
     configuration_listener_status = CNC_RestconfStateHandler_configuration_listener_status(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list=8c-c3-C1-1f-75-E4:5E-b3/configuration/status-info/listener-status")
     configuration_failure_code = CNC_RestconfStateHandler_configuration_failure_code(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list=8c-c3-C1-1f-75-E4:5E-b3/configuration/status-info/failure-code")
+    ds.handlers.state.register(configuration)
+    ds.handlers.state.register(configuration_status_info)
     ds.handlers.state.register(configuration_talker_status)
     ds.handlers.state.register(configuration_listener_status)
     ds.handlers.state.register(configuration_failure_code)
