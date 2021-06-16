@@ -5,7 +5,7 @@ from yangson.instance import InstanceRoute
 from jetconf.helpers import JsonNodeT, PathFormat
 from jetconf.handler_base import StateDataContainerHandler
 from jetconf.data import BaseDatastore
-
+import json
 
 # ---------- User-defined handlers follow ----------
 
@@ -25,10 +25,10 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
 
             }
         }
-        #json_string = json.dumps(data)
+        json_string = json.dumps(payload)
         print(payload)
-        print("looking for this",type(payload))
-        return payload # empty
+        print("looking for this",type(json_string))
+        return json_string # empty
 
 # This handler will generate /ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info
 class CNC_RestconfStateHandler_configuration_status_info(StateDataContainerHandler):
