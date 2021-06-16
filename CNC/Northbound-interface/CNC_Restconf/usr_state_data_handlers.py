@@ -15,9 +15,6 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
 
         payload= {
         "status-info": {
-            "talker_status": 1,
-            "listener_status": 2,
-            "failure-code": "0"
             }
         }
         json_string = json.dumps(payload)
