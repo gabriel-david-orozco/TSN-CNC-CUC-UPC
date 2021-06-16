@@ -1384,25 +1384,7 @@ module ieee802-dot1q-tsn-types-upc-version {
       }
     }
 
-    list failed-interfaces {
-      key "mac-address interface-name";
-      description
-        "When a failure occurs in network configuration
-        (i.e. non-zero failure-code in status-info),
-        failed-interfaces provides a list of one or more
-        physical interfaces (distinct points of attachement)
-        in the failed end station or Bridge. Each identifier
-        is sufficient to locate the interface in the physical
-        topology.
 
-        The failed-interfaces list is optional.
-
-        Since the interface-name leaf is optional, empty string
-        can be used for its key value.";
-      reference
-        "46.2.5.4 of IEEE Std 802.1Qcc-2018";
-      uses group-interface-id;
-    }
   }
 
   grouping group-status-talker-listener {
