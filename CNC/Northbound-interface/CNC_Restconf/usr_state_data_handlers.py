@@ -13,6 +13,11 @@ import json
 class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
         talker_status = "1"
+        mac_address = "8c-c3-C1-1f-75-E4"
+        interface_name = "8c-c3-C1-1f-75-E4"
+        index = 1
+        destination_mac_addres = "8c-c3-C1-1f-75-E4"
+        source_mac_address = "8c-c3-C1-1f-75-E4"
         payload= {
             "status-info": {
                 "talker-status" : talker_status,
