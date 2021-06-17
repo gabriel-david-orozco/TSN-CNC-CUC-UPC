@@ -25,7 +25,7 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
                 "listener-status" : "1",
                 "failure-code" : 0
                 },
-            "status-info": [ status_info ],
+            "status-info": status_info,
             "talker": {
                 "accumulated-latency" : 100,
                 "interface-configuration" : {
