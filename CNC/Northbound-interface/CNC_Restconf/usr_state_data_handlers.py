@@ -12,10 +12,10 @@ import json
 # This handler will generate /ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration
 class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
-
+        talker_status = "1"
         payload= {
         "status-info": {
-        "talker-status" : "1",
+        "talker-status" : talker_status,
         "listener-status" : "1",
         "failure-code" : 0
             }
