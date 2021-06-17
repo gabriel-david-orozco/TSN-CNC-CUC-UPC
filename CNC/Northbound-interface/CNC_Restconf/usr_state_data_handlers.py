@@ -19,6 +19,12 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
         destination_mac_addres = "8c-c3-C1-1f-75-E4"
         source_mac_address = "8c-c3-C1-1f-75-E4"
         failed_interfaces = {}
+        flag=1
+        if flag == 1 :
+             failed_interfaces = {
+                "mac-address" : mac_address,
+                "interface-name" : interface_name
+             }
         payload= {
             "status-info": {
                 "talker-status" : talker_status,
