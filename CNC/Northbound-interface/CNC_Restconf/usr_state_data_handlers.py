@@ -14,11 +14,34 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
         talker_status = "1"
         payload= {
-        "status-info": {
-        "talker-status" : talker_status,
-        "listener-status" : "1",
-        "failure-code" : 0
-            }
+            "status-info": {
+                "talker-status" : talker_status,
+                "listener-status" : "1",
+                "failure-code" : 0
+                },
+            "talker": {
+                "accumulated-latency" : 100,
+                "interface-configuration" : {
+                    "interface-list" : [
+                        {
+                        "mac-address" : mac_address,
+                        "interface-name" : interface_name,
+                        "config-list" : [
+                            {
+                            "index" : index,
+                            "ieee802-mac-addresses" : {
+                                "destination-mac-address" : destination_mac_addres,
+                                "source-mac-address" : source_mac_address
+                                },
+                            "time-aware-offset" : 100
+                            }
+                            ]
+                        }
+                    ],
+
+                }
+
+                }
         }
         json_string = json.dumps(payload)
         print(payload)
