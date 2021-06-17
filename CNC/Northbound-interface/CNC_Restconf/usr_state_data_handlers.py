@@ -18,12 +18,14 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
         index = 1
         destination_mac_addres = "8c-c3-C1-1f-75-E4"
         source_mac_address = "8c-c3-C1-1f-75-E4"
+        status_info = {}
         payload= {
             "status-info": {
                 "talker-status" : talker_status,
                 "listener-status" : "1",
                 "failure-code" : 0
                 },
+            "status-info": [ status_info ],
             "talker": {
                 "accumulated-latency" : 100,
                 "interface-configuration" : {
