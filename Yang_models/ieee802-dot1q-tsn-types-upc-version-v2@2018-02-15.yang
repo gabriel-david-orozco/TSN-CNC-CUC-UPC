@@ -1510,6 +1510,16 @@ module ieee802-dot1q-tsn-types-upc-version {
       container configuration{
         config false;
         uses group-status-stream;
+        container talker {
+          uses group-status-talker-listener;
+        }
+        list listener-list{
+          key index;
+          leaf index{
+            type uint16;
+          }
+          uses group-status-talker-listener;
+        }
         action deploy-configuration{
             input{
                 leaf compute-at {
