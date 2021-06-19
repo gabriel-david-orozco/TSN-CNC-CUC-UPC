@@ -15,7 +15,7 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
         talker_status = "1"
         #mac_address_ii = self.ds.parse_ii("ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list=8c-c3-C1-1f-75-E4:5E-b3/request/talker/end-station-interfaces=60-F2-62-74-45-F0,eth0/mac-address", PathFormat.URL)
         #mac_address = self.ds.get_data_root().goto(mac_address_ii).value
-        testing_ii = self.ds.parse_ii("ieee802-dot1q-tsn-types-upc-version:tsn-uni", PathFormat.URL)
+        testing_ii = self.ds.parse_ii("ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list", PathFormat.URL)
         testing = self.ds.get_data_root().goto(testing_ii).value
         i = 0
         #print(testing[0])
