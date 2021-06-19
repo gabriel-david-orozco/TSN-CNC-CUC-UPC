@@ -19,8 +19,8 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
         testing = self.ds.get_data_root().goto(testing_ii).value
 
         for test in testing :
-            print("tipo de la variable",test['stream-id'])
-            print("tipo de la variable",type(test['stream-id']))
+            print("tipo de la variable",test)
+            print("tipo de la variable",type(test))
         #print("testing, just for fun", testing)
         print("the type of the variable", type(testing))
         #print("testing, just for fun, parsed data", testing_ii)
