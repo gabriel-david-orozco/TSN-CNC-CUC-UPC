@@ -50,11 +50,33 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
                             }
                             ]
                         }
-                    ],
-
+                    ]
                 }
-
-                }
+                },
+            "listener-list" : [
+            {
+            "index" : index,
+            "accumulated-latency" : 100,
+            "interface-configuration" : {
+                "interface-list" : [
+                    {
+                    "mac-address" : mac_address,
+                    "interface-name" : interface_name,
+                    "config-list" : [
+                        {
+                        "index" : index,
+                        "ieee802-mac-addresses" : {
+                            "destination-mac-address" : destination_mac_addres,
+                            "source-mac-address" : source_mac_address
+                            },
+                        "time-aware-offset" : 100
+                        }
+                        ]
+                    }
+                ]
+            }
+            }
+            ]
         }
         json_string = json.dumps(payload)
         print(payload)
