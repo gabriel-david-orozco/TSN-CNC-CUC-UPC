@@ -17,9 +17,9 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
         mac_address = self.ds.get_data_root().goto(mac_address_ii).value
         testing_ii = self.ds.parse_ii("ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list", PathFormat.URL)
         testing = self.ds.get_data_root().goto(testing_ii).value
-        print("testing, just for fun", testing)
+        #print("testing, just for fun", testing)
         print("the type of the variable", type(testing))
-        print("testing, just for fun, parsed data", testing_ii)
+        #print("testing, just for fun, parsed data", testing_ii)
         print("the type of the variable, parsed data", type(testing_ii))
         #mac_address = "8c-c3-C1-1f-75-E4"
         interface_name = "8c-c3-C1-1f-75-E4"
@@ -87,7 +87,7 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
             ]
         }
         json_string = json.dumps(payload)
-        print(payload)
+        #print(payload)
         print("looking for this",type(json_string))
         return payload # empty
 
