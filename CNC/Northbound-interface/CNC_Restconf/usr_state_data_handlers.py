@@ -13,8 +13,8 @@ import json
 class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
         talker_status = "1"
-        mac_address_ii = self.ds.parse_ii("ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list=8c-c3-C1-1f-75-E4:5E-b3/request/talker/end-station-interfaces=60-F2-62-74-45-F0,eth0/mac-address", PathFormat.URL)
-        mac_address = self.ds.get_data_root().goto(mac_address_ii).value
+        #mac_address_ii = self.ds.parse_ii("ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list=8c-c3-C1-1f-75-E4:5E-b3/request/talker/end-station-interfaces=60-F2-62-74-45-F0,eth0/mac-address", PathFormat.URL)
+        #mac_address = self.ds.get_data_root().goto(mac_address_ii).value
         testing_ii = self.ds.parse_ii("ieee802-dot1q-tsn-types-upc-version:tsn-uni", PathFormat.URL)
         testing = self.ds.get_data_root().goto(testing_ii).value
         i = 0
@@ -29,7 +29,7 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
         #print("testing, just for fun, parsed data", testing_ii)
         print("the type of the variable, parsed data", type(testing_ii))
         print("the full variable", testing)
-        #mac_address = "8c-c3-C1-1f-75-E4"
+        mac_address = "8c-c3-C1-1f-75-E4"
         interface_name = "8c-c3-C1-1f-75-E4"
         index = 1
         destination_mac_addres = "8c-c3-C1-1f-75-E4"
