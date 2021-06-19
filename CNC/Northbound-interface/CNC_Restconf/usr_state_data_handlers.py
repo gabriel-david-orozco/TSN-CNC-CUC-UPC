@@ -23,7 +23,7 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
             i += 1
             print("tipo de la variable",test)
             print("tipo de la variable",type(test))
-            print(testing[i])
+            print("longitud de la varaible es igual a =",len(testing))
         #print("testing, just for fun", testing)
         print("the type of the variable", type(testing))
         #print("testing, just for fun, parsed data", testing_ii)
