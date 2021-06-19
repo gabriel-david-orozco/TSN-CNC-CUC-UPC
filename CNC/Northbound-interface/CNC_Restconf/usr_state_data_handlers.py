@@ -21,9 +21,9 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
         print(testing[0])
         for test in testing :
             i += 1
-            print("tipo de la variable",test)
+            print("contenido de la variable",test)
             print("tipo de la variable",type(test))
-            print("longitud de la varaible es igual a =",len(testing))
+        print("longitud de la varaible es igual a =",len(testing))
         #print("testing, just for fun", testing)
         print("the type of the variable", type(testing))
         #print("testing, just for fun, parsed data", testing_ii)
@@ -95,7 +95,7 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
         }
         json_string = json.dumps(payload)
         #print(payload)
-        print("looking for this",type(json_string))
+        #print("looking for this",type(json_string))
         return payload # empty
 
 # This handler will generate /ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/configuration/status-info
