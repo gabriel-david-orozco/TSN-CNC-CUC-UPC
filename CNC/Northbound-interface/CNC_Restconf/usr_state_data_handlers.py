@@ -1,3 +1,5 @@
+# Remember to create a class and import it to obtain the value of the query
+
 from colorlog import info
 
 from yangson.instance import InstanceRoute
