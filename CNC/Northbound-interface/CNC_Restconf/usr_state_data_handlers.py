@@ -28,6 +28,7 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
         print("the type of the variable", type(testing))
         #print("testing, just for fun, parsed data", testing_ii)
         print("the type of the variable, parsed data", type(testing_ii))
+        print("the full variable", testing)
         #mac_address = "8c-c3-C1-1f-75-E4"
         interface_name = "8c-c3-C1-1f-75-E4"
         index = 1
