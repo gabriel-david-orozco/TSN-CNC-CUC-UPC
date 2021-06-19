@@ -18,6 +18,7 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
         testing_ii = self.ds.parse_ii("ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list", PathFormat.URL)
         testing = self.ds.get_data_root().goto(testing_ii).value
         i = 0
+        print(testing["stream-id"])
         for test in testing :
             i += 1
             print("tipo de la variable",test)
