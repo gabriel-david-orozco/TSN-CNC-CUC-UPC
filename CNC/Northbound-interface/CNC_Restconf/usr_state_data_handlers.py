@@ -13,7 +13,9 @@ import json
 class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
     def generate_node(self, node_ii: InstanceRoute, username: str, staging: bool) -> JsonNodeT:
         talker_status = "1"
-        mac_address = "8c-c3-C1-1f-75-E4"
+        mac_address_ii = self.ds.parse_ii("ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list/request/talker/end-station-interfaces/mac-address", PathFormat.URL)
+        mac_address = self.ds.get_data_root().goto(artist_list_ii).value
+        #mac_address = "8c-c3-C1-1f-75-E4"
         interface_name = "8c-c3-C1-1f-75-E4"
         index = 1
         destination_mac_addres = "8c-c3-C1-1f-75-E4"
