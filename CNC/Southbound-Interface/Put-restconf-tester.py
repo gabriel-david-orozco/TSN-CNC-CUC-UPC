@@ -12,7 +12,7 @@ device = {
 headers = {
       #"Accept" : "application/yang-data+json",
       "Accept" : "*/*",
-      "Content-Type" : "application/yang-data+json",
+      "Content-Type" : "application/json",
    }
 
 module = "ietf-interfaces:interfaces"
@@ -28,7 +28,7 @@ payload = {
             "type": "iana-if-type:ethernetCsmacd",
             "ieee802-dot1q-sched:gate-parameters": {
                 "admin-gate-states": "255",
-                "gate-enabled": "true",
+                "gate-enabled": "false",
                 "admin-control-list-length": "0",
                 "config-change": "false",
                 "admin-cycle-time": {
