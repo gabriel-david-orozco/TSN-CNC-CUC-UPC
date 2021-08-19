@@ -193,135 +193,137 @@ class Network_Topology():
 # Using the Network Topology class
 network = Network_Topology(Adjacency_Matrix) 
 
-all_paths_matrix = [] # This is a matrix with all the paths from one node to the other
-for node in Network_nodes:
-    network.dijkstra(node) # This matrix saves all the existing paths in the network from one point to the othe 
-    all_paths_matrix.append(network.full_paths_set)
+# This is function generates a matrix with all the paths from one node to the other calculated by djikstra
+def all_paths_matrix_generator(Network_nodes, network) :
+    all_paths_matrix = [] 
+    for node in Network_nodes:
+        network.dijkstra(node) # This matrix saves all the existing paths in the network from one point to the othe 
+        all_paths_matrix.append(network.full_paths_set)
+    return all_paths_matrix
 
-# Determining the path for each Stream regarding the nodes
-Streams_paths = [0 for i in range(len(Stream_Source_Destination))]
-n = 0
-for stream in Stream_Source_Destination:
-    
-    if len(all_paths_matrix[stream[1]][stream[0]]) == 1 : 
-        Streams_paths[n]=all_paths_matrix[stream[1]][stream[0]]
-        print("is", stream[1], "Different from", all_paths_matrix[stream[1]][stream[0]][0])
-        if stream[1] != all_paths_matrix[stream[1]][stream[0]][0] : 
-            Streams_paths[n].append(stream[1])
-    else :
-        Streams_paths[n]=all_paths_matrix[stream[1]][stream[0]]
-    print(Streams_paths[n])
-    Streams_paths[n].insert(0,stream[0])
-    if Streams_paths[n][0] == Streams_paths[n][1]:
-        del Streams_paths[n][0]
-    n = n +1
-print(Streams_paths)
+all_paths_matrix = all_paths_matrix_generator(Network_nodes, network)
+
+
+# Determining the path for each Stream generating a list of of all the nodes from source to destination
+def Streams_paths_generator(all_paths_matrix, Stream_Source_Destination) :
+    Streams_paths = [0 for i in range(len(Stream_Source_Destination))]
+    n = 0
+    for stream in Stream_Source_Destination:
+        
+        if len(all_paths_matrix[stream[1]][stream[0]]) == 1 : 
+            Streams_paths[n]=all_paths_matrix[stream[1]][stream[0]]
+            if stream[1] != all_paths_matrix[stream[1]][stream[0]][0] : 
+                Streams_paths[n].append(stream[1])
+        else :
+            Streams_paths[n]=all_paths_matrix[stream[1]][stream[0]]
+        Streams_paths[n].insert(0,stream[0])
+        if Streams_paths[n][0] == Streams_paths[n][1]:
+            del Streams_paths[n][0]
+        n = n +1
+    return Streams_paths
+Streams_paths = Streams_paths_generator(all_paths_matrix, Stream_Source_Destination)
 
 # Determining the path for each Stream regarding the links
-Streams_links_paths = []
-for stream in Streams_paths :
-    print(stream[1:])
-    n = 1
-    stream_allocator = []
-    for i in stream[1:]:
-        stream_allocator.append([stream[n-1], i])
-        n = n+1
-    Streams_links_paths.append(stream_allocator)
-print(Streams_links_paths)
 
-# Now it is necessary generate two things The link order descriptor for each stream and the links per stream.
-# For that, it is used the Network_nodes list
+def Streams_links_paths_generator(Streams_paths):
+    Streams_links_paths = []
+    for stream in Streams_paths :
+        print(stream[1:])
+        n = 1
+        stream_allocator = []
+        for i in stream[1:]:
+            stream_allocator.append([stream[n-1], i])
+            n = n+1
+        Streams_links_paths.append(stream_allocator)
+    return Streams_links_paths
+Streams_links_paths = Streams_links_paths_generator(Streams_paths)
 
-
-# Important to mention that links shoul be duplicated for the sake of 
-Link_order_Descriptor = []
-for stream in Streams_links_paths :
-    link_order_helper = []
-    for link in stream :
-        try:
-            link_order_helper.append(Network_links.index(tuple(link)))
-        except:
-            link_order_helper.append(Network_links.index(tuple([link[1],link[0]])))
-    Link_order_Descriptor.append(link_order_helper)
-print(Link_order_Descriptor)
+# this function generates the link_order_descriptor 
+#Basically, the link order descriptor is a list of the index of each link in the path
+#from source to destination of a stream #
+def Link_order_Descripto_generator(Streams_links_paths) :
+    Link_order_Descriptor = []
+    for stream in Streams_links_paths :
+        link_order_helper = []
+        for link in stream :
+            try:
+                link_order_helper.append(Network_links.index(tuple(link)))
+            except:
+                link_order_helper.append(Network_links.index(tuple([link[1],link[0]])))
+        Link_order_Descriptor.append(link_order_helper)
+    return Link_order_Descriptor
+Link_order_Descriptor = Link_order_Descripto_generator(Streams_links_paths)
 
 # Links per stream, basically is a list that indicates if a link is used for transmitting in a stream
 
-Links_per_Stream = [[0 for link in range(len(Network_links))] for stream in range(len(Link_order_Descriptor))]
+def Links_per_Stream_generator(Network_links, Link_order_Descriptor) : 
+    Links_per_Stream = [[0 for link in range(len(Network_links))] for stream in range(len(Link_order_Descriptor))]
+    stream_index = 0
+    for stream in Link_order_Descriptor :
+        for link in stream :
+            Links_per_Stream[stream_index][link] = 1
+        stream_index = stream_index + 1 
+    return Links_per_Stream  
 
-stream_index = 0
-for stream in Link_order_Descriptor :
-    for link in stream :
-        Links_per_Stream[stream_index][link] = 1
-    stream_index = stream_index + 1 
-        
-print(Links_per_Stream)
+Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
 
 # This is for choosing a random length for the stream, whithin a selected number
-# Also creates the periods
+# Also chooses a random period
 from math import gcd
 
-Streams_size = []
-Streams_Period = {}
-i = 0
-for stream in range(len(Links_per_Stream)) :
-    Streams_size.append(random.sample([1500, 3000, 4500, 6000], 1)) # This is the size of the packages in bytes
-    Streams_Period[(i)] = random.sample([200, 400, 800], 1) # This is the period in micro seconds
-    i = i + 1
-print(Streams_size)
-print(Streams_Period)
+def Stream_size_and_period_generator(Links_per_Stream): 
+    Streams_size = []
+    Streams_Period = {}
+    for stream in range(len(Links_per_Stream)) :
+        Streams_size.append(random.sample([1500, 3000, 4500, 6000], 1)) # This is the size of the packages in bytes
+        Streams_Period[(stream)] = random.sample([200, 400, 800], 1) # This is the period in micro seconds
+
+    Streams_Period_list = [(v[0]) for k, v in Streams_Period.items()]
+    return Streams_size , Streams_Period, Streams_Period_list
+Streams_size , Streams_Period, Streams_Period_list = Stream_size_and_period_generator(Links_per_Stream)
 
 
-Streams_Period_list = [(v[0]) for k, v in Streams_Period.items()]
+# This funciton reads the periods of the strems and provides the hyperperiod (lcm of all the periods)
+def Hyperperiod_generator(Streams_Period_list) :
+    Hyperperiod = 1
+    for i in Streams_Period_list:
+        Hyperperiod = Hyperperiod*i//gcd(Hyperperiod, i)
+    return Hyperperiod
 
-print(Streams_Period_list)
+Hyperperiod = Hyperperiod_generator(Streams_Period_list)
 
-
-Hyperperiod = 1
-
-for i in Streams_Period_list:
-    Hyperperiod = Hyperperiod*i//gcd(Hyperperiod, i)
-print(Hyperperiod)
-
-# This code generates the frames_per_stream, basically a list with the number of frames per stream represented 
+# This function generates the frames_per_stream, basically a list with the number of frames per stream represented 
 # as a set of 1's
+# Provides also the maximum number of frames in an stream
+def Frames_per_Stream_generator(Streams_size):
+    Frames_per_Stream = []
+    for repetition in (Streams_size):
+        print(repetition[0], type(repetition[0]))
+        Frames_per_Stream.append([1 for frame in range(int(float(repetition[0])/1500))])
+    
+    Max_frames = max([len(frame) for frame in Frames_per_Stream])
+    return Frames_per_Stream, Max_frames
 
-print(Streams_size)
-Frames_per_Stream = []
-for repetition in (Streams_size):
-    print(repetition[0], type(repetition[0]))
-    Frames_per_Stream.append([1 for frame in range(int(float(repetition[0])/1500))])
+Frames_per_Stream, Max_frames = Frames_per_Stream_generator(Streams_size)
 
-print(Frames_per_Stream)
+# This code generates a matrix empty matrix that will be used to 
+# indicate wheter of not a frame in a stream and in a link exists or not
 
-# This gets the larger number of frames per stream
+def Empty_Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links) :
+    Model_Descriptor = {}
 
-Max_frames = max([len(frame) for frame in Frames_per_Stream])
-print(Max_frames)
+    for stream in range(Number_of_Streams):
+        for frame in range(Max_frames):
+            for link in range(len(Network_links)):
+                Model_Descriptor[(stream,frame,link)]= 0
 
-# This code generates a matrix that indicates wheter of not a frame in a stream and in a link exists or not
-#Model_Descriptor = [[[0 for link in range(3)] for frame in range(4)] for stream in range(2)]
 
-Model_Descriptor = {}
+    Model_Descriptor_vector = [[[0 for link in range(len(Network_links))] for frame in range(Max_frames)] for stream in range(Number_of_Streams)]
+    return Model_Descriptor, Model_Descriptor_vector
 
-for stream in range(Number_of_Streams):
-    for frame in range(Max_frames):
-        for link in range(len(Network_links)):
-            Model_Descriptor[(stream,frame,link)]= 0
-
-Model_Descriptor[(0,0,0)]
-
-Model_Descriptor_vector = [[[0 for link in range(len(Network_links))] for frame in range(Max_frames)] for stream in range(Number_of_Streams)]
-
+Model_Descriptor, Model_Descriptor_vector = Empty_Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links)
 Streams = range(Number_of_Streams)
-#Frames_per_Stream = [1, 1],[1, 1, 1, 1]
-#Links_per_Stream = [0, 1, 1],[1, 1, 0]
 
-
-#Links_per_Stream = [L1, L2, L3],[L1, L2, L3]
-# This matrix should be filled with all the links available in the network
-# Net to generate also the transmision and reception links, they should be parsed as lists:
-#Link_order_Descriptor = [1, 2],[0,1]
 
 Num_of_Frames = []
 for i in Frames_per_Stream : Num_of_Frames.append(len(i))
@@ -771,8 +773,8 @@ import matplotlib.pyplot as plt
 plt.figure(figsize=(12, 5))
 plt.barh(y=df.Process_Name, left=df.Start, width=12, color=df.Color)
 plt.grid(axis='x', alpha=0.5)
-plt.xlabel("Frames")
-plt.ylabel("Time in miliseconds")
+plt.ylabel("Frames")
+plt.xlabel("Time in miliseconds")
 plt.title("Ghant Chart")
 plt.show()
 print(Repetitions)
