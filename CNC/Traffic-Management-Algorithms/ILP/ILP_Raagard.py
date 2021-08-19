@@ -17,6 +17,9 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 
+import random
+
+# This function generates the adjacency Matrix
 def adj(connections):
     ##step 1
     temp=(set(elem[0] for elem in connections).union(
@@ -37,44 +40,70 @@ def adj(connections):
 
 Number_of_edges = 5 # Number of edges
 Connection_probability = 0.3 # Probability of connection
-ensurer = 0
-while ensurer == 0 :
-    g = erdos_renyi_graph(Number_of_edges, Connection_probability)
 
-    Network_nodes =  list(g.nodes)
-    Network_links = list(g.edges)
+# Determine if a list has a 0 element
+def allcmp(existing_indicator) :
+    for item in existing_indicator :
+        if item == 0 :
+            return False
+    return True
 
-    print("This value should be the same as Number_of_edges variable" , Network_nodes)
+# Validates if all the elements in the matrix are connected
+def Matrix_Validator(element_list):
+    existing_indicator = [0 for i in range(len(element_list[0]))]
+    x = 0
+    for element in element_list :
+        y = 0 
+        for element_2 in element :
+            existing_indicator[y] = existing_indicator[y] + element_2
+            y = y +1
+        x = x +1
+    return allcmp(existing_indicator)
 
-    Sources = [link[0] for link in Network_links]
-    Destinations = [link[1] for link in Network_links]
+# This function generates the Random Network 
 
-    try:
-        Adjacency_Matrix = adj(Network_links)
-        ensurer = 1
-    except:
-        ensurer = 0 
-print(Adjacency_Matrix)
+def Random_Network_Generator(Number_of_edges, Connection_probability) :
+    ensurer = False
+    while ensurer == False :
+        g = erdos_renyi_graph(Number_of_edges, Connection_probability)
 
-# Build a dataframe with the Source and destination connections
+        Network_nodes =  list(g.nodes)
+        Network_links = list(g.edges)
+        Sources = [link[0] for link in Network_links]
+        Destinations = [link[1] for link in Network_links]
 
-df = pd.DataFrame({ 'from': Sources , 'to': Destinations})
+        # Checks if the random values are suitable for the Adjacency Mtrix
+        try: 
+            Adjacency_Matrix = adj(Network_links)
+            ensurer = Matrix_Validator(Adjacency_Matrix) # Determine if the all the nodes are connected
+        except:
+            ensurer = False 
+            
 
-# Build the graph
-G=nx.from_pandas_edgelist(df, 'from', 'to')
+    # Build a dataframe with the Source and destination connections
 
-# Plot the graph
-nx.draw(G, with_labels=True)
-plt.show()
+    df = pd.DataFrame({ 'from': Sources , 'to': Destinations})
 
-# This function generates a set of flows from a destination to an end
-import random
+    # Build the graph
+    G=nx.from_pandas_edgelist(df, 'from', 'to')
+
+    # Plot the graph
+    nx.draw(G, with_labels=True)
+    plt.show()
+
+    return Network_nodes, Network_links, Adjacency_Matrix
+
+Network_nodes, Network_links, Adjacency_Matrix = Random_Network_Generator(Number_of_edges, Connection_probability)
 
 Number_of_Streams = 4
-Stream_Source_Destination = []
-for i in range(Number_of_Streams) :
-    Stream_Source_Destination.append(random.sample(range(0, Number_of_edges), 2))
-print(Stream_Source_Destination)
+# This function generates a set of flows from a destination to an end
+def Random_flows_generator(Number_of_Streams, Number_of_edges) :
+    Stream_Source_Destination = []
+    for i in range(Number_of_Streams) :
+        Stream_Source_Destination.append(random.sample(range(0, Number_of_edges), 2))
+    return Stream_Source_Destination
+
+Stream_Source_Destination = Random_flows_generator(Number_of_Streams, Number_of_edges)
 
 # Djikstra algorithm is here !
 class Network_Topology(): 
@@ -161,23 +190,20 @@ class Network_Topology():
             full_path_per_node = []
         return full_path_per_node
 
-# Using the above class
+# Using the Network Topology class
 network = Network_Topology(Adjacency_Matrix) 
 
-all_paths_matrix = []
+all_paths_matrix = [] # This is a matrix with all the paths from one node to the other
 for node in Network_nodes:
     network.dijkstra(node) # This matrix saves all the existing paths in the network from one point to the othe 
     all_paths_matrix.append(network.full_paths_set)
-print(all_paths_matrix)
 
 # Determining the path for each Stream regarding the nodes
-Streams_paths = []
-Streams_paths.clear()
 Streams_paths = [0 for i in range(len(Stream_Source_Destination))]
 n = 0
 for stream in Stream_Source_Destination:
-    print(all_paths_matrix[stream[1]][stream[0]], type(all_paths_matrix[stream[1]][stream[0]]), len(all_paths_matrix[stream[1]][stream[0]]))
-    if len(all_paths_matrix[stream[1]][stream[0]]) == 1 :
+    
+    if len(all_paths_matrix[stream[1]][stream[0]]) == 1 : 
         Streams_paths[n]=all_paths_matrix[stream[1]][stream[0]]
         print("is", stream[1], "Different from", all_paths_matrix[stream[1]][stream[0]][0])
         if stream[1] != all_paths_matrix[stream[1]][stream[0]][0] : 
@@ -240,7 +266,7 @@ Streams_Period = {}
 i = 0
 for stream in range(len(Links_per_Stream)) :
     Streams_size.append(random.sample([1500, 3000, 4500, 6000], 1)) # This is the size of the packages in bytes
-    Streams_Period[(i)] = random.sample([100, 200, 400], 1) # This is the period in micro seconds
+    Streams_Period[(i)] = random.sample([200, 400, 800], 1) # This is the period in micro seconds
     i = i + 1
 print(Streams_size)
 print(Streams_Period)
@@ -741,11 +767,12 @@ print(df)
 
 import pandas as pd
 import matplotlib.pyplot as plt
-import datetime as dt
 
 plt.figure(figsize=(12, 5))
 plt.barh(y=df.Process_Name, left=df.Start, width=12, color=df.Color)
 plt.grid(axis='x', alpha=0.5)
+plt.xlabel("Frames")
+plt.ylabel("Time in miliseconds")
+plt.title("Ghant Chart")
 plt.show()
-
 print(Repetitions)
