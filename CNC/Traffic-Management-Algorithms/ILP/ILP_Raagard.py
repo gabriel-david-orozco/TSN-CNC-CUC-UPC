@@ -12,12 +12,10 @@
 from networkx.generators.random_graphs import erdos_renyi_graph
 
 import pandas as pd
-import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
-
-
 import random
+from math import gcd
 
 # This function generates the adjacency Matrix
 def adj(connections):
@@ -37,9 +35,8 @@ def adj(connections):
         ans[pair[1]][pair[0]]=1
     return ans
 
-
-Number_of_edges = 5 # Number of edges
-Connection_probability = 0.3 # Probability of connection
+Number_of_edges = 4 # Number of edges
+Connection_probability = 0.4 # Probability of connection
 
 # Determine if a list has a 0 element
 def allcmp(existing_indicator) :
@@ -96,7 +93,6 @@ def Random_Network_Generator(Number_of_edges, Connection_probability) :
     return Network_nodes, Network_links, Adjacency_Matrix
 Network_nodes, Network_links, Adjacency_Matrix = Random_Network_Generator(Number_of_edges, Connection_probability)
 
-print("this is the adjacency matrix", Adjacency_Matrix)
 
 Number_of_Streams = 4
 # This function generates a set of flows from a destination to an end
@@ -203,7 +199,6 @@ def all_paths_matrix_generator(Network_nodes, network) :
         network.dijkstra(node) # This matrix saves all the existing paths in the network from one point to the othe 
         all_paths_matrix.append(network.full_paths_set)
     return all_paths_matrix
-
 all_paths_matrix = all_paths_matrix_generator(Network_nodes, network)
 
 
@@ -227,7 +222,6 @@ def Streams_paths_generator(all_paths_matrix, Stream_Source_Destination) :
 Streams_paths = Streams_paths_generator(all_paths_matrix, Stream_Source_Destination)
 
 # Determining the path for each Stream regarding the links
-
 def Streams_links_paths_generator(Streams_paths):
     Streams_links_paths = []
     for stream in Streams_paths :
@@ -271,8 +265,8 @@ def Links_per_Stream_generator(Network_links, Link_order_Descriptor) :
 Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
 
 # This is for choosing a random length for the stream, whithin a selected number
-# Also chooses a random period
-from math import gcd
+# Also chooses a random period for every Stream
+
 
 def Stream_size_and_period_generator(Links_per_Stream): 
     Streams_size = []
@@ -287,7 +281,6 @@ def Stream_size_and_period_generator(Links_per_Stream):
         Streams_Period[(i)] = Streams_Period[(i)][0]
     return Streams_size , Streams_Period, Streams_Period_list
 Streams_size , Streams_Period, Streams_Period_list = Stream_size_and_period_generator(Links_per_Stream)
-
 
 # This funciton reads the periods of the strems and provides the hyperperiod (lcm of all the periods)
 def Hyperperiod_generator(Streams_Period_list) :
@@ -313,12 +306,10 @@ def Frames_per_Stream_generator(Streams_size):
     x = 0
     return Frames_per_Stream, Max_frames, Num_of_Frames
 
-
 Frames_per_Stream, Max_frames, Num_of_Frames = Frames_per_Stream_generator(Streams_size)
 
-# This code generates a matrix empty matrix that will be used to 
+# This code generates a matrix that will be used to 
 # indicate wheter of not a frame in a stream and in a link exists or not
-
 def Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links) :
     Model_Descriptor = {}
 
@@ -326,7 +317,6 @@ def Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links) :
         for frame in range(Max_frames):
             for link in range(len(Network_links)):
                 Model_Descriptor[(stream,frame,link)]= 0
-
 
     Model_Descriptor_vector = [[[0 for link in range(len(Network_links))] for frame in range(Max_frames)] for stream in range(Number_of_Streams)]
 
@@ -348,7 +338,7 @@ Model_Descriptor, Model_Descriptor_vector = Model_Descriptor_generator(Number_of
 Streams = range(Number_of_Streams)
 
 # Boolean function that indicates if a combination of Frame Link and Stream exists or not
-def frame_exists (Model_Descriptor_vector, stream, frame) :
+def frame_exists(Model_Descriptor_vector, stream, frame) :
     return len([*filter(lambda x: x >= 1, Model_Descriptor_vector[stream][frame])])
 
 # Simply, fills the duration of the streams with a fixed value, can be changed in future
@@ -362,10 +352,7 @@ def Frame_Duration(Number_of_Streams, Max_frames, Network_links ) :
 
 Frame_Duration = Frame_Duration(Number_of_Streams, Max_frames, Network_links )
 
-
-
 # this function creates the deathlines, in this case, all the streams have a fixed deathline
-
 def Deathline_Stream_generator(Frames_per_Stream) :
     Deathline_Stream = {}
     Deathline = 1000 # This is the selected value for the latency deathline
@@ -393,8 +380,11 @@ def Repetitions_generator(Streams_Period) :
     for repetition in Repetitions :
         Repetitions_Matrix.append([1 for rep in range(int(repetition))])
 
-
-    Repetitions_Descriptor = [[0 for repetition in range(int(max(Repetitions)))] for stream in Streams ]
+    print("Getting Repetitions", Repetitions, "and Streams", Streams)
+    if max(Repetitions) == 0 :
+        Repetitions_Descriptor = [0 for stream in Streams ]
+    else :
+        Repetitions_Descriptor = [[0 for repetition in range(int(max(Repetitions)))] for stream in Streams ]
     x = 0
     for stream in Repetitions_Matrix:
         y = 0
@@ -403,20 +393,27 @@ def Repetitions_generator(Streams_Period) :
             y = y +1
         x = x + 1
     
-    max_repetitions = max([max(stream) for stream in Repetitions_Descriptor])
+    print("looking for:", Repetitions_Descriptor)
+    try :
+        max_repetitions = max([max(stream) for stream in Repetitions_Descriptor])
+    except :
+        max_repetitions = 0
 
 
     # This is a patch for including the repetition 0 in the constraints 34 and 35
     y = 0
-    for stream in Repetitions_Descriptor :
-        x = 0
-        for repetition in stream :
-            #print(y, x)
-            if repetition == 0 :
-                Repetitions_Descriptor[y][x] = 9
-            x = x +1
-        Repetitions_Descriptor[y].insert(0 ,0)
-        y = y +1
+    try :
+        for stream in Repetitions_Descriptor :
+            x = 0
+            for repetition in [stream] :
+                #print(y, x)
+                if repetition == 0 :
+                    Repetitions_Descriptor[y][x] = 9
+                x = x +1
+            Repetitions_Descriptor[y].insert(0 ,0)
+            y = y +1
+    except :
+        print("Then it is not necessary")
     return Repetitions, Repetitions_Matrix, Repetitions_Descriptor, max_repetitions
 Repetitions, Repetitions_Matrix, Repetitions_Descriptor, max_repetitions= Repetitions_generator(Streams_Period)
 
@@ -571,6 +568,8 @@ instance.solutions.load_from(results)
 # Showing the results
 print("############### This is the set of offsets ######################")
 Result_offsets = []
+Clean_offsets = []
+Feasibility_indicator = 0
 for i in instance.Streams:
     for j in instance.Links:
         for k in instance.Frames:
@@ -578,10 +577,16 @@ for i in instance.Streams:
                 print("The offset of stream", i, "link", j, "frame", k, "is",instance.Frame_Offset[i,j,k].value)
                 frame_indicator = ("S", i, "L", j, "F", k)
                 helper = { "Task" :str(frame_indicator), "Start": instance.Frame_Offset[i,j,k].value, "Finish" : (instance.Frame_Offset[i,j,k].value +12), "Color" : j }
+                clean_offset = { "Task" :str(frame_indicator), "Start": instance.Frame_Offset[i,j,k].value }
                 Result_offsets.append(helper)
+                Clean_offsets.append(clean_offset)
+                if instance.Frame_Offset[i,j,k].value != 1 :
+                    Feasibility_indicator = Feasibility_indicator + 1         
 print("############### This is the set of latencies ######################")
+Results_latencies = []
 for stream in instance.Streams:
     print("The latency of Stream", stream, "is",instance.Latency[stream].value)
+    Results_latencies.append(instance.Latency[stream].value)
     
 print("############### This is the set of queues ######################")
 for link in instance.Links:
@@ -597,14 +602,13 @@ print("This is the set of network links", Network_links)
 # results.write()
 # results.solver.status 
 ######################## For now on, this code is for generate the Gant chart ########################
-import pandas as pd
-import matplotlib.pyplot as plt
 
-def ghant_chart_generator(Result_offsets, Repetitions) :
+
+def gantt_chart_generator(Result_offsets, Repetitions) :
     data = [[frame['Task'], frame['Start']] for frame in Result_offsets]
     Repetitions = [repetition + 1 for repetition in Repetitions]
 
-    color=['black', 'red', 'green', 'blue', 'cyan', 'magenta', 'fuchsia']
+    color=['black', 'red', 'green', 'blue', 'cyan', 'magenta', 'fuchsia', 'yellow', 'grey', 'orange', 'pink']
 
     # This set of code is for generating the repetitions values in the dataset
     #For printing the full gant Chart
@@ -629,8 +633,49 @@ def ghant_chart_generator(Result_offsets, Repetitions) :
     plt.grid(axis='x', alpha=0.5)
     plt.ylabel("Frames")
     plt.xlabel("Time in miliseconds")
-    plt.title("Ghant Chart")
+    plt.title("Gantt Chart")
     plt.show()
 
     return df
-df = ghant_chart_generator(Result_offsets, Repetitions)
+df = gantt_chart_generator(Result_offsets, Repetitions)
+
+
+# Definition of the Data Frame
+# Each schedule provides the following:
+
+# Number of Streams 
+# Paths of each stream
+# Deathline of each Stream
+# Periods
+# Stream Duration
+# Possibility of schedule
+# Offset of the frames
+# Latencies
+
+Feasibility = False
+if Feasibility_indicator > 1 :
+    Feasibility = True
+Full_scheduled_data = {
+    #Parameter of the network 
+    "Adjacency_Matrix" : Adjacency_Matrix, 
+    #Parameters of the Streams
+    "Stream_Source_Destination" : Stream_Source_Destination, 
+    "Link_order_Descriptor" : Link_order_Descriptor,
+    "Links_per_Stream" : Links_per_Stream, 
+    "Number_of_Streams" : len(instance.Streams),
+    "Frames_per_Stream" : Frames_per_Stream,
+    "Deathline_Stream" : Deathline_Stream,
+    "Streams_Period" : Streams_Period,
+    #Results
+    "Streams_size" : Streams_size,
+    "Clean_offsets" : Clean_offsets,
+    "Latencies" : Results_latencies,
+    "Feasibility" : Feasibility
+}
+
+
+print(Full_scheduled_data)
+### This will store the results into a txt for further usage
+
+with open('results.txt', 'a') as f :
+    f.write("\n" + str(Full_scheduled_data))
