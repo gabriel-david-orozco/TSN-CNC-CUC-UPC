@@ -24,15 +24,31 @@ class Cassandra_connecion():
       WITH replication = {'class' : 'SimpleStrategy', 'replication_factor':1};""")
       except :
         pass 
-  def table_creator(self, table_name):
+  
+  
+  def table_creator(self, table_name, columns):
     self.session.execute("""USE cassandra_namespace""")
-    droping_string = '"""DROP TABLE ' + table_name + '"""'
     try:
-      self.session.execute(droping_string)
+      self.session.execute("DROP TABLE " + table_name)
     except :
-      pass
-    creating_string = '"""CREATE TABLE' + table_name + '( usrid int PRIMARY KEY, nombre text,ape1 text);"""'
-    self.session.execute(creating_string)
- 
+      print("The table does not exit, creating ")
+    special_characters = "']["
+    for element in special_characters:
+      print("entering 1 time", element)
+      columns = str(columns).replace(element, "")
+    self.session.execute("CREATE TABLE " + table_name + "( " + str(columns) + ");")
+
+  def insert_in_table(self, table_name, keyed_values):
+    special_characters = "]["
+    values = keyed_values
+    for element in special_characters:
+      values = str(list(values.values())).replace(element, "")
+    keys = ", ".join(keyed_values.keys())
+    print(keys, values)
+    self.session.execute("INSERT INTO " + table_name+ " (" + keys + ") VALUES ("+ values +");")
+
 cassandra = Cassandra_connecion()
-cassandra.table_creator("Topology")
+columns = ["usrid text PRIMARY KEY"," nombre text", " ape1 text"]
+filling_values = {"usrid": "1", "nombre": "Gabriel", "ape1": "Orozco"}
+cassandra.table_creator("Topology", columns)
+cassandra.insert_in_table("Topology", filling_values)
