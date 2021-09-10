@@ -35,7 +35,7 @@ def adj(connections):
         ans[pair[1]][pair[0]]=1
     return ans
 
-Number_of_edges = 4 # Number of edges
+Number_of_edges = 5 # Number of edges
 Connection_probability = 0.4 # Probability of connection
 
 # Determine if a list has a 0 element
@@ -87,14 +87,16 @@ def Random_Network_Generator(Number_of_edges, Connection_probability) :
     G=nx.from_pandas_edgelist(df, 'from', 'to')
 
     # Plot the graph
+    plot_network = plt.figure(1, figsize=(14, 7))
+    plt.subplot(221)
+    plt.title("Network Topology")
     nx.draw(G, with_labels=True)
-    plt.show()
 
-    return Network_nodes, Network_links, Adjacency_Matrix
-Network_nodes, Network_links, Adjacency_Matrix = Random_Network_Generator(Number_of_edges, Connection_probability)
+    return Network_nodes, Network_links, Adjacency_Matrix, plot_network
+Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Generator(Number_of_edges, Connection_probability)
 
 
-Number_of_Streams = 4
+Number_of_Streams = 5
 # This function generates a set of flows from a destination to an end
 def Random_flows_generator(Number_of_Streams, Number_of_edges) :
     Stream_Source_Destination = []
@@ -593,7 +595,7 @@ for link in instance.Links:
     print("The number of queues of link ", link, "is",instance.Num_Queues[link].value)
 print(Result_offsets)
 
-print("This is the set of network links", Network_links)
+
 
 ##### For printing the model results and variables #####
 #UNCOMMENT if necessary 
@@ -627,19 +629,35 @@ def gantt_chart_generator(Result_offsets, Repetitions) :
     data = [[frame['Task'], frame['Start'], frame['Color']] for frame in New_offsets]
     df = pd.DataFrame(data, columns = ['Process_Name', 'Start', 'Color'])
 
+
     # This is for printing the gant Chart 
-    plt.figure(figsize=(12, 5))
+    plt.subplot(212)
+    #plt.figure(figsize=(12, 5))
     plt.barh(y=df.Process_Name, left=df.Start, width=12, color=df.Color)
     plt.grid(axis='x', alpha=0.5)
     plt.ylabel("Frames")
     plt.xlabel("Time in miliseconds")
     plt.title("Gantt Chart")
-    plt.show()
 
     return df
 df = gantt_chart_generator(Result_offsets, Repetitions)
 
 
+def information_generator(Num_of_Frames, Streams_Period, Link_order_Descriptor, Network_links, Streams_links_paths):
+    #Frames per stream
+    #period per stream
+    #Links used per stream
+    #Network_links
+    # Streams_links_paths
+    plt.subplot(222)
+    plt.text(0.1, 0.9, "Network-links: \n" + str(Network_links), bbox=dict(facecolor='red', alpha=0.5))
+    plt.text(0.1, 0.7, "Frames per stream: \n" + str(Num_of_Frames), bbox=dict(facecolor='red', alpha=0.5))
+    plt.text(0.1, 0.5, "Streams periods: \n" + str(Streams_Period), bbox=dict(facecolor='red', alpha=0.5))
+    plt.text(0.1, 0.3, "Indexed Links order per stream: \n " + str(Link_order_Descriptor), bbox=dict(facecolor='red', alpha=0.5))
+    plt.text(0.1, 0.1, "Streams Paths: \n " + str(Streams_links_paths), bbox=dict(facecolor='red', alpha=0.5))
+    plt.axis('off')
+    plt.show()
+information_generator(Num_of_Frames, Streams_Period, Link_order_Descriptor, Network_links, Streams_links_paths)
 # Definition of the Data Frame
 # Each schedule provides the following:
 
