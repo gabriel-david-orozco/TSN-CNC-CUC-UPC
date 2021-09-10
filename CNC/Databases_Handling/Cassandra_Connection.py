@@ -1,8 +1,9 @@
 from cassandra.cluster import Cluster
+from numpy import empty
 
 class Cassandra_connecion():
   def __init__(self) :
-      self.cluster = Cluster(contact_points=['localhost'], port=9042)
+      self.cluster = Cluster(contact_points=['localhost'], port=9042) # Contact points can be a list with the cluster IPs
       self.session = self.cluster.connect()
       try :
         self.session.execute("""CREATE KEYSPACE cassandra_namespace \
@@ -34,16 +35,32 @@ class Cassandra_connecion():
       values = values.replace(element, "")
     keys = ", ".join(keyed_values.keys())
     self.session.execute("INSERT INTO " + table_name + " (" + keys + ") VALUES ("+ values +");")
-  
+
+# This element receives the table element and the name of the element
+
   def find_in_table(self, table_name, element="*"):
     query_result = self.session.execute("select " + element + " from " + table_name + ";")
     row = query_result.one()
     return row
+  
+#Update in table using select and where statements element and filter have to be provided in a dictionary
+
+  def update_table(self, table_name, element, filter = empty):
+    if filter :
+      new_element, new_element_2 = "", ""
+      #self.session.execute("UPDATE " + element + " FROM" + table_name + " WHERE "+ filter +";")
+      for value in element.items():
+        new_element = new_element + value[0] + " = '" + value[1] + "',"
+      for value in filter.items():
+        new_element_2 = new_element_2 + value[0] + " = '" + value[1] + "',"
+      
+      print("UPDATE " + new_element[0:-1] + " FROM " + table_name + " WHERE "+ new_element_2[0:-1] +";")
 
 
-# cassandra = Cassandra_connecion()
+cassandra = Cassandra_connecion()
 # columns = ["usrid text PRIMARY KEY"," nombre text", " ape1 text"]
-# filling_values = {"usrid": "1", "nombre": "Gabriel", "ape1": "Orozco"}
+filling_values = {"usrid": "1", "nombre": "Gabriel", "ape1": "Orozco"}
+cassandra.update_table( "hola", filling_values, filling_values)
 # cassandra.table_creator("Topology", columns)
 # cassandra.insert_in_table("Topology", filling_values)
 # print(cassandra.find_in_table("Topology") )
