@@ -11,4 +11,7 @@ This Time Sensitive Networking Controller is developed by the Universitat Polit√
 - [ ] Check bug on scheduler
 - [ ] Performance testing on AWS
 
+# Workflow guide ILP:
+
+- [ ] add option initialized Network
 
