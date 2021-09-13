@@ -35,8 +35,8 @@ def adj(connections):
         ans[pair[1]][pair[0]]=1
     return ans
 
-Number_of_edges = 5 # Number of edges
-Connection_probability = 0.4 # Probability of connection
+Number_of_edges = 4 # Number of edges
+Connection_probability = 0.3 # Probability of connection
 
 # Determine if a list has a 0 element
 def allcmp(existing_indicator) :
@@ -273,14 +273,20 @@ Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descript
 def Stream_size_and_period_generator(Links_per_Stream): 
     Streams_size = []
     Streams_Period = {}
-    for stream in range(len(Links_per_Stream)) :
+    for stream_index in range(len(Links_per_Stream)) :
         Streams_size.append(random.sample([1500, 3000, 4500, 6000], 1)) # This is the size of the packages in bytes
-        Streams_Period[(stream)] = random.sample([200, 400, 800], 1) # This is the period in micro seconds
-
+        #Streams_size.append(random.sample([6000,9000], 1)) # This is the size of the packages in bytes
+        Streams_Period[(stream_index)] = random.sample([200, 400, 800], 1) # This is the period in micro seconds
+        #Streams_Period[(stream_index)] = random.sample([100, 200], 1) # This is the period in micro seconds
+    #Streams_size = [[7500], [7500]]
+    print("#######################Streams_size and Stream Period#################")    
+    print(Streams_size)
+    print(Streams_Period)
     Streams_Period_list = [(v[0]) for k, v in Streams_Period.items()]
     
     for i in range(len(Streams_Period)):
         Streams_Period[(i)] = Streams_Period[(i)][0]
+    print("the same streams_periods but after the funny loop",Streams_Period)
     return Streams_size , Streams_Period, Streams_Period_list
 Streams_size , Streams_Period, Streams_Period_list = Stream_size_and_period_generator(Links_per_Stream)
 
@@ -349,7 +355,7 @@ def Frame_Duration(Number_of_Streams, Max_frames, Network_links ) :
     for stream in range(Number_of_Streams):
         for frame in range(Max_frames):
             for link in range(len(Network_links)):
-                Frame_Duration[(stream,frame,link)]= 12
+                Frame_Duration[(stream,frame,link)]= 12 # This has to be 12
     return Frame_Duration
 
 Frame_Duration = Frame_Duration(Number_of_Streams, Max_frames, Network_links )
@@ -477,7 +483,6 @@ def Constraint_27_rule(model, stream, link):
 model.Constraint_27 = Constraint(model.Streams, model.Links, rule=Constraint_27_rule)
 
 def Constraint_28_rule(model, stream): 
-    a = model.Frame_Duration[stream, Frames_per_Stream[stream][-1] , Link_order_Descriptor[stream][-1] ]
     return model.Latency[stream] == model.Frame_Offset[stream, Link_order_Descriptor[stream][-1], (len(Frames_per_Stream[stream]) -1) ] + model.Frame_Duration[stream, (len(Frames_per_Stream[stream]) -1) , Link_order_Descriptor[stream][-1] ] - model.Frame_Offset[stream, Link_order_Descriptor[stream][0] , 0 ]
 model.Constraint_28 = Constraint(model.Streams, rule=Constraint_28_rule)
 
@@ -499,15 +504,17 @@ def Constraint_31_rule(model, stream, frame, link):
         return Constraint.Skip
 model.Constraint_31 = Constraint(model.Streams, model.Frames, model.Links, rule=Constraint_31_rule)
 
-def Constraint_32_rule(model, stream, frame, link):
+def Constraint_32_rule(model, stream, frame, link): # This constraint doesn't seems to apply when there is only one stream
     if Model_Descriptor[(stream, frame, link)] and frame :
+        print("applying for stream", stream, "frame", frame, "link", link)
         return model.Frame_Offset[stream, link, frame - 1 ] + model.Frame_Duration[stream, frame - 1, link] <= model.Frame_Offset[stream, link, frame]
     else:
         return Constraint.Skip
 model.Constraint_32 = Constraint(model.Streams, model.Frames, model.Links, rule=Constraint_32_rule)
 
 def Constraint_34_rule(model, stream, frame, link, stream_2, frame_2, repetition, repetition_2):
-    if frame_exists(Model_Descriptor_vector, stream, frame) and frame_exists(Model_Descriptor_vector, stream_2, frame_2) and Model_Descriptor[(stream,frame,link)] and Model_Descriptor[(stream_2,frame_2,link)] and Repetitions_Descriptor[stream][repetition] != 9 and Repetitions_Descriptor[stream_2][repetition_2] != 9 :
+    if frame_exists(Model_Descriptor_vector, stream, frame) and frame_exists(Model_Descriptor_vector, stream_2, frame_2) and Model_Descriptor[(stream,frame,link)] and Model_Descriptor[(stream_2,frame_2,link)] and Repetitions_Descriptor[stream][repetition] != 9 and Repetitions_Descriptor[stream_2][repetition_2] != 9 and stream != stream_2 :
+        if stream ==stream_2: print("both streams are the same")
         return Repetitions_Descriptor[stream][repetition] * model.Period[(stream)] + model.Frame_Offset[stream, link, frame] + model.Frame_Duration[stream, frame, link] <= Repetitions_Descriptor[stream_2][repetition_2] * model.Period[(stream_2)] + model.Frame_Offset[stream_2, link, frame_2] +  model.Large_Number * model.Aux_Var_Dis[stream, frame, stream_2, frame_2, link, repetition, repetition_2]
     else:
         return Constraint.Skip
@@ -515,45 +522,53 @@ model.Constraint_34 = Constraint(model.Streams, model.Frames, model.Links, model
 
 def Constraint_35_rule(model, stream, frame, link, stream_2, frame_2, repetition, repetition_2):
     # The constant has to be applied if the combination exists and the frames exists
-    if frame_exists(Model_Descriptor_vector, stream, frame) and frame_exists(Model_Descriptor_vector, stream_2, frame_2) and Model_Descriptor[(stream,frame,link)] and Model_Descriptor[(stream_2,frame_2,link)] and Repetitions_Descriptor[stream][repetition] != 9 and Repetitions_Descriptor[stream_2][repetition_2] != 9:
+    if frame_exists(Model_Descriptor_vector, stream, frame) and frame_exists(Model_Descriptor_vector, stream_2, frame_2) and Model_Descriptor[(stream,frame,link)] and Model_Descriptor[(stream_2,frame_2,link)] and Repetitions_Descriptor[stream][repetition] != 9 and Repetitions_Descriptor[stream_2][repetition_2] != 9 and stream != stream_2:
+        if stream ==stream_2: print("both streams are the same")
         return Repetitions_Descriptor[stream_2][repetition_2] * model.Period[(stream_2)] + model.Frame_Offset[stream_2, link, frame_2] + model.Frame_Duration[stream_2, frame_2, link] <= Repetitions_Descriptor[stream][repetition] * model.Period[(stream)] + model.Frame_Offset[stream, link, frame] + model.Large_Number * (1 - model.Aux_Var_Dis[stream, frame, stream_2, frame_2, link, repetition, repetition_2]) 
     else:
         return Constraint.Skip
 model.Constraint_35 = Constraint(model.Streams, model.Frames, model.Links, model.Streams, model.Frames, model.Repetitions, model.Repetitions, rule=Constraint_35_rule)
 
 def Constraint_36_rule(model, stream, frame, link, stream_2, frame_2, repetition, repetition_2 ):
-    if frame_exists(Model_Descriptor_vector, stream, frame) and frame_exists(Model_Descriptor_vector, stream_2, frame_2) and Model_Descriptor[(stream,frame,link)] and Model_Descriptor[(stream_2,frame_2,link)] and Link_order_Descriptor[stream].index(link) and Link_order_Descriptor[stream_2].index(link) and Repetitions_Descriptor[stream][repetition] != 9 and Repetitions_Descriptor[stream_2][repetition_2] != 9:
+    if frame_exists(Model_Descriptor_vector, stream, frame) and frame_exists(Model_Descriptor_vector, stream_2, frame_2) and Model_Descriptor[(stream,frame,link)] and Model_Descriptor[(stream_2,frame_2,link)] and Link_order_Descriptor[stream].index(link) and Link_order_Descriptor[stream_2].index(link) and Repetitions_Descriptor[stream][repetition] != 9 and Repetitions_Descriptor[stream_2][repetition_2] != 9 and stream != stream_2:
         return Repetitions_Descriptor[stream][repetition] * model.Period[stream] + model.Frame_Offset[stream, link, frame] <= Repetitions_Descriptor[stream_2][repetition_2] * model.Period[stream_2] + model.Frame_Offset[stream_2,Link_order_Descriptor[stream][Link_order_Descriptor[stream].index(link)-1], frame_2] + model.Large_Number * (model.w[stream, frame, stream_2, frame_2, link] + model.Aux_Same_Queue[stream, link, stream_2] + model.Aux_Same_Queue[stream_2, link, stream])
     else : 
         return Constraint.Skip
 model.Constraint_36 = Constraint(model.Streams, model.Frames, model.Links, model.Streams, model.Frames, model.Repetitions, model.Repetitions, rule=Constraint_36_rule)
 
 def Constraint_37_rule(model, stream, frame, link, stream_2, frame_2, repetition, repetition_2):
-    if frame_exists(Model_Descriptor_vector, stream, frame) and frame_exists(Model_Descriptor_vector, stream_2, frame_2) and Model_Descriptor[(stream,frame,link)] and Model_Descriptor[(stream_2,frame_2,link)] and Link_order_Descriptor[stream].index(link) and Link_order_Descriptor[stream_2].index(link) and Repetitions_Descriptor[stream][repetition] != 9 and Repetitions_Descriptor[stream_2][repetition_2] != 9:
+    if frame_exists(Model_Descriptor_vector, stream, frame) and frame_exists(Model_Descriptor_vector, stream_2, frame_2) and Model_Descriptor[(stream,frame,link)] and Model_Descriptor[(stream_2,frame_2,link)] and Link_order_Descriptor[stream].index(link) and Link_order_Descriptor[stream_2].index(link) and Repetitions_Descriptor[stream][repetition] != 9 and Repetitions_Descriptor[stream_2][repetition_2] != 9 and stream != stream_2:
         return Repetitions_Descriptor[stream_2][repetition_2] * model.Period[stream_2] + model.Frame_Offset[stream_2, link, frame_2] <= Repetitions_Descriptor[stream][repetition] * model.Period[stream] + model.Frame_Offset[stream, Link_order_Descriptor[stream][Link_order_Descriptor[stream].index(link)-1], frame] + model.Large_Number * (1- model.w[stream, frame, stream_2, frame_2, link] + model.Aux_Same_Queue[stream, link, stream_2] + model.Aux_Same_Queue[stream_2, link,stream])
     else : 
         return Constraint.Skip
 model.Constraint_37 = Constraint(model.Streams, model.Frames, model.Links, model.Streams, model.Frames, model.Repetitions, model.Repetitions, rule=Constraint_37_rule)
 
 def Constraint_39_rule(model, stream, link, stream_2):
-    return model.Queue_Assignment[stream_2, link] - model.Queue_Assignment[stream, link] - model.Large_Number * (model.Aux_Same_Queue[stream, link, stream_2] - 1) >= 1 
+    if Model_Descriptor[(stream, 0, link)] and Model_Descriptor[(stream_2, 0, link)] and stream != stream_2:
+        return model.Queue_Assignment[stream_2, link] - model.Queue_Assignment[stream, link] - model.Large_Number * (model.Aux_Same_Queue[stream, link, stream_2] - 1) >= 1 
+    else : 
+        return Constraint.Skip
 model.Constraint_39 = Constraint(model.Streams, model.Links, model.Streams, rule=Constraint_39_rule)
 
 def Constraint_40_rule(model, stream, link, stream_2):
-    return model.Queue_Assignment[stream_2, link] - model.Queue_Assignment[stream, link] - model.Large_Number * model.Aux_Same_Queue[stream, link, stream_2] <= 0
-model.Constraint_40 = Constraint(model.Streams, model.Links, model.Streams, rule=Constraint_40_rule)
-
-def Constraint_41_rule(model, stream, frame, link, stream_2, frame_2):
-    
-    if frame_exists(Model_Descriptor_vector, stream, frame) and frame_exists(Model_Descriptor_vector, stream_2, frame_2) and Model_Descriptor[(stream, frame, link)] and Model_Descriptor[(stream_2, frame_2, link)] and Link_order_Descriptor[stream].index(link) and Link_order_Descriptor[stream_2].index(link):
-
-        return  model.Period[stream] + model.Frame_Offset[stream, link, frame] + model.Max_Syn_Error <= stream_2 * model.Period[stream_2] + model.Frame_Offset[stream_2,Link_order_Descriptor[stream_2][Link_order_Descriptor[stream_2].index(link)-1], frame_2] + model.Large_Number * (model.w[stream, frame, stream_2, frame_2, link] + model.Aux_Same_Queue[stream, link, stream_2] + model.Aux_Same_Queue[stream_2, link, stream])
+    if Model_Descriptor[(stream, 0, link)] and Model_Descriptor[(stream_2, 0, link)] and stream != stream_2:
+        return model.Queue_Assignment[stream_2, link] - model.Queue_Assignment[stream, link] - model.Large_Number * model.Aux_Same_Queue[stream, link, stream_2] <= 0
     else : 
         return Constraint.Skip
-model.Constraint_41 = Constraint(model.Streams, model.Frames, model.Links, model.Streams, model.Frames, rule=Constraint_41_rule)
+
+model.Constraint_40 = Constraint(model.Streams, model.Links, model.Streams, rule=Constraint_40_rule)
+
+def Constraint_41_rule(model, stream, frame, link, stream_2, frame_2, repetition, repetition_2):
+    
+    if frame_exists(Model_Descriptor_vector, stream, frame) and frame_exists(Model_Descriptor_vector, stream_2, frame_2) and Model_Descriptor[(stream, frame, link)] and Model_Descriptor[(stream_2, frame_2, link)] and Link_order_Descriptor[stream].index(link) and Link_order_Descriptor[stream_2].index(link) and Repetitions_Descriptor[stream][repetition] != 9 and Repetitions_Descriptor[stream_2][repetition_2] != 9 and stream != stream_2:
+
+        return  Repetitions_Descriptor[stream][repetition] * model.Period[stream] + model.Frame_Offset[stream, link, frame] + model.Max_Syn_Error <= Repetitions_Descriptor[stream_2][repetition_2] * model.Period[stream_2] + model.Frame_Offset[stream_2,Link_order_Descriptor[stream_2][Link_order_Descriptor[stream_2].index(link)-1], frame_2] + model.Large_Number * (model.w[stream, frame, stream_2, frame_2, link] + model.Aux_Same_Queue[stream, link, stream_2] + model.Aux_Same_Queue[stream_2, link, stream])
+    else : 
+        return Constraint.Skip
+model.Constraint_41 = Constraint(model.Streams, model.Frames, model.Links, model.Streams, model.Frames, model.Repetitions, model.Repetitions, rule=Constraint_41_rule)
 
 def Constraint_42_rule(model, stream, frame, link, stream_2, frame_2, repetition, repetition_2):
-    if frame_exists(Model_Descriptor_vector, stream, frame) and frame_exists(Model_Descriptor_vector, stream_2, frame_2) and Model_Descriptor[(stream, frame, link)] and Model_Descriptor[(stream_2, frame_2, link)] and Link_order_Descriptor[stream].index(link) and Link_order_Descriptor[stream_2].index(link) and Repetitions_Descriptor[stream][repetition] != 9 and Repetitions_Descriptor[stream_2][repetition_2] != 9:
+    if frame_exists(Model_Descriptor_vector, stream, frame) and frame_exists(Model_Descriptor_vector, stream_2, frame_2) and Model_Descriptor[(stream, frame, link)] and Model_Descriptor[(stream_2, frame_2, link)] and Link_order_Descriptor[stream].index(link) and Link_order_Descriptor[stream_2].index(link) and Repetitions_Descriptor[stream][repetition] != 9 and Repetitions_Descriptor[stream_2][repetition_2] != 9 and stream != stream_2:
         return Repetitions_Descriptor[stream_2][repetition_2] * model.Period[stream_2] + model.Frame_Offset[stream_2, link, frame_2] + model.Max_Syn_Error <= Repetitions_Descriptor[stream][repetition] * model.Period[stream] + model.Frame_Offset[stream, Link_order_Descriptor[stream][Link_order_Descriptor[stream].index(link)-1], frame] + model.Large_Number * (model.w[stream, frame, stream_2, frame_2, link] + model.Aux_Same_Queue[stream, link, stream_2] + model.Aux_Same_Queue[stream_2, link, stream])
     else : 
         return Constraint.Skip
@@ -593,7 +608,12 @@ for stream in instance.Streams:
 print("############### This is the set of queues ######################")
 for link in instance.Links:
     print("The number of queues of link ", link, "is",instance.Num_Queues[link].value)
-print(Result_offsets)
+#print(Result_offsets)
+
+print("############### This is the set of queues per stream and link######################")
+for stream in instance.Streams:
+    for link in instance.Links:
+        print("The number of queues of Link",link , "Stream" , stream, "is", instance.Queue_Assignment[stream, link].value)
 
 
 

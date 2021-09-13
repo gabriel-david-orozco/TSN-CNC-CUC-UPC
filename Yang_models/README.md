@@ -298,7 +298,7 @@ module: ieee802-dot1q-tsn-types-upc-version
      |  |  |     +--rw cb-sequence-type-list*      uint32
      |  |  +---x compute-request
      |  +--ro configuration
-     |     +--ro status-info
+     |     +--ro statuts-info
      |     |  +--ro talker-status?     enumeration
      |     |  +--ro listener-status?   enumeration
      |     |  +--ro failure-code?      uint8
@@ -344,7 +344,7 @@ module: ieee802-dot1q-tsn-types-upc-version
      |     |  +--ro index                      uint16
      |     |  +--ro accumulated-latency?       uint32
      |     |  +--ro interface-configuration
-     |     |     +--ro interface-list* [mac-address interface-name]
+     |     |     +--ro interfacelist* [mac-address interface-name]
      |     |        +--ro mac-address       string
      |     |        +--ro interface-name    string
      |     |        +--ro config-list* [index]
