@@ -35,7 +35,7 @@ def adj(connections):
         ans[pair[1]][pair[0]]=1
     return ans
 
-Number_of_edges = 4 # Number of edges
+Number_of_edges = 7 # Number of edges
 Connection_probability = 0.4 # Probability of connection
 
 # Determine if a list has a 0 element
@@ -426,6 +426,23 @@ def Repetitions_generator(Streams_Period) :
 Repetitions, Repetitions_Matrix, Repetitions_Descriptor, max_repetitions= Repetitions_generator(Streams_Period)
 
 
+### Defined unused links
+def unused_links_generator(Network_links, Link_order_Descriptor):
+    number_of_links = len(Network_links)
+    unused_links = []
+    for i in range(number_of_links) :
+        totalizer = 0
+        for link in Link_order_Descriptor:
+            print("first flag", link)
+            for sub_link in link:
+                print("second flag", sub_link, "the number", i)
+                if sub_link == i :
+                    totalizer = 1
+        if totalizer == 0:
+            unused_links.append(i)
+    print("the hell is happening",unused_links)
+    return unused_links
+unused_links = unused_links_generator(Network_links, Link_order_Descriptor)
 ##################################### ILP Model starts here #####################################
 # The ILP took as base for this code appears in the paper 
 # Optimization algorithms for the scheduling of IEEE 802.1 Time-Sensitive Networking (TSN)
@@ -566,7 +583,7 @@ def Constraint_40_rule(model, stream, link, stream_2):
     else : 
         return Constraint.Skip
 
-#model.Constraint_40 = Constraint(model.Streams, model.Links, model.Streams, rule=Constraint_40_rule)
+model.Constraint_40 = Constraint(model.Streams, model.Links, model.Streams, rule=Constraint_40_rule)
 
 def Constraint_41_rule(model, stream, frame, link, stream_2, frame_2, repetition, repetition_2):
     
@@ -586,6 +603,15 @@ def Constraint_42_rule(model, stream, frame, link, stream_2, frame_2, repetition
         return Constraint.Skip
 model.Constraint_42 = Constraint(model.Streams, model.Frames, model.Links, model.Streams, model.Frames, model.Repetitions, model.Repetitions, rule=Constraint_42_rule)
 
+#unused_links_generator(Network_links, Link_order_Descriptor)
+def Constraint_reliever_rule(model, link):
+    print("constraint reliever", link, unused_links, Link_order_Descriptor, Link_order_Descriptor[0])
+    if link in unused_links :
+        print("applying for link", link)
+        return model.Num_Queues[link] == 0
+    else : 
+        return Constraint.Skip
+model.Constraint_reliever = Constraint(model.Links, rule=Constraint_reliever_rule)
 
 ### This part is the creation of the instance in the ilp system
 opt = SolverFactory('glpk')
