@@ -35,8 +35,8 @@ def adj(connections):
         ans[pair[1]][pair[0]]=1
     return ans
 
-Number_of_edges = 6 # Number of edges
-Connection_probability = 0.3 # Probability of connection
+Number_of_edges = 2 # Number of edges
+Connection_probability = 0.9 # Probability of connection
 
 # Determine if a list has a 0 element
 def allcmp(existing_indicator) :
@@ -95,8 +95,12 @@ def Random_Network_Generator(Number_of_edges, Connection_probability) :
     return Network_nodes, Network_links, Adjacency_Matrix, plot_network
 Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Generator(Number_of_edges, Connection_probability)
 
+####################################################################################
+################### FROM THIS PART THE DJIKSTRA ALGORITH STARTS ####################
+####################################################################################
 
-Number_of_Streams = 5
+
+Number_of_Streams = 50
 # This function generates a set of flows from a destination to an end
 def Random_flows_generator(Number_of_Streams, Number_of_edges) :
     Stream_Source_Destination = []
@@ -266,11 +270,14 @@ def Links_per_Stream_generator(Network_links, Link_order_Descriptor) :
 
 Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
 
-# This is for choosing a random length for the stream, whithin a selected number
-# Also chooses a random period for every Stream
+########################################################################
+########################################################################
+###########    Random parameters of the streams    #####################
+########################################################################
+########################################################################
 
 
-def Stream_size_and_period_generator(Links_per_Stream): 
+def Random_Stream_size_and_period_generator(Links_per_Stream): 
     Streams_size = []
     Streams_Period = {}
     for stream_index in range(len(Links_per_Stream)) :
@@ -288,7 +295,7 @@ def Stream_size_and_period_generator(Links_per_Stream):
         Streams_Period[(i)] = Streams_Period[(i)][0]
     print("the same streams_periods but after the funny loop",Streams_Period)
     return Streams_size , Streams_Period, Streams_Period_list
-Streams_size , Streams_Period, Streams_Period_list = Stream_size_and_period_generator(Links_per_Stream)
+Streams_size , Streams_Period, Streams_Period_list = Random_Stream_size_and_period_generator(Links_per_Stream)
 
 # This funciton reads the periods of the strems and provides the hyperperiod (lcm of all the periods)
 def Hyperperiod_generator(Streams_Period_list) :
@@ -311,7 +318,6 @@ def Frames_per_Stream_generator(Streams_size):
     Max_frames = max([len(frame) for frame in Frames_per_Stream])
     Num_of_Frames = []
     for i in Frames_per_Stream : Num_of_Frames.append(len(i))
-    x = 0
     return Frames_per_Stream, Max_frames, Num_of_Frames
 
 Frames_per_Stream, Max_frames, Num_of_Frames = Frames_per_Stream_generator(Streams_size)
