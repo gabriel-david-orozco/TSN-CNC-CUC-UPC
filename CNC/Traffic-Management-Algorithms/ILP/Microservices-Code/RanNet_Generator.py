@@ -41,7 +41,6 @@ def Matrix_Validator(element_list):
     return allcmp(existing_indicator)
 
 # This function generates the Random Network 
-
 def Random_Network_Generator(Number_of_edges, Connection_probability) :
     ensurer = False
     while ensurer == False :
@@ -76,5 +75,5 @@ def Random_Network_Generator(Number_of_edges, Connection_probability) :
     nx.draw(G, with_labels=True)
 
     return Network_nodes, Network_links, Adjacency_Matrix, plot_network
+
 #Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Generator(5, 0.3)
-#print(Network_nodes, Network_links, Adjacency_Matrix)

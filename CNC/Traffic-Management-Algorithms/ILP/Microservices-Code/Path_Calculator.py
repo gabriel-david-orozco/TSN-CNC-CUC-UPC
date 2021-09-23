@@ -1,17 +1,8 @@
 # This part gets as input the Number of streams and the network parameters
+# This function is called for generating the calculation of the network paths independly on the frames an periods
 
 import random
 from RanNet_Generator import Random_Network_Generator
-
-
-### This is just the part where the program can select betweeen generating a new network
-
-#Optional parameters
-Number_of_edges, Connection_probability = 5 , 0.4
-
-Number_of_Streams = 5 
-Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Generator(Number_of_edges, Connection_probability)
-
 
 # This function generates a set of flows from a destination to an end
 def Random_flows_generator(Number_of_Streams, Number_of_edges) :
@@ -106,7 +97,6 @@ class Network_Topology():
             full_path_per_node = []
         return full_path_per_node
 
-
 # This is function generates a matrix with all the paths from one node to the other calculated by djikstra
 def all_paths_matrix_generator(Network_nodes, network) :
     all_paths_matrix = [] 
@@ -114,8 +104,6 @@ def all_paths_matrix_generator(Network_nodes, network) :
         network.dijkstra(node) # This matrix saves all the existing paths in the network from one point to the othe 
         all_paths_matrix.append(network.full_paths_set)
     return all_paths_matrix
-
-
 
 # Determining the path for each Stream generating a list of of all the nodes from source to destination
 def Streams_paths_generator(all_paths_matrix, Stream_Source_Destination) :
@@ -151,7 +139,7 @@ def Streams_links_paths_generator(Streams_paths):
 # this function generates the link_order_descriptor 
 #Basically, the link order descriptor is a list of the index of each link in the path
 #from source to destination of a stream #
-def Link_order_Descripto_generator(Streams_links_paths) :
+def Link_order_Descriptor_generator(Streams_links_paths, Network_links) :
     Link_order_Descriptor = []
     for stream in Streams_links_paths :
         link_order_helper = []
@@ -164,7 +152,6 @@ def Link_order_Descripto_generator(Streams_links_paths) :
     return Link_order_Descriptor
 
 # Links per stream, basically is a list that indicates if a link is used for transmitting in a stream
-
 def Links_per_Stream_generator(Network_links, Link_order_Descriptor) : 
     Links_per_Stream = [[0 for link in range(len(Network_links))] for stream in range(len(Link_order_Descriptor))]
     stream_index = 0
@@ -175,13 +162,15 @@ def Links_per_Stream_generator(Network_links, Link_order_Descriptor) :
     return Links_per_Stream  
 
 
+# Calling the Random_Network_Generator function from the other file 
+# Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Generator(Number_of_edges, Connection_probability)
 
-Stream_Source_Destination = Random_flows_generator(Number_of_Streams, Number_of_edges)
-network = Network_Topology(Adjacency_Matrix) # Using the Network Topology class
-all_paths_matrix = all_paths_matrix_generator(Network_nodes, network)
-Streams_paths = Streams_paths_generator(all_paths_matrix, Stream_Source_Destination)
-Streams_links_paths = Streams_links_paths_generator(Streams_paths)
-Link_order_Descriptor = Link_order_Descripto_generator(Streams_links_paths)
-Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
+# Stream_Source_Destination = Random_flows_generator(Number_of_Streams, Number_of_edges)
+# network = Network_Topology(Adjacency_Matrix) # Using the Network Topology class
+# all_paths_matrix = all_paths_matrix_generator(Network_nodes, network)
+# Streams_paths = Streams_paths_generator(all_paths_matrix, Stream_Source_Destination)
+# Streams_links_paths = Streams_links_paths_generator(Streams_paths)
+# Link_order_Descriptor = Link_order_Descripto_generator(Streams_links_paths)
+# Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
 
-print(Links_per_Stream)
+# print(Links_per_Stream)
