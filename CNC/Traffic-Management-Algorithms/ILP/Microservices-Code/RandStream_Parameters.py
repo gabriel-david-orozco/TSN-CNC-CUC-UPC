@@ -45,6 +45,16 @@ def Frames_per_Stream_generator(Streams_size):
     return Frames_per_Stream, Max_frames, Num_of_Frames
 
 
+# this function creates the deathlines, in this case, all the streams have a fixed deathline
+def Deathline_Stream_generator(Frames_per_Stream) :
+    Deathline_Stream = {}
+    Deathline = 1000 # This is the selected value for the latency deathline
+    n = 0
+
+    for stream in range(len(Frames_per_Stream)) :
+        Deathline_Stream[(stream)] = Deathline
+    return Deathline_Stream 
+
 # Stream_Source_Destination = Random_flows_generator(Number_of_Streams, Number_of_edges)
 # network = Network_Topology(Adjacency_Matrix) # Using the Network Topology class
 # all_paths_matrix = all_paths_matrix_generator(Network_nodes, network)

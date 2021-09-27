@@ -54,15 +54,6 @@ def Frame_Duration_Generator(Number_of_Streams, Max_frames, Network_links ) :
                 Frame_Duration[(stream,frame,link)]= 12 # This has to be 12
     return Frame_Duration
 
-# this function creates the deathlines, in this case, all the streams have a fixed deathline
-def Deathline_Stream_generator(Frames_per_Stream) :
-    Deathline_Stream = {}
-    Deathline = 1000 # This is the selected value for the latency deathline
-    n = 0
-
-    for stream in range(len(Frames_per_Stream)) :
-        Deathline_Stream[(stream)] = Deathline
-    return Deathline_Stream 
 
 #This function generates the following:
 

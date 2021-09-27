@@ -147,7 +147,7 @@ Number_of_Streams = 5
 ################################################################
 # Generation of random Network
 Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Generator(Number_of_edges, Connection_probability)
-Stream_Source_Destination = Random_flows_generator(Number_of_Streams, Number_of_edges)
+Stream_Source_Destination = Random_flows_generator(Number_of_Streams, Number_of_edges) 
 ################################################################
 #Djikstra scheduler
 network = Network_Topology(Adjacency_Matrix) # Using the Network Topology class
@@ -162,13 +162,12 @@ Link_order_Descriptor = Link_order_Descriptor_generator(Streams_links_paths, Net
 Streams_size , Streams_Period, Streams_Period_list = Random_Stream_size_and_period_generator(Number_of_Streams)
 Hyperperiod = Hyperperiod_generator(Streams_Period_list)
 Frames_per_Stream, Max_frames, Num_of_Frames = Frames_per_Stream_generator(Streams_size)
-
+Deathline_Stream = Deathline_Stream_generator(Frames_per_Stream)
 ################################################################
 # Preprocessing
 Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
 Model_Descriptor, Model_Descriptor_vector, Streams = Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links, Frames_per_Stream, Links_per_Stream)
 Frame_Duration = Frame_Duration_Generator(Number_of_Streams, Max_frames, Network_links )
-Deathline_Stream = Deathline_Stream_generator(Frames_per_Stream)
 Repetitions, Repetitions_Matrix, Repetitions_Descriptor, max_repetitions= Repetitions_generator(Streams_Period, Streams, Hyperperiod)
 unused_links = unused_links_generator(Network_links, Link_order_Descriptor)
 
