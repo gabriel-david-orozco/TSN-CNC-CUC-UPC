@@ -3,14 +3,14 @@ import random
 from math import gcd
 
 from RanNet_Generator import Random_Network_Generator
-from Path_Calculator import *
+from Djikstra_Path_Calculator import *
 
-def Random_Stream_size_and_period_generator(Links_per_Stream): 
-    Posible_Streams_Sizes = [1500, 3000, 4500, 6000]
-    Posible_Streams_Periods = [200, 400, 800]
+def Random_Stream_size_and_period_generator(Number_of_Streams): 
+    Posible_Streams_Sizes = [1500]
+    Posible_Streams_Periods = [2000, 4000]
     Streams_size = []
     Streams_Period = {}
-    for stream_index in range(len(Links_per_Stream)) :
+    for stream_index in range(Number_of_Streams) :
         Streams_size.append(random.sample(Posible_Streams_Sizes, 1)) # This is the size of the packages in bytes
         Streams_Period[(stream_index)] = random.sample(Posible_Streams_Periods, 1) # This is the period in micro seconds
     

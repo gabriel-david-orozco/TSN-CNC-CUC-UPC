@@ -4,6 +4,8 @@ import networkx as nx
 from networkx.generators.random_graphs import erdos_renyi_graph
 import matplotlib.pyplot as plt
 import pandas as pd
+import random
+
 def adj(connections):
     ##step 1
     temp=(set(elem[0] for elem in connections).union(
@@ -75,5 +77,12 @@ def Random_Network_Generator(Number_of_edges, Connection_probability) :
     nx.draw(G, with_labels=True)
 
     return Network_nodes, Network_links, Adjacency_Matrix, plot_network
+
+# This function generates a set of flows from a destination to an end
+def Random_flows_generator(Number_of_Streams, Number_of_edges) :
+    Stream_Source_Destination = []
+    for i in range(Number_of_Streams) :
+        Stream_Source_Destination.append(random.sample(range(0, Number_of_edges), 2))
+    return Stream_Source_Destination
 
 #Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Generator(5, 0.3)

@@ -1,16 +1,6 @@
 # This part gets as input the Number of streams and the network parameters
 # This function is called for generating the calculation of the network paths independly on the frames an periods
 
-import random
-from RanNet_Generator import Random_Network_Generator
-
-# This function generates a set of flows from a destination to an end
-def Random_flows_generator(Number_of_Streams, Number_of_edges) :
-    Stream_Source_Destination = []
-    for i in range(Number_of_Streams) :
-        Stream_Source_Destination.append(random.sample(range(0, Number_of_edges), 2))
-    return Stream_Source_Destination
-
 
 # Djikstra algorithm is here !
 class Network_Topology(): 
@@ -151,15 +141,7 @@ def Link_order_Descriptor_generator(Streams_links_paths, Network_links) :
         Link_order_Descriptor.append(link_order_helper)
     return Link_order_Descriptor
 
-# Links per stream, basically is a list that indicates if a link is used for transmitting in a stream
-def Links_per_Stream_generator(Network_links, Link_order_Descriptor) : 
-    Links_per_Stream = [[0 for link in range(len(Network_links))] for stream in range(len(Link_order_Descriptor))]
-    stream_index = 0
-    for stream in Link_order_Descriptor :
-        for link in stream :
-            Links_per_Stream[stream_index][link] = 1
-        stream_index = stream_index + 1 
-    return Links_per_Stream  
+
 
 
 # Calling the Random_Network_Generator function from the other file 

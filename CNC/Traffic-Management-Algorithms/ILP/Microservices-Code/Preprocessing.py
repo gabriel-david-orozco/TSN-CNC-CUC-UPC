@@ -3,7 +3,7 @@
 # This code generates a matrix that will be used to 
 # indicate wheter of not a frame in a stream and in a link exists or not
 from RanNet_Generator import Random_Network_Generator
-from Path_Calculator import *
+from Djikstra_Path_Calculator import *
 from RandStream_Parameters import *
 def Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links, Frames_per_Stream, Links_per_Stream) :
     Model_Descriptor = {}
@@ -29,6 +29,17 @@ def Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links, Fra
     Streams = range(Number_of_Streams)
 
     return Model_Descriptor, Model_Descriptor_vector, Streams
+
+
+# Links per stream, basically is a list that indicates if a link is used for transmitting in a stream
+def Links_per_Stream_generator(Network_links, Link_order_Descriptor) : 
+    Links_per_Stream = [[0 for link in range(len(Network_links))] for stream in range(len(Link_order_Descriptor))]
+    stream_index = 0
+    for stream in Link_order_Descriptor :
+        for link in stream :
+            Links_per_Stream[stream_index][link] = 1
+        stream_index = stream_index + 1 
+    return Links_per_Stream  
 
 # Boolean function that indicates if a combination of Frame Link and Stream exists or not
 def frame_exists(Model_Descriptor_vector, stream, frame) :

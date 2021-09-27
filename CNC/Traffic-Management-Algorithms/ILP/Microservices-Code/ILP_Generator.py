@@ -9,7 +9,7 @@ from pyomo.core import Var
 
 
 from RanNet_Generator import Random_Network_Generator
-from Path_Calculator import *
+from Djikstra_Path_Calculator import *
 from RandStream_Parameters import *
 from Preprocessing import *
 #Objective Function

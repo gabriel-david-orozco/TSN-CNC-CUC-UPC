@@ -3,8 +3,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from RanNet_Generator import Random_Network_Generator
-from Path_Calculator import *
+from RanNet_Generator import *
+from Djikstra_Path_Calculator import *
 from RandStream_Parameters import *
 from Preprocessing import *
 from ILP_Generator import *
@@ -141,23 +141,31 @@ def dataframe_printer(instance, Clean_offsets, Results_latencies):
 
 
 ### This is just the part where the program can select betweeen generating a new network
-Number_of_edges, Connection_probability = 5 , 0.4
-Number_of_Streams = 5 
+Number_of_edges, Connection_probability = 2 , 0.8
+Number_of_Streams = 5
 
 ################################################################
+# Generation of random Network
 Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Generator(Number_of_edges, Connection_probability)
-################################################################
 Stream_Source_Destination = Random_flows_generator(Number_of_Streams, Number_of_edges)
+################################################################
+#Djikstra scheduler
 network = Network_Topology(Adjacency_Matrix) # Using the Network Topology class
 all_paths_matrix = all_paths_matrix_generator(Network_nodes, network)
 Streams_paths = Streams_paths_generator(all_paths_matrix, Stream_Source_Destination)
 Streams_links_paths = Streams_links_paths_generator(Streams_paths)
 Link_order_Descriptor = Link_order_Descriptor_generator(Streams_links_paths, Network_links)
-Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
-Streams_size , Streams_Period, Streams_Period_list = Random_Stream_size_and_period_generator(Links_per_Stream)
+
+
+################################################################
+# Random Streams parameters
+Streams_size , Streams_Period, Streams_Period_list = Random_Stream_size_and_period_generator(Number_of_Streams)
 Hyperperiod = Hyperperiod_generator(Streams_Period_list)
 Frames_per_Stream, Max_frames, Num_of_Frames = Frames_per_Stream_generator(Streams_size)
+
 ################################################################
+# Preprocessing
+Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
 Model_Descriptor, Model_Descriptor_vector, Streams = Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links, Frames_per_Stream, Links_per_Stream)
 Frame_Duration = Frame_Duration_Generator(Number_of_Streams, Max_frames, Network_links )
 Deathline_Stream = Deathline_Stream_generator(Frames_per_Stream)
