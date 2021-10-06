@@ -200,6 +200,6 @@ def Evaluation_function(Number_of_edges, Connection_probability,Number_of_Stream
     except :
         print("Yeah well, shit happens")
 
-for n in [30, 35, 40]:
+for n in [10, 15, 20, 25, 30]:
     for i in range(20):
         Evaluation_function(2, 0.9, n)
