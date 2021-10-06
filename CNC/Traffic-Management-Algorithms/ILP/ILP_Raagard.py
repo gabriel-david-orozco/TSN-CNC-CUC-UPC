@@ -100,7 +100,8 @@ Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Ge
 ####################################################################################
 
 
-Number_of_Streams = 50
+Number_of_Streams = 5
+
 # This function generates a set of flows from a destination to an end
 def Random_flows_generator(Number_of_Streams, Number_of_edges) :
     Stream_Source_Destination = []
