@@ -244,7 +244,7 @@ Streams_links_paths = Streams_links_paths_generator(Streams_paths)
 # this function generates the link_order_descriptor 
 #Basically, the link order descriptor is a list of the index of each link in the path
 #from source to destination of a stream #
-def Link_order_Descripto_generator(Streams_links_paths) :
+def Link_order_Descriptor_generator(Streams_links_paths) :
     Link_order_Descriptor = []
     for stream in Streams_links_paths :
         link_order_helper = []
@@ -255,7 +255,7 @@ def Link_order_Descripto_generator(Streams_links_paths) :
                 link_order_helper.append(Network_links.index(tuple([link[1],link[0]])))
         Link_order_Descriptor.append(link_order_helper)
     return Link_order_Descriptor
-Link_order_Descriptor = Link_order_Descripto_generator(Streams_links_paths)
+Link_order_Descriptor = Link_order_Descriptor_generator(Streams_links_paths)
 
 # Links per stream, basically is a list that indicates if a link is used for transmitting in a stream
 
@@ -356,7 +356,7 @@ def frame_exists(Model_Descriptor_vector, stream, frame) :
     return len([*filter(lambda x: x >= 1, Model_Descriptor_vector[stream][frame])])
 
 # Simply, fills the duration of the streams with a fixed value, can be changed in future
-def Frame_Duration(Number_of_Streams, Max_frames, Network_links ) :
+def Frame_Duration_generator(Number_of_Streams, Max_frames, Network_links ) :
     Frame_Duration = {}
     for stream in range(Number_of_Streams):
         for frame in range(Max_frames):
@@ -364,7 +364,7 @@ def Frame_Duration(Number_of_Streams, Max_frames, Network_links ) :
                 Frame_Duration[(stream,frame,link)]= 12 # This has to be 12
     return Frame_Duration
 
-Frame_Duration = Frame_Duration(Number_of_Streams, Max_frames, Network_links )
+Frame_Duration = Frame_Duration_generator(Number_of_Streams, Max_frames, Network_links )
 
 # this function creates the deathlines, in this case, all the streams have a fixed deathline
 def Deathline_Stream_generator(Frames_per_Stream) :
@@ -631,8 +631,10 @@ instance = model.create_instance()
 results = opt.solve(instance)
 instance.solutions.load_from(results)
 
+#################################################################################
+############################## Showing the results ##############################
+#################################################################################
 
-# Showing the results
 print("############### This is the set of offsets ######################")
 Result_offsets = []
 Clean_offsets = []
