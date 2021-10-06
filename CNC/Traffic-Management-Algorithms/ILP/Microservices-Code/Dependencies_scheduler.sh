@@ -1,15 +1,16 @@
 #!/bin/bash
-#Dependencies Script
+#For installing all the dependencies of the code
 apt update
-apt -y install nano
-echo _______________________________testing0_______________________________
+apt -y install nano wget
 apt -y install software-properties-common << 'EOF'
 8
 29
 EOF
-echo _______________________________testing1_______________________________
 apt -y install python3.9 
-echo _______________________________testing2_______________________________
 apt -y install python3-pip
-echo testing3
-pip3 --version
+pip install pandas
+pip install networkx
+pip install matplotlib
+pip install glpk
+wget -P /tmp https://repo.anaconda.com/archive/Anaconda3-2021.05-Linux-x86_64.sh
+bash /tmp/Anaconda3-2021.05-Linux-x86_64.sh
