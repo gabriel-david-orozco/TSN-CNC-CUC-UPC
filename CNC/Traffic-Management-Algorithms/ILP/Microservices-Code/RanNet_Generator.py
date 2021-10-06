@@ -79,6 +79,7 @@ def Random_Network_Generator(Number_of_edges, Connection_probability) :
     return Network_nodes, Network_links, Adjacency_Matrix, plot_network
 
 # This function generates a set of flows from a destination to an end
+# This function is placed here because it needs both parameters from the network and the Streams 
 def Random_flows_generator(Number_of_Streams, Number_of_edges) :
     Stream_Source_Destination = []
     for i in range(Number_of_Streams) :
