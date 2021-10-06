@@ -193,11 +193,11 @@ def Evaluation_function(Number_of_edges, Connection_probability,Number_of_Stream
     ### This will store the results into a txt for further usage
     
     time_evaluation = final_time - initial_time
-    with open('results_local_'  + str(Number_of_edges)  + '_'
+    with open('results_aws_small'  + str(Number_of_edges)  + '_'
                                 + str(Connection_probability) + '_'
                                 + str(Number_of_Streams) + '.txt', 'a') as f :
         f.write(str(time_evaluation) + "\n")
 
-for n in [30, 35, 40]:
+for n in [5, 15, 20]:
     for i in range(20):
         Evaluation_function(2, 0.9, n)
