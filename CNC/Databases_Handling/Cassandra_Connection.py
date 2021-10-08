@@ -60,6 +60,7 @@ class Cassandra_connecion():
 cassandra = Cassandra_connecion()
 # columns = ["usrid text PRIMARY KEY"," nombre text", " ape1 text"]
 filling_values = {"usrid": "1", "nombre": "Gabriel", "ape1": "Orozco"}
+filling_values = {"usrid": "1", "nombre": "Gabriel David", "ape1": "Orozco Urrutia "}
 cassandra.update_table( "hola", filling_values, filling_values)
 # cassandra.table_creator("Topology", columns)
 # cassandra.insert_in_table("Topology", filling_values)

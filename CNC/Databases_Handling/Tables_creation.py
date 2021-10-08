@@ -1,6 +1,7 @@
 from Cassandra_Connection import Cassandra_connecion
 
-class Tables_creator():
+# This class is for creating the data structure in Cassandra
+class Tables_creator(): 
     def  __init__ (self):
         self.tables = {
             "Stream_list" : [

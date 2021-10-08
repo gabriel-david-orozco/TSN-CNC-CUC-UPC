@@ -627,7 +627,7 @@ def Constraint_reliever_rule(model, link):
 model.Constraint_reliever = Constraint(model.Links, rule=Constraint_reliever_rule)
 
 ### This part is the creation of the instance in the ilp system
-opt = SolverFactory('glpk')
+opt = SolverFactory('gurobi')
 instance = model.create_instance()
 results = opt.solve(instance)
 instance.solutions.load_from(results)
