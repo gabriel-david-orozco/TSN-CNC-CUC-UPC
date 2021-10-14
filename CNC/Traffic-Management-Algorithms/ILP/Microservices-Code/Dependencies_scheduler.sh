@@ -9,10 +9,9 @@ EOF
 apt -y install python3.9 
 apt -y install python3-pip
 pip install pandas
-pip install networkx ==
+pip install networkx==2.6.3
 pip install matplotlib
 pip install pyomo
-pip install gurobipy
 cd ~
 mkdir tmp
 wget -P tmp https://repo.anaconda.com/archive/Anaconda3-2021.05-Linux-x86_64.sh
