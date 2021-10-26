@@ -84,7 +84,7 @@ def gantt_chart_generator(Result_offsets, Repetitions, Streams_Period) :
     # This is for printing the gant Chart 
     plt.subplot(212)
     #plt.figure(figsize=(12, 5))
-    plt.barh(y=df.Process_Name, left=df.Start, width=12, color=df.Color)
+    plt.barh(y=df.Process_Name, left=df.Start, width=123, color=df.Color)
     plt.grid(axis='x', alpha=0.5)
     plt.ylabel("Frames")
     plt.xlabel("Time in miliseconds")
@@ -106,7 +106,7 @@ def information_generator(Num_of_Frames, Streams_Period, Link_order_Descriptor, 
     plt.text(0.1, 0.3, "Indexed Links order per stream: \n " + str(Link_order_Descriptor), bbox=dict(facecolor='red', alpha=0.5))
     plt.text(0.1, 0.1, "Streams Paths: \n " + str(Streams_links_paths), bbox=dict(facecolor='red', alpha=0.5))
     plt.axis('off')
-    #plt.show()
+    plt.show()
 
 
 def dataframe_printer(instance, Clean_offsets, Results_latencies, Feasibility_indicator, Adjacency_Matrix, Stream_Source_Destination,
@@ -163,10 +163,9 @@ def Evaluation_function(Number_of_edges, Connection_probability,Number_of_Stream
 
         ################################################################
         # Random Streams parameters
-        Streams_size , Streams_Period, Streams_Period_list = Random_Stream_size_and_period_generator(Number_of_Streams)
+        Streams_size , Streams_Period, Streams_Period_list, Deathline_Stream = Random_Stream_size_and_period_generator(Number_of_Streams)
         Hyperperiod = Hyperperiod_generator(Streams_Period_list)
         Frames_per_Stream, Max_frames, Num_of_Frames = Frames_per_Stream_generator(Streams_size)
-        Deathline_Stream = Deathline_Stream_generator(Frames_per_Stream)
         ################################################################
         # Preprocessing
         Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
@@ -197,9 +196,9 @@ def Evaluation_function(Number_of_edges, Connection_probability,Number_of_Stream
                                     + str(Connection_probability) + '_'
                                     + str(Number_of_Streams) + '.txt', 'a') as f :
             f.write(str(time_evaluation) + "\n")
-    except :
+    except ValueError:
         print("Yeah well, shit happens")
 
-for n in [45, 50]:
-    for i in range(20):
+for n in [5, 6]:
+    for i in range(2):
         Evaluation_function(2, 0.9, n)
