@@ -6,6 +6,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import random
 
+
+#All of this functions are randomizers that shouldn't be used if the values are provided
+#Network_nodes, 
+#Network_links, 
+#Adjacency_Matrix, 
+#plot_network
+#Stream_Source_Destination
+
+
 def adj(connections):
     ##step 1
     temp=(set(elem[0] for elem in connections).union(

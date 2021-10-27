@@ -5,6 +5,16 @@ from math import gcd
 from RanNet_Generator import Random_Network_Generator
 from Djikstra_Path_Calculator import *
 
+########## PARAMETERS ##########
+# Stream_size (Provided - Randomized)
+# Streams_Period (Provided - Randomized)
+# Streams_Period_list (generated)
+# Hiperperiod (generated)
+# Frames_per_Stream (generated) 
+# Max_frames, (generated)
+# Num_of_Frames (generated)
+# Deathline_Stream (Provided - Randomized)
+
 def Random_Stream_size_and_period_generator(Number_of_Streams): 
     Posible_Streams_Sizes = [1500]
     Posible_Streams_Periods = [2000, 4000]
@@ -14,9 +24,6 @@ def Random_Stream_size_and_period_generator(Number_of_Streams):
         Streams_size.append(random.sample(Posible_Streams_Sizes, 1)) # This is the size of the packages in bytes
         Streams_Period[(stream_index)] = random.sample(Posible_Streams_Periods, 1) # This is the period in micro seconds
     
-    print("#######################Streams_size and Stream Period#################")    
-    print(Streams_size)
-    print(Streams_Period)
     Streams_Period_list = [(v[0]) for k, v in Streams_Period.items()]
     
     for i in range(len(Streams_Period)):
@@ -44,9 +51,8 @@ def Frames_per_Stream_generator(Streams_size):
     for i in Frames_per_Stream : Num_of_Frames.append(len(i))
     return Frames_per_Stream, Max_frames, Num_of_Frames
 
-
 # this function creates the deathlines, in this case, all the streams have a fixed deathline
-def Deathline_Stream_generator(Frames_per_Stream) :
+def Deathline_Stream_generator(Frames_per_Stream) : # Not to execute if Deathlines provided
     Deathline_Stream = {}
     Deathline = 1000 # This is the selected value for the latency deathline
     n = 0
@@ -54,14 +60,3 @@ def Deathline_Stream_generator(Frames_per_Stream) :
     for stream in range(len(Frames_per_Stream)) :
         Deathline_Stream[(stream)] = Deathline
     return Deathline_Stream 
-
-# Stream_Source_Destination = Random_flows_generator(Number_of_Streams, Number_of_edges)
-# network = Network_Topology(Adjacency_Matrix) # Using the Network Topology class
-# all_paths_matrix = all_paths_matrix_generator(Network_nodes, network)
-# Streams_paths = Streams_paths_generator(all_paths_matrix, Stream_Source_Destination)
-# Streams_links_paths = Streams_links_paths_generator(Streams_paths)
-# Link_order_Descriptor = Link_order_Descripto_generator(Streams_links_paths)
-# Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
-# Streams_size , Streams_Period, Streams_Period_list = Random_Stream_size_and_period_generator(Links_per_Stream)
-# Hyperperiod = Hyperperiod_generator(Streams_Period_list)
-# Frames_per_Stream, Max_frames, Num_of_Frames = Frames_per_Stream_generator(Streams_size)

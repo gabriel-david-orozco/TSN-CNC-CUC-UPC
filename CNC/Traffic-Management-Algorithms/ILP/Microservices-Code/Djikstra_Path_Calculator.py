@@ -140,19 +140,3 @@ def Link_order_Descriptor_generator(Streams_links_paths, Network_links) :
                 link_order_helper.append(Network_links.index(tuple([link[1],link[0]])))
         Link_order_Descriptor.append(link_order_helper)
     return Link_order_Descriptor
-
-
-
-
-# Calling the Random_Network_Generator function from the other file 
-# Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Generator(Number_of_edges, Connection_probability)
-
-# Stream_Source_Destination = Random_flows_generator(Number_of_Streams, Number_of_edges)
-# network = Network_Topology(Adjacency_Matrix) # Using the Network Topology class
-# all_paths_matrix = all_paths_matrix_generator(Network_nodes, network)
-# Streams_paths = Streams_paths_generator(all_paths_matrix, Stream_Source_Destination)
-# Streams_links_paths = Streams_links_paths_generator(Streams_paths)
-# Link_order_Descriptor = Link_order_Descripto_generator(Streams_links_paths)
-# Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
-
-# print(Links_per_Stream)
