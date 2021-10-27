@@ -283,10 +283,8 @@ def Random_Stream_size_and_period_generator(Links_per_Stream):
     Streams_Period = {}
     for stream_index in range(len(Links_per_Stream)) :
         Streams_size.append(random.sample([1500, 3000, 4500, 6000], 1)) # This is the size of the packages in bytes
-        #Streams_size.append(random.sample([6000,9000], 1)) # This is the size of the packages in bytes
         Streams_Period[(stream_index)] = random.sample([200, 400, 800], 1) # This is the period in micro seconds
-        #Streams_Period[(stream_index)] = random.sample([100, 200], 1) # This is the period in micro seconds
-    #Streams_size = [[7500], [7500]]
+
     print("#######################Streams_size and Stream Period#################")    
     print(Streams_size)
     print(Streams_Period)
