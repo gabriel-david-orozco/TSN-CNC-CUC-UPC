@@ -170,7 +170,7 @@ class ILP_Raagard_solver :
             else : 
                 return Constraint.Skip
         ### This part is the creation of the instance in the ilp system
-        opt = SolverFactory('gurobi', solver_io="python")
+        opt = SolverFactory('gurobi')
         self.instance = self.model.create_instance()
         self.results = opt.solve(self.instance)
         self.instance.solutions.load_from(self.results)
