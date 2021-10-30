@@ -1,0 +1,26 @@
+version: '3.8'
+services: 
+  scheduler_data_backend: 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8001:8000
+    volumes:
+      - .:/app 
+    depends_on:
+      - scheduler_data_db 
+  
+  scheduler_data_db:
+    image: mysql:5.7.22
+    restart: always
+    environment:
+      MYSQL_DATABASE: scheduler_data
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - .appdata:/var/lib/mysql
+    ports:
+      - 33066:3306    
+
