@@ -16,7 +16,7 @@ for ip in addresses:
     ssh.connect(ip, username='soc-e', password='soc-e')
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('sudo lldpcli show neighbors')
     time.sleep(1)
-    data = ssh_stdout.read()
-    ssh.close()
-    with open('devices/topology_'+ ip + '.txt', 'w') as f:
-        f.write(str(data))
+    data = ssh_stdout.readlines()
+    with open('devices/topology_'+ ip + '.txt', 'a') as f:
+        for line in data:
+            f.write(str(line) + '\n')
