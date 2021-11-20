@@ -15,7 +15,8 @@ debug_confh = LogHelpers.create_module_dbg_logger(__name__)
 # ---------- User-defined handlers follow ----------
 
 
-class JukeboxExampleConfHandler(ConfDataListHandler):
+
+class CNC_RestconfConfHandler(ConfDataListHandler):
     def create_item(self, ii: InstanceRoute, ch: "DataChange"):
         debug_confh(self.__class__.__name__ + " replace triggered")
         info("Creating item '/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list' in app configuration")
@@ -42,4 +43,4 @@ class JukeboxExampleConfHandler(ConfDataListHandler):
 
 
 def register_conf_handlers(ds: BaseDatastore):
-    ds.handlers.conf.register(JukeboxExampleConfHandler(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list"))
+    ds.handlers.conf.register(CNC_RestconfConfHandler(ds, "/ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list"))
