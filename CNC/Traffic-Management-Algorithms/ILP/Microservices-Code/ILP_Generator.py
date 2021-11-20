@@ -8,17 +8,39 @@ from pyomo.opt import SolverFactory
 from pyomo.core import Var
 
 
-from RanNet_Generator import Random_Network_Generator
-from Djikstra_Path_Calculator import *
-from RandStream_Parameters import *
-from Preprocessing import *
+"""
+____________Input Variables______________ 
+
+Number_of_Streams
+Network_links,
+Link_order_Descriptor,
+Streams_Period, 
+Hyperperiod,
+Frames_per_Stream, 
+Max_frames, 
+Num_of_Frames,
+Model_Descriptor, 
+Model_Descriptor_vector, 
+Deathline_Stream, 
+Repetitions, 
+Repetitions_Descriptor, 
+Unused_links, 
+Frame_Duration
+
+"""
+
+
+# Boolean function that indicates if a combination of Frame Link and Stream exists or not
+def frame_exists(Model_Descriptor_vector, stream, frame) :
+    return len([*filter(lambda x: x >= 1, Model_Descriptor_vector[stream][frame])])
 #Objective Function
+
+
 def Latency_Num_Queues_rule(model):
     return sum(model.Num_Queues[link] - 1 for link in model.Links )
 #    return (0.9) * sum(model.Latency[stream] - model.Lower_Latency[stream] for link in model.Links ) + (0.1) * sum(model.Num_Queues[stream] - 1 for stream in model.Streams )
 
 #Constraints
-
 
 class ILP_Raagard_solver :
     
