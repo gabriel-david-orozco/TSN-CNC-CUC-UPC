@@ -11,6 +11,9 @@ from pyomo.core import Var
 """
 ____________Input Variables______________ 
 
+
+This values are received from the outside. According to our microservices topology, 
+all these parameters should ber provided as a input from preprocessing microservice
 Number_of_Streams
 Network_links,
 Link_order_Descriptor,

@@ -5,6 +5,13 @@ from math import gcd
 from RanNet_Generator import Random_Network_Generator
 from Djikstra_Path_Calculator import *
 
+"""
+Fortunately the only input is the number of streams in the network
+# Number of streams
+
+"""
+
+
 ########## PARAMETERS ##########
 # Stream_size (Provided - Randomized)
 # Streams_Period (Provided - Randomized)
@@ -47,7 +54,7 @@ def Random_Stream_size_and_period_generator(Number_of_Streams):
     
     #for i in range(len(Streams_Period)):
     #    Streams_Period[(i)] = Streams_Period[(i)][0]
-    return Streams_size , Streams_Period, Streams_Period_list, Deathline_Stream
+    return Streams_size , Streams_Period, Streams_Period_list, Deathline_Stream, Number_of_Streams
 
 # This funciton reads the periods of the strems and provides the hyperperiod (lcm of all the periods)
 def Hyperperiod_generator(Streams_Period_list) :
@@ -70,15 +77,3 @@ def Frames_per_Stream_generator(Streams_size):
     Num_of_Frames = []
     for i in Frames_per_Stream : Num_of_Frames.append(len(i))
     return Frames_per_Stream, Max_frames, Num_of_Frames
-
-
-# Stream_Source_Destination = Random_flows_generator(Number_of_Streams, Number_of_edges)
-# network = Network_Topology(Adjacency_Matrix) # Using the Network Topology class
-# all_paths_matrix = all_paths_matrix_generator(Network_nodes, network)
-# Streams_paths = Streams_paths_generator(all_paths_matrix, Stream_Source_Destination)
-# Streams_links_paths = Streams_links_paths_generator(Streams_paths)
-# Link_order_Descriptor = Link_order_Descripto_generator(Streams_links_paths)
-# Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
-# Streams_size , Streams_Period, Streams_Period_list = Random_Stream_size_and_period_generator(Links_per_Stream)
-# Hyperperiod = Hyperperiod_generator(Streams_Period_list)
-# Frames_per_Stream, Max_frames, Num_of_Frames = Frames_per_Stream_generator(Streams_size)

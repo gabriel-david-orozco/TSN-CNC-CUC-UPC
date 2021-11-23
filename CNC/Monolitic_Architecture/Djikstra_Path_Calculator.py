@@ -1,7 +1,15 @@
 # This part gets as input the Number of streams and the network parameters
 # This function is called for generating the calculation of the network paths independly on the frames an periods
 
+"""
+Entry parameters
 
+Adjacency_Matrix (rand_net)
+Network_nodes (rand_net)
+Stream_Source_Destination (rand_net) This value has to be regard as it is not properly from the rand net
+Network_links (rand_net)
+
+"""
 # Djikstra algorithm is here !
 class Network_Topology(): 
     # A constructor to iniltialize the values

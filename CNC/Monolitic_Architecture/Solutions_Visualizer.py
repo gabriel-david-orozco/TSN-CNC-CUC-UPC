@@ -163,7 +163,7 @@ def Evaluation_function(Number_of_edges, Connection_probability,Number_of_Stream
 
         ################################################################
         # Random Streams parameters
-        Streams_size , Streams_Period, Streams_Period_list, Deathline_Stream = Random_Stream_size_and_period_generator(Number_of_Streams)
+        Streams_size , Streams_Period, Streams_Period_list, Deathline_Stream, Number_of_Streams = Random_Stream_size_and_period_generator(Number_of_Streams)
         Hyperperiod = Hyperperiod_generator(Streams_Period_list)
         Frames_per_Stream, Max_frames, Num_of_Frames = Frames_per_Stream_generator(Streams_size)
         ################################################################
@@ -199,6 +199,6 @@ def Evaluation_function(Number_of_edges, Connection_probability,Number_of_Stream
     except ValueError:
         print("Yeah well, shit happens")
 
-for n in [50]:
+for n in [2]:
     for i in range(2):
         Evaluation_function(2, 0.9, n)
