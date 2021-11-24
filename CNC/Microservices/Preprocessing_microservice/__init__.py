@@ -90,21 +90,45 @@ Output parameters
 """
 
 
-connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
-channel = connection.channel()
+# Connecting and declaring the rabbitmq channel for the jet_pre queueue
 
+jet_pre_Received = False
+top_pre_Received = False
 
+def callback_jet_pre(ch, method, properties, body):
+    print(" [x] Received %r" % body.decode())
 
-#Djikstra scheduler should be executed first
-network = Network_Topology(Adjacency_Matrix) # Using the Network Topology class
-all_paths_matrix = all_paths_matrix_generator(Network_nodes, network)
-Streams_paths = Streams_paths_generator(all_paths_matrix, Stream_Source_Destination)
-Streams_links_paths = Streams_links_paths_generator(Streams_paths)
-Link_order_Descriptor = Link_order_Descriptor_generator(Streams_links_paths, Network_links)
-# Preprocessing 
-Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
-Model_Descriptor, Model_Descriptor_vector, Streams = Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links, Frames_per_Stream, Links_per_Stream)
-Frame_Duration = Frame_Duration_Generator(Number_of_Streams, Max_frames, Network_links )
-Repetitions, Repetitions_Matrix, Repetitions_Descriptor, max_repetitions= Repetitions_generator(Streams_Period, Streams, Hyperperiod)
-unused_links = unused_links_generator(Network_links, Link_order_Descriptor)
+    #Djikstra scheduler should be executed first
+    network = Network_Topology(Adjacency_Matrix) # Using the Network Topology class
+    all_paths_matrix = all_paths_matrix_generator(Network_nodes, network)
+    Streams_paths = Streams_paths_generator(all_paths_matrix, Stream_Source_Destination)
+    Streams_links_paths = Streams_links_paths_generator(Streams_paths)
+    Link_order_Descriptor = Link_order_Descriptor_generator(Streams_links_paths, Network_links)
+    # Preprocessing 
+    Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
+    Model_Descriptor, Model_Descriptor_vector, Streams = Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links, Frames_per_Stream, Links_per_Stream)
+    Frame_Duration = Frame_Duration_Generator(Number_of_Streams, Max_frames, Network_links )
+    Repetitions, Repetitions_Matrix, Repetitions_Descriptor, max_repetitions= Repetitions_generator(Streams_Period, Streams, Hyperperiod)
+    unused_links = unused_links_generator(Network_links, Link_order_Descriptor)
+    
+    print(" [x] Done")
+    ch.basic_ack(delivery_tag=method.delivery_tag)
+
+def callback_top_pre(ch, method, properties, body):
+    print(" [x] Received %r" % body.decode())
+
+    #Djikstra scheduler should be executed first
+    network = Network_Topology(Adjacency_Matrix) # Using the Network Topology class
+    all_paths_matrix = all_paths_matrix_generator(Network_nodes, network)
+    Streams_paths = Streams_paths_generator(all_paths_matrix, Stream_Source_Destination)
+    Streams_links_paths = Streams_links_paths_generator(Streams_paths)
+    Link_order_Descriptor = Link_order_Descriptor_generator(Streams_links_paths, Network_links)
+    # Preprocessing 
+    Links_per_Stream = Links_per_Stream_generator(Network_links, Link_order_Descriptor)
+    Model_Descriptor, Model_Descriptor_vector, Streams = Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links, Frames_per_Stream, Links_per_Stream)
+    Frame_Duration = Frame_Duration_Generator(Number_of_Streams, Max_frames, Network_links )
+    Repetitions, Repetitions_Matrix, Repetitions_Descriptor, max_repetitions= Repetitions_generator(Streams_Period, Streams, Hyperperiod)
+    unused_links = unused_links_generator(Network_links, Link_order_Descriptor)
+    
+    print(" [x] Done")
+    ch.basic_ack(delivery_tag=method.delivery_tag)

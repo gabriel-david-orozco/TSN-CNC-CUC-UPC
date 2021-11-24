@@ -1,0 +1,23 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: preprocessing-microservice-deployment
+  labels:
+    app: preprocessing-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: preprocessing-microservice
+  template:
+    metadata:
+      labels:
+        app: preprocessing-microservice
+    spec:
+      containers:
+      - name: preprocessing-microservice
+        image: gabrielorozco20/preprocessing_microservice:latest
+        volumeMounts:
+        - mountPath: "/CNC/Microservices/preprocessing-microservice"
+          name: preprocessing-microservice-storage
