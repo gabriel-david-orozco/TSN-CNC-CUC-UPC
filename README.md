@@ -11,10 +11,11 @@ This Time Sensitive Networking Controller is developed by the Universitat Polit√
 - [ ] test Jetconf with a generated payload
 - [ ] Finish the Jetconf integration with the CUC
 - [ ] Implement the Soth_configurator microservice
+- [ ] We have decided to use RabbitMQ for the messages 
 
 
 # (Specific task) Translate the microservices of the ILP into two microservices
-- [ ] Write the input variables from the outside at the beginning of the code
+- [X] Write the input variables from the outside at the beginning of the code
+- [ ] Create the images for the kubernetes cluster and push them into the repo
 - [ ] The ILP calculation should be in other microservice
-
 
