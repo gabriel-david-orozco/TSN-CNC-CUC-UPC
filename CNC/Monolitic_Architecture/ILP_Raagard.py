@@ -35,7 +35,7 @@ def adj(connections):
         ans[pair[1]][pair[0]]=1
     return ans
 
-Number_of_edges = 2 # Number of edges
+Number_of_edges = 5 # Number of edges
 Connection_probability = 0.9 # Probability of connection
 
 # Determine if a list has a 0 element
@@ -242,6 +242,7 @@ def Streams_links_paths_generator(Streams_paths):
     return Streams_links_paths
 Streams_links_paths = Streams_links_paths_generator(Streams_paths)
 
+print("looking for this______________", Streams_links_paths)
 # this function generates the link_order_descriptor 
 #Basically, the link order descriptor is a list of the index of each link in the path
 #from source to destination of a stream #
@@ -718,7 +719,7 @@ def gantt_chart_generator(Result_offsets, Repetitions) :
 df = gantt_chart_generator(Result_offsets, Repetitions)
 
 
-def information_generator(Num_of_Frames, Streams_Period, Link_order_Descriptor, Network_links, Streams_links_paths):
+def information_generator(Num_of_Frames, Streams_Period, Link_order_Descriptor, Network_links, ):
     #Frames per stream
     #period per stream
     #Links used per stream
@@ -732,6 +733,9 @@ def information_generator(Num_of_Frames, Streams_Period, Link_order_Descriptor, 
     plt.text(0.1, 0.1, "Streams Paths: \n " + str(Streams_links_paths), bbox=dict(facecolor='red', alpha=0.5))
     plt.axis('off')
     plt.show()
+print("looking for this______________", Streams_links_paths)
+print("looking for this______________", Network_links)
+
 information_generator(Num_of_Frames, Streams_Period, Link_order_Descriptor, Network_links, Streams_links_paths)
 # Definition of the Data Frame
 # Each schedule provides the following:

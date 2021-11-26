@@ -13,4 +13,5 @@ def send_message(message, queue_name):
         properties=pika.BasicProperties(
             delivery_mode=2,  # make message persistent
         ))
+    print("Message sent to RabbitMQ")
     connection.close()

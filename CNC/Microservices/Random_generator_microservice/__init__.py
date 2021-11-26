@@ -56,9 +56,9 @@ Topology={}
 Topology["Network_nodes"]=Network_nodes
 Topology["Network_links"]=Network_links 
 Topology["Adjacency_Matrix"]=Adjacency_Matrix 
-
+Topology["Stream_Source_Destination"]=Stream_Source_Destination
 json_Topology = json.dumps(Topology, indent = 4) 
-print(json_Topology)
+
 
 # source destination generator
 
@@ -67,7 +67,6 @@ Stream_information={}
 Streams_size , Streams_Period, Streams_Period_list, Deathline_Stream, Number_of_Streams = Random_Stream_size_and_period_generator(Number_of_Streams)
 Hyperperiod = Hyperperiod_generator(Streams_Period_list)
 Frames_per_Stream, Max_frames, Num_of_Frames = Frames_per_Stream_generator(Streams_size)
-
 Stream_information["Streams_size"] = Streams_size
 Stream_information["Streams_Period"]= Streams_Period
 Stream_information["Streams_Period_list"]= Streams_Period_list

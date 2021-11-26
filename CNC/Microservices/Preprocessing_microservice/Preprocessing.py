@@ -24,7 +24,7 @@ def Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links, Fra
     for stream in range(Number_of_Streams):
         for frame in range(Max_frames):
             for link in range(len(Network_links)):
-                Model_Descriptor[(stream,frame,link)]= 0
+                Model_Descriptor[str(stream)+str(frame)+str(link)]= 0
 
     Model_Descriptor_vector = [[[0 for link in range(len(Network_links))] for frame in range(Max_frames)] for stream in range(Number_of_Streams)]
 
@@ -34,7 +34,7 @@ def Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links, Fra
         for frame in stream:
             z = 0
             for link in Links_per_Stream[x]:
-                Model_Descriptor[(x,y,z)] = frame * link 
+                Model_Descriptor[str(x)+str(y)+str(z)] = frame * link 
                 Model_Descriptor_vector [x][y][z] = frame * link
                 z = z +  1
             y = y + 1
@@ -64,7 +64,7 @@ def Frame_Duration_Generator(Number_of_Streams, Max_frames, Network_links ) :
     for stream in range(Number_of_Streams):
         for frame in range(Max_frames):
             for link in range(len(Network_links)):
-                Frame_Duration[(stream,frame,link)]= 123 # This has to be 12
+                Frame_Duration[str(stream)+str(frame)+str(link)]= 123 # This has to be 12
     return Frame_Duration
 
 
@@ -77,7 +77,8 @@ def Frame_Duration_Generator(Number_of_Streams, Max_frames, Network_links ) :
 def Repetitions_generator(Streams_Period, Streams, Hyperperiod) :
     Repetitions = []
     for period in range(len(Streams_Period)):
-        Repetitions.append(float(Hyperperiod)/Streams_Period[(period)] - 1)
+        print("______________________looking for this__________________",Streams_Period)
+        Repetitions.append(float(Hyperperiod)/Streams_Period[(str(period))] - 1)
 
 
     Repetitions_Matrix = []

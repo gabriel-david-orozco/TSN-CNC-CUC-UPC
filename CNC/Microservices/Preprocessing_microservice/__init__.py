@@ -7,19 +7,19 @@ from Preprocessing import *
 This code should receive as input:
 
 -------------- For the djikstra --------------
-Adjacency_Matrix (rand_net)
-Network_nodes (rand_net)
+Topology["Adjacency_Matrix"] (rand_net)
+Topology["Network_nodes"] (rand_net)
 Stream_Source_Destination (rand_net) This value has to be regard as it is not properly from the rand net
-Network_links (rand_net)
+Topology["Network_links"] (rand_net)
 
 -------------- For the preprocessing --------------
 
-Network_links (rand network)
+Topology["Network_links"] (rand network)
 Link_order_Descriptor (djikstra)
 Number_of_streams (rand stream parameters)
 max_frames (rand stream parameters)
-Network_links (rand network)
-Frames_per_Stream (ran stream parameters)
+Topology["Network_links"] (rand network)
+Stream_information["Frames_per_Stream"] (ran stream parameters)
 Streams_Period (ran stream parameters)
 hyperperiod (ran stream parameters)
 
@@ -93,12 +93,57 @@ Output parameters
 # Connecting and declaring the rabbitmq channel for the jet_pre queueue
 
 import os
-
-
+import json
+from Rabbitmq_queues import *
 
 if __name__ == "__main__":
     
-    topo_flag = os.path.exists('/var/topology.txt')
-    jetconf_flag = os.path.exists  ('/var/jetconf.txt')
-    
-    print(topo_flag,jetconf_flag)
+   
+   topo_flag = os.path.exists('/var/topology.txt')
+   jetconf_flag = os.path.exists  ('/var/jetconf.txt')
+   if(topo_flag and jetconf_flag):
+      with open('/var/topology.txt') as topology_json_file:
+         Topology = json.load(topology_json_file)
+      with open('/var/jetconf.txt') as jetconf_json_file:
+         Stream_information = json.load(jetconf_json_file)   
+      # Djikstra scheduler
+
+      network = Network_Topology(Topology["Adjacency_Matrix"]) # Using the Network Topology class
+      all_paths_matrix = all_paths_matrix_generator(Topology["Network_nodes"], network)
+      Streams_paths = Streams_paths_generator(all_paths_matrix, Topology["Stream_Source_Destination"])
+      Streams_links_paths = Streams_links_paths_generator(Streams_paths)
+      Link_order_Descriptor = Link_order_Descriptor_generator(Streams_links_paths, Topology["Network_links"])
+
+      # Preprocessing
+      Links_per_Stream = Links_per_Stream_generator(Topology["Network_links"], Link_order_Descriptor)
+      Model_Descriptor, Model_Descriptor_vector, Streams = Model_Descriptor_generator(Stream_information["Number_of_Streams"], Stream_information["Max_frames"], Topology["Network_links"], Stream_information["Frames_per_Stream"], Links_per_Stream)
+      Frame_Duration = Frame_Duration_Generator(Stream_information["Number_of_Streams"], Stream_information["Max_frames"], Topology["Network_links"] )
+      Repetitions, Repetitions_Matrix, Repetitions_Descriptor, max_repetitions= Repetitions_generator(Stream_information["Streams_Period"], Streams, Stream_information["Hyperperiod"])
+      unused_links = unused_links_generator(Topology["Network_links"], Link_order_Descriptor)
+
+      Preprocessed_data = {}
+
+      Preprocessed_data["Number_of_Streams"] = Stream_information["Number_of_Streams"]
+      Preprocessed_data["Network_links"] = Topology["Network_links"]
+      Preprocessed_data["Link_order_Descriptor"] = Link_order_Descriptor
+      Preprocessed_data["Streams_Period"] = Stream_information["Streams_Period"]
+      Preprocessed_data["Hyperperiod"] = Stream_information["Hyperperiod"]
+      Preprocessed_data["Frames_per_Stream"] = Stream_information["Frames_per_Stream"]
+      Preprocessed_data["Max_frames" ] = Stream_information["Max_frames"]
+      Preprocessed_data["Num_of_Frames"] = Stream_information["Num_of_Frames"]
+      Preprocessed_data["Model_Descriptor"] = Model_Descriptor
+      Preprocessed_data["Model_Descriptor_vector"] = Model_Descriptor_vector
+      Preprocessed_data["Deathline_Stream"] = Stream_information["Deathline_Stream"]
+      Preprocessed_data["Repetitions"] = Repetitions
+      Preprocessed_data["Repetitions_Descriptor"] = Repetitions_Descriptor
+      Preprocessed_data["Frame_Duration"] = Frame_Duration
+      Preprocessed_data["unused_links"] =unused_links
+
+      print(Preprocessed_data)
+      json_Preprocessed_data = json.dumps(Preprocessed_data, indent = 4) 
+      print("working")
+      # Sending the messages to the RabbitMQ server
+      send_message(json_Preprocessed_data, 'pre-ilp')
+   else:
+      print("There is not input data, check the previous microserrvices or the RabbitMQ logs")
+

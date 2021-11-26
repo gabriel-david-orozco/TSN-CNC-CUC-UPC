@@ -143,8 +143,8 @@ def Link_order_Descriptor_generator(Streams_links_paths, Network_links) :
         link_order_helper = []
         for link in stream :
             try:
-                link_order_helper.append(Network_links.index(tuple(link)))
+                link_order_helper.append(Network_links.index(link))
             except:
-                link_order_helper.append(Network_links.index(tuple([link[1],link[0]])))
+                link_order_helper.append(Network_links.index([link[1],link[0]]))
         Link_order_Descriptor.append(link_order_helper)
     return Link_order_Descriptor
