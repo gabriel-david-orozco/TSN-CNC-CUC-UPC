@@ -16,7 +16,8 @@ This Time Sensitive Networking Controller is developed by the Universitat Polit√
 
 # (Specific task) Translate the microservices of the ILP into two microservices
 - [X] Write the input variables from the outside at the beginning of the code
+- [ ] Create the random microservice 
 - [ ] Create the images for the kubernetes cluster and push them into the repo
         - [ ] Create the Preprocessing microservice image
 - [ ] The ILP calculation should be in other microservice
-
+- [ ] For the visualization remember to configure the image

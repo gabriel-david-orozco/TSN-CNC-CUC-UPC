@@ -6,12 +6,24 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+  
   preprocessing-microservice:
     build:
       context: .
       dockerfile: Preprocessing_microservice/Dockerfile
     volumes:
       - ./Preprocessing_microservice:/preprocessing
+    stdin_open: true 
+    tty: true
+    depends_on: 
+      - rabbitmq-microservice
+  
+  random_generator-microservice:
+    build:
+      context: .
+      dockerfile: Random_generator_microservice/Dockerfile
+    volumes:
+      - ./Random_generator_microservice:/random_generator
     stdin_open: true 
     tty: true
     depends_on: 
