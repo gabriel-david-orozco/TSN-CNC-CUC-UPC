@@ -83,8 +83,6 @@ def Repetitions_generator(Streams_Period, Streams, Hyperperiod) :
             Repetitions_Descriptor[x][y] = repetition * (y+1)
             y = y +1
         x = x + 1
-    
-    print("looking for:", Repetitions_Descriptor)
     try :
         max_repetitions = max([max(stream) for stream in Repetitions_Descriptor])
     except :

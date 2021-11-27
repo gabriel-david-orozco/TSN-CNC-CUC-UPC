@@ -32,7 +32,6 @@ def Random_Stream_size_and_period_generator(Number_of_Streams):
     # Stream sizes are in bytes
     # Stream periods are in nano seconds
     type_selector = random.choices([1,2,3],weights=(16,15,69), k= Number_of_Streams)
-    print("THis is the type selector", type_selector)
     Streams_size = []
     Streams_Period = {}
     Streams_Period_list = [(v[0]) for k, v in Streams_Period.items()]
@@ -69,7 +68,6 @@ def Hyperperiod_generator(Streams_Period_list) :
 def Frames_per_Stream_generator(Streams_size):
     Frames_per_Stream = []
     for repetition in (Streams_size):
-        print(repetition, type(repetition))
         Frames_per_Stream.append([1 for frame in range(int(float(repetition)/1500))])
         Frames_per_Stream = [x if x else [1] for x in Frames_per_Stream]
 

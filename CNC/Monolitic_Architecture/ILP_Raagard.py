@@ -35,7 +35,7 @@ def adj(connections):
         ans[pair[1]][pair[0]]=1
     return ans
 
-Number_of_edges = 5 # Number of edges
+Number_of_edges = 2 # Number of edges
 Connection_probability = 0.9 # Probability of connection
 
 # Determine if a list has a 0 element

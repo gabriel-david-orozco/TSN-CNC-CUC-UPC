@@ -106,7 +106,7 @@ def information_generator(Num_of_Frames, Streams_Period, Link_order_Descriptor, 
     plt.text(0.1, 0.3, "Indexed Links order per stream: \n " + str(Link_order_Descriptor), bbox=dict(facecolor='red', alpha=0.5))
     plt.text(0.1, 0.1, "Streams Paths: \n " + str(Streams_links_paths), bbox=dict(facecolor='red', alpha=0.5))
     plt.axis('off')
-    #plt.show()
+    plt.show() # comment for avoiding showing de result
 
 
 def dataframe_printer(instance, Clean_offsets, Results_latencies, Feasibility_indicator, Adjacency_Matrix, Stream_Source_Destination,
@@ -197,8 +197,9 @@ def Evaluation_function(Number_of_edges, Connection_probability,Number_of_Stream
                                     + str(Number_of_Streams) + '.txt', 'a') as f :
             f.write(str(time_evaluation) + "\n")
     except ValueError:
-        print("Yeah well, shit happens")
+        print("One error has occurred")
 
 for n in [2]:
     for i in range(2):
+        # Evaluation_Function(number_of_nodes, connection_probability, number of streams)
         Evaluation_function(2, 0.9, n)
