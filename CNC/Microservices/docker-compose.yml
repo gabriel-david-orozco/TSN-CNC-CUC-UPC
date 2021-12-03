@@ -28,3 +28,14 @@ services:
     tty: true
     depends_on: 
       - rabbitmq-microservice
+
+  ilp:
+    build:
+      context: .
+      dockerfile: ILP/Dockerfile
+    volumes:
+      - ./ILP:/ILP
+    stdin_open: true 
+    tty: true
+    depends_on: 
+      - rabbitmq-microservice

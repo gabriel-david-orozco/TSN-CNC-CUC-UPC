@@ -1,0 +1,11 @@
+
+Gurobi 9.1.2 (mac64, gurobi_cl) logging started Fri Dec  3 17:33:08 2021
+
+
+--------------------------------------------
+Warning: your license will expire in 3 days
+--------------------------------------------
+
+Academic license - for non-commercial use only - expires 2021-12-06
+Using license file /Users/gabriel/gurobi.lic
+Set parameter LogFile to value gurobi.log

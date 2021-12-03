@@ -34,7 +34,7 @@ def Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links, Fra
         for frame in stream:
             z = 0
             for link in Links_per_Stream[x]:
-                Model_Descriptor[str(x)+str(y)+str(z)] = frame * link 
+                Model_Descriptor[str(x)+"_"+str(y)+"_"+str(z)] = frame * link 
                 Model_Descriptor_vector [x][y][z] = frame * link
                 z = z +  1
             y = y + 1
@@ -64,7 +64,7 @@ def Frame_Duration_Generator(Number_of_Streams, Max_frames, Network_links ) :
     for stream in range(Number_of_Streams):
         for frame in range(Max_frames):
             for link in range(len(Network_links)):
-                Frame_Duration[str(stream)+str(frame)+str(link)]= 123 # This has to be 12
+                Frame_Duration[str(stream)+"_"+str(frame)+"_"+str(link)]= 123 # This has to be 12
     return Frame_Duration
 
 
