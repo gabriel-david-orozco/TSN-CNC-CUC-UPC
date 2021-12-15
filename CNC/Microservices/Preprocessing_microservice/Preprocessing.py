@@ -24,7 +24,7 @@ def Model_Descriptor_generator(Number_of_Streams, Max_frames, Network_links, Fra
     for stream in range(Number_of_Streams):
         for frame in range(Max_frames):
             for link in range(len(Network_links)):
-                Model_Descriptor[str(stream)+str(frame)+str(link)]= 0
+                Model_Descriptor[str(stream)+"_"+str(frame)+"_"+str(link)]= 0
 
     Model_Descriptor_vector = [[[0 for link in range(len(Network_links))] for frame in range(Max_frames)] for stream in range(Number_of_Streams)]
 
