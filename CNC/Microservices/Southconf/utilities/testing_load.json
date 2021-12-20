@@ -1,0 +1,29 @@
+{
+   "interface": {
+      "name": "PORT0",
+      "type": "ianaift:ethernetCsmacd",
+      "gate-parameters": {
+         "gate-enabled": "true",
+         "admin-gate-states": "255",
+         "admin-control-list-length": "1",
+         "admin-control-list": {
+            "index": "0",
+            "operation-name": "set-gate-states",
+            "sgs-params": {
+               "gate-states-value": "128",
+               "time-interval-value": "1000000"
+            }
+         },
+         "admin-cycle-ime": {
+            "numerator": "1",
+            "denominator": "1000"
+         },
+         "admin-cycle-ime-extension": "10",
+         "admin-base-ime": {
+            "seconds": "1",
+            "fractional-seconds": "1"
+         },
+         "config-change": "true"
+      }
+   }
+}

@@ -21,5 +21,6 @@ This Time Sensitive Networking Controller is developed by the Universitat Polit√
 - [X] Create the interfaz between the preprocessing and ILP microservice
 - [X] Create the images for the kubernetes cluster and push them into the repo
 - [X] The ILP calculation should be in other microservice, actually is a good practice to not do it
-- [ ] For the visualization remember to configure the image
-- [ ] Define the things that should be allocated into the Final Microservice
+- [X] For the visualization remember to configure the image
+- [X] Define the things that should be allocated into the Final Microservice
+- [ ] Took each one of the parameters in the yang model for the TAS configuration and retrieve where you could generate them 
