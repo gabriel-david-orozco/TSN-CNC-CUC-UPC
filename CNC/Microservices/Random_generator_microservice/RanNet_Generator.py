@@ -51,6 +51,30 @@ def Matrix_Validator(element_list):
         x = x +1
     return allcmp(existing_indicator)
 
+# This function is for creting fake identificators for the devices in the network.
+def Network_identificator(Network_nodes, Adjacency_Matrix):
+    identificator= {}
+    ip_suxif_initializator = 10
+    for node in Network_nodes:
+        identificator[node]= '192.168.1'+ str(ip_suxif_initializator)
+        ip_suxif_initializator+=1
+    
+    interfaces_Matrix = Adjacency_Matrix
+    x = 0
+    for device in Adjacency_Matrix:
+        interface_initializator= 0
+        y = 0
+        for interface in device:
+            if interface:
+                interfaces_Matrix[x][y] = "en"+ str(interface_initializator)
+                interface_initializator+=1
+            y+=1
+        x+=1
+    return identificator, interfaces_Matrix
+
+
+
+    
 # This function generates the Random Network 
 def Random_Network_Generator(Number_of_edges, Connection_probability) :
     ensurer = False

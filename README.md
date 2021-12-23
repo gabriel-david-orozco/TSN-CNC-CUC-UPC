@@ -23,4 +23,5 @@ This Time Sensitive Networking Controller is developed by the Universitat Polit√
 - [X] The ILP calculation should be in other microservice, actually is a good practice to not do it
 - [X] For the visualization remember to configure the image
 - [X] Define the things that should be allocated into the Final Microservice
-- [ ] Took each one of the parameters in the yang model for the TAS configuration and retrieve where you could generate them 
+- [ ] Took each one of the parameters in the yang model for the TAS configurtion and retrieve where you could generate them 
+- [ ] It is necessary to create additional values in the topology parameters such as the identificator of the TSN device, and the interface that connect them to the other microservices.

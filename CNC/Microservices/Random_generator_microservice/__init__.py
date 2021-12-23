@@ -51,12 +51,16 @@ Number_of_Streams = int(configParser.get('random', 'Number_of_Streams'))
 
 Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Generator(Number_of_edges, Connection_probability)
 Stream_Source_Destination = Random_flows_generator(Number_of_Streams, Number_of_edges) 
+identificator, interface_Matrix = Network_identificator(Network_nodes, Adjacency_Matrix)
 
 Topology={}
 Topology["Network_nodes"]=Network_nodes
 Topology["Network_links"]=Network_links 
 Topology["Adjacency_Matrix"]=Adjacency_Matrix 
 Topology["Stream_Source_Destination"]=Stream_Source_Destination
+Topology["identificator"]=identificator
+Topology["interface_Matrix"]=interface_Matrix
+
 json_Topology = json.dumps(Topology, indent = 4) 
 
 
