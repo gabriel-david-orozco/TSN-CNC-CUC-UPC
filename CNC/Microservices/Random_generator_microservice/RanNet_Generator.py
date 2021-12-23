@@ -5,6 +5,7 @@ from networkx.generators.random_graphs import erdos_renyi_graph
 import matplotlib.pyplot as plt
 import pandas as pd
 import random
+import copy
 
 
 #All of this functions are randomizers that shouldn't be used if the values are provided
@@ -50,30 +51,6 @@ def Matrix_Validator(element_list):
             y = y +1
         x = x +1
     return allcmp(existing_indicator)
-
-# This function is for creting fake identificators for the devices in the network.
-def Network_identificator(Network_nodes, Adjacency_Matrix):
-    identificator= {}
-    ip_suxif_initializator = 10
-    for node in Network_nodes:
-        identificator[node]= '192.168.1'+ str(ip_suxif_initializator)
-        ip_suxif_initializator+=1
-    
-    interfaces_Matrix = Adjacency_Matrix
-    x = 0
-    for device in Adjacency_Matrix:
-        interface_initializator= 0
-        y = 0
-        for interface in device:
-            if interface:
-                interfaces_Matrix[x][y] = "en"+ str(interface_initializator)
-                interface_initializator+=1
-            y+=1
-        x+=1
-    return identificator, interfaces_Matrix
-
-
-
     
 # This function generates the Random Network 
 def Random_Network_Generator(Number_of_edges, Connection_probability) :
@@ -120,3 +97,24 @@ def Random_flows_generator(Number_of_Streams, Number_of_edges) :
     return Stream_Source_Destination
 
 #Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Generator(5, 0.3)
+
+# This function is for creting fake identificators for the devices in the network.
+def Network_identificator(Network_nodes, Adjacency_Matrix):
+    identificator= {}
+    ip_suxif_initializator = 10
+    for node in Network_nodes:
+        identificator[node]= '192.168.1'+ str(ip_suxif_initializator)
+        ip_suxif_initializator+=1
+    
+    interfaces_Matrix = copy.deepcopy(Adjacency_Matrix)
+    x = 0
+    for device in interfaces_Matrix:
+        interface_initializator= 0
+        y = 0
+        for interface in device:
+            if interface:
+                interfaces_Matrix[x][y] = "en"+ str(interface_initializator)
+                interface_initializator+=1
+            y+=1
+        x+=1
+    return identificator, interfaces_Matrix

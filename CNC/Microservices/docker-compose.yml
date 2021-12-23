@@ -40,13 +40,13 @@ services:
     depends_on: 
       - rabbitmq-microservice
 
-  # southconf:
-  #   build:
-  #     context: .
-  #     dockerfile: Southconf/Dockerfile
-  #   volumes:
-  #     - ./Southconf:/Southconf
-  #   stdin_open: true 
-  #   tty: true
-  #   depends_on: 
-  #     - rabbitmq-microservice
+  southconf:
+    build:
+      context: .
+      dockerfile: Southconf/Dockerfile
+    volumes:
+      - ./Southconf:/Southconf
+    stdin_open: true 
+    tty: true
+    depends_on: 
+      - rabbitmq-microservice

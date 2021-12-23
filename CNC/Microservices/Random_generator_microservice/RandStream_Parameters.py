@@ -30,7 +30,8 @@ def Random_Stream_size_and_period_generator(Number_of_Streams):
     #69% Control Streams
     # Stream sizes are in bytes
     # Stream periods are in nano seconds
-    type_selector = random.choices([1,2,3],weights=(16,15,69), k= Number_of_Streams)
+    #type_selector = random.choices([1,2,3],weights=(16,15,69), k= Number_of_Streams)
+    type_selector = random.choices([1,3],weights=(50,50), k= Number_of_Streams)
     print("THis is the type selector", type_selector)
     Streams_size = []
     Streams_Period = {}

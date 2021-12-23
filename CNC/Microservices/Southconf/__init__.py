@@ -64,3 +64,16 @@ This is the diagram that represents this microservice:
 '''
 
 
+import os
+import json
+from Vlans_configurator import *
+from TAS_configurator import *
+
+if __name__ == "__main__":
+    raw_scheduler_data = os.path.exists('/var/raw_scheduler_data.txt')
+    if(raw_scheduler_data):
+        with open('/var/raw_scheduler_data.txt') as raw_scheduler_data_file:
+                Topology = json.load(raw_scheduler_data_file)
+        
+    else:
+        print("There is not input data, check the previous microservices or the RabbitMQ logs")

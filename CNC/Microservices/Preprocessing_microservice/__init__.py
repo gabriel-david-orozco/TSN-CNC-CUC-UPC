@@ -124,12 +124,15 @@ if __name__ == "__main__":
       Preprocessed_data = {}
 
       Preprocessed_data["Number_of_Streams"] = Stream_information["Number_of_Streams"]
+      Preprocessed_data["Stream_Source_Destination"] = Topology["Stream_Source_Destination"]
       Preprocessed_data["Network_links"] = Topology["Network_links"]
+      Preprocessed_data["Adjacency_Matrix"] = Topology["Adjacency_Matrix"]
       Preprocessed_data["Link_order_Descriptor"] = Link_order_Descriptor
       Preprocessed_data["Streams_Period"] = Stream_information["Streams_Period"]
       Preprocessed_data["Hyperperiod"] = Stream_information["Hyperperiod"]
       Preprocessed_data["Frames_per_Stream"] = Stream_information["Frames_per_Stream"]
       Preprocessed_data["Max_frames" ] = Stream_information["Max_frames"]
+      Preprocessed_data["Streams_size"] = Stream_information["Streams_size"]
       Preprocessed_data["Num_of_Frames"] = Stream_information["Num_of_Frames"]
       Preprocessed_data["Model_Descriptor"] = Model_Descriptor
       Preprocessed_data["Model_Descriptor_vector"] = Model_Descriptor_vector
@@ -138,6 +141,7 @@ if __name__ == "__main__":
       Preprocessed_data["Repetitions_Descriptor"] = Repetitions_Descriptor
       Preprocessed_data["Frame_Duration"] = Frame_Duration
       Preprocessed_data["unused_links"] =unused_links
+      Preprocessed_data["Links_per_Stream"] = Links_per_Stream
 
       print(Preprocessed_data)
       json_Preprocessed_data = json.dumps(Preprocessed_data, indent = 4) 
@@ -145,5 +149,4 @@ if __name__ == "__main__":
       # Sending the messages to the RabbitMQ server
       send_message(json_Preprocessed_data, 'pre-ilp')
    else:
-      print("There is not input data, check the previous microserrvices or the RabbitMQ logs")
-
+      print("There is not input data, check the previous microservices or the RabbitMQ logs")
