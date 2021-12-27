@@ -64,7 +64,7 @@ def Frame_Duration_Generator(Number_of_Streams, Max_frames, Network_links ) :
     for stream in range(Number_of_Streams):
         for frame in range(Max_frames):
             for link in range(len(Network_links)):
-                Frame_Duration[str(stream)+"_"+str(frame)+"_"+str(link)]= 123 # This has to be 12
+                Frame_Duration[str(stream)+"_"+str(frame)+"_"+str(link)]= 12 # This has to be 12
     return Frame_Duration
 
 
