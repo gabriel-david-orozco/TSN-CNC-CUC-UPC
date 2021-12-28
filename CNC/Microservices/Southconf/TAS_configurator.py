@@ -81,7 +81,21 @@ def gates_states_values_generator(grouped_offsets, priority_mapping):
     for link in new_gates_states_be.keys():
         final_sorted_offsets[link] = {x: new_gates_states_be[link][x] for x in sorted(new_gates_states_be[link])}
     return final_sorted_offsets
-    
+
+def payload_generator(final_sorted_offsets, hyperperiod):
+    for link, streams in final_sorted_offsets.items():
+        
+        admin_control_list = []
+        admin_cycle_time = {}
+        admin_control_list_length = len(streams) + 1
+        offsets_list = streams.keys()
+        offsets_index= 0
+        
+        for gate_state in streams.values():
+            sgs_params = {"gate-state-vaue": str(gate_state),
+                        # Evaluate a offset with the next offset to get the total duration of the transmission
+                          "time-interval-value" : str(streams[streams[offsets_list[offsets_index +1 ]] -offsets_list[offsets_index]])}
+
 hyperperiod= 5000
 Repetitions_Descriptor = [[0, 0], [0, 1], [0, 1], [0, 1], [0, 1]]
 Clean_offsets = [{'Task': "('S', 0, 'L', 6, 'F', 0)", 'Start': 1.0}, 
@@ -91,6 +105,7 @@ Clean_offsets = [{'Task': "('S', 0, 'L', 6, 'F', 0)", 'Start': 1.0},
                 {'Task': "('S', 3, 'L', 1, 'F', 0)", 'Start': 1.0}, 
                 {'Task': "('S', 4, 'L', 0, 'F', 0)", 'Start': 1.0}]
 Streams_Period=  {'0': 5000, '1': 2500, '2': 2500, '3': 2500, '4': 2500}
+
 # The priority number 7 is always for ptp traffic
 priority_mapping= {'0': '0', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '7'} 
 grouped_offsets=gates_parameter_generator(Clean_offsets)
