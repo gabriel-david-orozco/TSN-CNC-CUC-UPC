@@ -125,6 +125,8 @@ if __name__ == "__main__":
 
       Preprocessed_data["Number_of_Streams"] = Stream_information["Number_of_Streams"]
       Preprocessed_data["Stream_Source_Destination"] = Topology["Stream_Source_Destination"]
+      Preprocessed_data["identificator"] = Topology["identificator"]
+      Preprocessed_data["interface_Matrix"] = Topology["interface_Matrix"]
       Preprocessed_data["Network_links"] = Topology["Network_links"]
       Preprocessed_data["Adjacency_Matrix"] = Topology["Adjacency_Matrix"]
       Preprocessed_data["Link_order_Descriptor"] = Link_order_Descriptor

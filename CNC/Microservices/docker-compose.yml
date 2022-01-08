@@ -45,8 +45,19 @@ services:
       context: .
       dockerfile: Southconf/Dockerfile
     volumes:
-      - ./Southconf:/Southconf
+      - ./Southconf:/southconf
     stdin_open: true 
     tty: true
     depends_on: 
       - rabbitmq-microservice
+
+  opendaylight:
+    image: gabrielorozco20/odl_tsn:latest
+    restart: always 
+    stdin_open: true 
+    tty: true
+    ports:
+      - 6633:6633
+      - 8101:8101
+      - 8181:8181
+  

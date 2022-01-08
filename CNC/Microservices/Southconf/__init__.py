@@ -68,12 +68,42 @@ import os
 import json
 from Vlans_configurator import *
 from TAS_configurator import *
-
+from Rest_client import *
 if __name__ == "__main__":
-    raw_scheduler_data = os.path.exists('/var/raw_scheduler_data.txt')
+    raw_scheduler_data = os.path.exists('/var/ilp.txt')
     if(raw_scheduler_data):
-        with open('/var/raw_scheduler_data.txt') as raw_scheduler_data_file:
-                Topology = json.load(raw_scheduler_data_file)
+        with open('/var/ilp.txt') as raw_scheduler_data_file:
+                ilp_data = json.load(raw_scheduler_data_file)
+        print(ilp_data)
+        """
+        TAS payload generator for the Yang models
+        Necessary parameters:
         
+        Clean_offsets, 
+        Repetitions_Descriptor, 
+        Streams_Period,
+        priority_mapping, 
+        Hyperperiod
+        It is also necessary the connection between the link id and the two devices that connects
+
+
+        """
+        Clean_offsets = ilp_data["Clean_offsets"]
+        Repetitions_Descriptor = ilp_data["Repetitions_Descriptor"]
+        Streams_Period = ilp_data["Streams_Period"]
+        Hyperperiod =  ilp_data["Hyperperiod"]
+        priority_mapping= {'0': '0', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '7'}
+        identificator = ilp_data["identificator"]
+        interface_Matrix = ilp_data["interface_Matrix"]
+        per_link_payload = payload_generator(Clean_offsets, Repetitions_Descriptor, Streams_Period,priority_mapping, Hyperperiod)
+        # device_list should be created
+        
+        for index, device in identificator.items() :
+            request = REST_DEVICE_creation(device, "TSN_SWITCH_" + str(index))
+            print(request)
+        request= REST_Device_configuration (per_link_payload[" 0"], "TSN_SWITCH_1")
+        print(json.dumps(per_link_payload[" 0"]))
+        print(f"this is the other request {request}")
+
     else:
         print("There is not input data, check the previous microservices or the RabbitMQ logs")

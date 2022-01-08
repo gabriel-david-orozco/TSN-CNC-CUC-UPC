@@ -104,7 +104,7 @@ def information_generator(Num_of_Frames, Streams_Period, Link_order_Descriptor, 
 
 
 def dataframe_printer(instance, Clean_offsets, Results_latencies, Feasibility_indicator, Adjacency_Matrix, Stream_Source_Destination,
-                    Link_order_Descriptor, Links_per_Stream, Frames_per_Stream, Deathline_Stream, Streams_Period, Streams_size):
+                    Link_order_Descriptor, Links_per_Stream, Frames_per_Stream, Deathline_Stream, Streams_Period, Streams_size, Hyperperiod, Repetitions_Descriptor, identificator, interface_Matrix):
     Feasibility = False
     if Feasibility_indicator > 1 :
         Feasibility = True
@@ -121,10 +121,14 @@ def dataframe_printer(instance, Clean_offsets, Results_latencies, Feasibility_in
         "Frames_per_Stream" : Frames_per_Stream,
         "Deathline_Stream" : Deathline_Stream,
         "Streams_Period" : Streams_Period,
+        "identificator" : identificator, 
+        "interface_Matrix" : interface_Matrix,
         #Results
         "Streams_size" : Streams_size,
         "Clean_offsets" : Clean_offsets,
         "Latencies" : Results_latencies,
+        "Hyperperiod" : Hyperperiod,
+        "Repetitions_Descriptor": Repetitions_Descriptor, 
         "Feasibility" : Feasibility
     }
 
@@ -133,6 +137,7 @@ def dataframe_printer(instance, Clean_offsets, Results_latencies, Feasibility_in
     ### This will store the results into a txt for further usage
     with open('/var/results.txt', 'a') as f :
         f.write("\n" + str(Full_scheduled_data))
+    return Full_scheduled_data
 
 def Evaluation_function(Number_of_edges, Connection_probability,Number_of_Streams) :
 

@@ -1,29 +1,40 @@
 {
-   "interface": {
-      "name": "PORT0",
-      "type": "ianaift:ethernetCsmacd",
-      "gate-parameters": {
-         "gate-enabled": "true",
-         "admin-gate-states": "255",
-         "admin-control-list-length": "1",
-         "admin-control-list": {
-            "index": "0",
-            "operation-name": "set-gate-states",
-            "sgs-params": {
-               "gate-states-value": "128",
-               "time-interval-value": "1000000"
-            }
-         },
-         "admin-cycle-ime": {
-            "numerator": "1",
-            "denominator": "1000"
-         },
-         "admin-cycle-ime-extension": "10",
-         "admin-base-ime": {
-            "seconds": "1",
-            "fractional-seconds": "1"
-         },
-         "config-change": "true"
-      }
-   }
+   "interface": [
+       {
+           "name": "PORT_1",
+           "ieee802-dot1q-bridge:bridge-port": {},
+           "type": "iana-if-type:ethernetCsmacd",
+           "ieee802-dot1q-sched:gate-parameters": {
+               "admin-gate-states": "255",
+               "gate-enabled": "true",
+               "admin-control-list-length": "2",
+               "config-change": "true",
+               "admin-cycle-time": {
+                   "numerator": "1",
+                   "denominator": "1000"
+               },
+               "admin-control-list": [
+                   {
+                       "index": "0", 
+                       "operation-name": "set-gate-states",
+                       "sgs-params": { 
+                            "gate-states-value": "131", 
+                            "time-interval-value": "500000" }
+                    },
+                                       {
+                       "index": "1", 
+                       "operation-name": "set-gate-states",
+                       "sgs-params": { 
+                            "gate-states-value": "140", 
+                            "time-interval-value": "500000" }
+                    }
+               ],
+               "admin-base-time": {
+                   "seconds": "0",
+                   "fractional-seconds": "0"
+               },
+               "admin-cycle-time-extension": "0"
+           }
+       }
+   ]
 }

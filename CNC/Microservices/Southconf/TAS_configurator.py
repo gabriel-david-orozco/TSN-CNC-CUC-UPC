@@ -41,7 +41,7 @@ def full_scheduler_generator(grouped_offsets, Repetitions_Descriptor, Streams_Pe
 
 ''' 
 The following fucntion presents the values in the following way (example):
-gate-state-values= [128, "in binary 10000000
+gate-states-values= [128, "in binary 10000000
                     128, "in binary 10000000
                     255], "in binary 11111111
 time-interval-values=[1000
@@ -82,40 +82,80 @@ def gates_states_values_generator(grouped_offsets, priority_mapping):
         final_sorted_offsets[link] = {x: new_gates_states_be[link][x] for x in sorted(new_gates_states_be[link])}
     return final_sorted_offsets
 
-def payload_generator(final_sorted_offsets, hyperperiod):
+
+'''
+Generates the payload defined in the 802.1 qcc schedule
+'''
+def payload_generator(Clean_offsets, Repetitions_Descriptor, Streams_Period,priority_mapping, hyperperiod):
+
+    grouped_offsets=gates_parameter_generator(Clean_offsets)
+    grouped_offsets=full_scheduler_generator(grouped_offsets, Repetitions_Descriptor, Streams_Period)
+    final_sorted_offsets = gates_states_values_generator(grouped_offsets, priority_mapping)
+
+    per_link_payload = {}
     for link, streams in final_sorted_offsets.items():
         
         admin_control_list = []
-        admin_cycle_time = {}
-        admin_control_list_length = len(streams) + 1
-        offsets_list = streams.keys()
+        offsets_list = list(streams.keys())
         offsets_index= 0
-        
+        to_define = "PORT_0"
         for gate_state in streams.values():
-            sgs_params = {"gate-state-vaue": str(gate_state),
-                        # Evaluate a offset with the next offset to get the total duration of the transmission
-                          "time-interval-value" : str(streams[streams[offsets_list[offsets_index +1 ]] -offsets_list[offsets_index]])}
+            # Evaluate a offset with the next offset to get the total duration of the transmission
+            # Until this moment, all offsets and period values were in microseconds
+            try:
+                time_interval_value = str(1000*(offsets_list[offsets_index +1 ] - offsets_list[offsets_index]))
+            except:
+                print("______________The mistake you are looking for _______________________")
+                print(hyperperiod, " __ ", offsets_list[offsets_index])
+                time_interval_value = str(1000*(hyperperiod - offsets_list[offsets_index]))
+            sgs_params = {"gate-states-value": str(gate_state),
 
-hyperperiod= 5000
-Repetitions_Descriptor = [[0, 0], [0, 1], [0, 1], [0, 1], [0, 1]]
-Clean_offsets = [{'Task': "('S', 0, 'L', 6, 'F', 0)", 'Start': 1.0}, 
-                {'Task': "('S', 1, 'L', 0, 'F', 0)", 'Start': 124.0}, 
-                {'Task': "('S', 1, 'L', 4, 'F', 0)", 'Start': 1.0}, 
-                {'Task': "('S', 2, 'L', 4, 'F', 0)", 'Start': 2377.0}, 
-                {'Task': "('S', 3, 'L', 1, 'F', 0)", 'Start': 1.0}, 
-                {'Task': "('S', 4, 'L', 0, 'F', 0)", 'Start': 1.0}]
-Streams_Period=  {'0': 5000, '1': 2500, '2': 2500, '3': 2500, '4': 2500}
+                          "time-interval-value" :time_interval_value # Nanoseconds
+                        }
+            admin_control_list.append(
+                {
+                    "index": str(offsets_index),
+                    "sgs-params": sgs_params
+                }
+            )
+        per_link_payload[link] = {
+            "interface": 
+            {
+                "name": to_define,
+                "type" : "iana-if-type:ethernetCsmacd",
+                "ieee802-dot1q-sched:gate-parameters": {
+                    "admin-gate-states": "255",
+                    "gate-enabled": "true",
+                    "admin-control-list-length": len(offsets_list),
+                    "config-change": "true",
+                    "admin-cycle-time": {
+                        "numerator": "1",
+                        "denominator": str(1/(hyperperiod*1000))
+                    },
+                    "admin-control-list" : admin_control_list,
+                    "admin-base-time": {
+                        "seconds": "0",
+                        "fractional-seconds": "0"
+                    },
+                    "admin-cycle-time-extension": "0"
+                }
+            }
+        }
+        offsets_index += 1
+    return per_link_payload
 
-# The priority number 7 is always for ptp traffic
-priority_mapping= {'0': '0', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '7'} 
-grouped_offsets=gates_parameter_generator(Clean_offsets)
-print(grouped_offsets[" 6"][" 0"])
+# hyperperiod= 32_000 # Hyperperiod is in microseconds
+# Repetitions_Descriptor = [[0, 0], [0, 1], [0, 1], [0, 1], [0, 1]]
+# Clean_offsets = [{'Task': "('S', 0, 'L', 6, 'F', 0)", 'Start': 1.0}, 
+#                 {'Task': "('S', 1, 'L', 0, 'F', 0)", 'Start': 124.0}, 
+#                 {'Task': "('S', 1, 'L', 4, 'F', 0)", 'Start': 1.0}, 
+#                 {'Task': "('S', 2, 'L', 4, 'F', 0)", 'Start': 2377.0}, 
+#                 {'Task': "('S', 3, 'L', 1, 'F', 0)", 'Start': 1.0}, 
+#                 {'Task': "('S', 4, 'L', 0, 'F', 0)", 'Start': 1.0}]
+# Streams_Period=  {'0': 32_000, '1': 32_000, '2': 32_000, '3': 16_000, '4': 32_000} # streams_periods are in microseconds 
 
-grouped_offsets=full_scheduler_generator(grouped_offsets, Repetitions_Descriptor, Streams_Period)
-print(grouped_offsets)
-
-gates_states = gates_states_values_generator(grouped_offsets, priority_mapping)
-print("_______________ Looking for the gate states _______________")
-print(gates_states)
-print(gates_states[' 6'])
-print(type(gates_states[' 6']))
+# # The chu
+# # The priority number 7 is always for ptp traffic
+# priority_mapping= {'0': '0', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '7'} 
+# per_link_payload = payload_generator(Clean_offsets, Repetitions_Descriptor, Streams_Period,priority_mapping, hyperperiod)
+# print(per_link_payload)

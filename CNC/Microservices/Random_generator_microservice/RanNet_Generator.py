@@ -101,9 +101,9 @@ def Random_flows_generator(Number_of_Streams, Number_of_edges) :
 # This function is for creting fake identificators for the devices in the network.
 def Network_identificator(Network_nodes, Adjacency_Matrix):
     identificator= {}
-    ip_suxif_initializator = 10
+    ip_suxif_initializator = 64
     for node in Network_nodes:
-        identificator[node]= '192.168.1'+ str(ip_suxif_initializator)
+        identificator[node]= '192.168.2.'+ str(ip_suxif_initializator)
         ip_suxif_initializator+=1
     
     interfaces_Matrix = copy.deepcopy(Adjacency_Matrix)

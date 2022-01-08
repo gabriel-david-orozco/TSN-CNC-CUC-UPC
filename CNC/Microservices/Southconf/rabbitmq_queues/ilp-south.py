@@ -16,7 +16,7 @@ channel.queue_declare(queue='ilp-south', durable=True)
 print(' [*] Waiting for messages. To exit press CTRL+C')
 
 def callback(ch, method, properties, body):
-    with open("/var/jetconf.txt", "w") as text:
+    with open("/var/ilp.txt", "w") as text:
             text.write(body.decode())
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
