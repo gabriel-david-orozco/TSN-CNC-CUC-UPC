@@ -35,7 +35,7 @@ def full_scheduler_generator(grouped_offsets, Repetitions_Descriptor, Streams_Pe
                         print(f"link index {link}  stream_index  {stream_index}")
                         for new_offset in repetition_offsets:
                             grouped_offsets[link][" " + str(stream_index)].append(new_offset)
-        stream_index += 1
+        stream_index = stream_index +  1
     return grouped_offsets
 
 
@@ -97,27 +97,30 @@ def payload_generator(Clean_offsets, Repetitions_Descriptor, Streams_Period,prio
         
         admin_control_list = []
         offsets_list = list(streams.keys())
+        print("Looking for the offsets_list don't you?", offsets_list)
         offsets_index= 0
         to_define = "PORT_0"
         for gate_state in streams.values():
             # Evaluate a offset with the next offset to get the total duration of the transmission
             # Until this moment, all offsets and period values were in microseconds
             try:
-                time_interval_value = str(1000*(offsets_list[offsets_index +1 ] - offsets_list[offsets_index]))
+                time_interval_value = str(int(1000*(offsets_list[offsets_index +1 ] - offsets_list[offsets_index])))
             except:
                 print("______________The mistake you are looking for _______________________")
                 print(hyperperiod, " __ ", offsets_list[offsets_index])
-                time_interval_value = str(1000*(hyperperiod - offsets_list[offsets_index]))
-            sgs_params = {"gate-states-value": str(gate_state),
+                time_interval_value = str(int(1000*(hyperperiod - offsets_list[offsets_index]) + 1000))
+            sgs_params = {"gate-states-value": str(int(gate_state)),
 
                           "time-interval-value" :time_interval_value # Nanoseconds
                         }
             admin_control_list.append(
                 {
                     "index": str(offsets_index),
+                    "operation-name": "set-gate-states",
                     "sgs-params": sgs_params
                 }
             )
+            offsets_index = offsets_index + 1
         per_link_payload[link] = {
             "interface": 
             {
@@ -130,7 +133,7 @@ def payload_generator(Clean_offsets, Repetitions_Descriptor, Streams_Period,prio
                     "config-change": "true",
                     "admin-cycle-time": {
                         "numerator": "1",
-                        "denominator": str(1/(hyperperiod*1000))
+                        "denominator": str(int(1000000/(hyperperiod)))
                     },
                     "admin-control-list" : admin_control_list,
                     "admin-base-time": {
@@ -140,8 +143,7 @@ def payload_generator(Clean_offsets, Repetitions_Descriptor, Streams_Period,prio
                     "admin-cycle-time-extension": "0"
                 }
             }
-        }
-        offsets_index += 1
+        } 
     return per_link_payload
 
 # hyperperiod= 32_000 # Hyperperiod is in microseconds
