@@ -8,6 +8,7 @@ from jetconf.helpers import JsonNodeT, PathFormat
 from jetconf.handler_base import StateDataContainerHandler
 from jetconf.data import BaseDatastore
 import json
+import requests
 
 # ---------- User-defined handlers follow ----------
 
@@ -17,8 +18,13 @@ class CNC_RestconfStateHandler_configuration(StateDataContainerHandler):
         talker_status = "1"
         #mac_address_ii = self.ds.parse_ii("ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list=8c-c3-C1-1f-75-E4:5E-b3/request/talker/end-station-interfaces=60-F2-62-74-45-F0,eth0/mac-address", PathFormat.URL)
         #mac_address = self.ds.get_data_root().goto(mac_address_ii).value
-        testing_ii = self.ds.parse_ii("ieee802-dot1q-tsn-types-upc-version:tsn-uni/stream-list", PathFormat.URL)
-        testing = self.ds.get_data_root().goto(testing_ii).value
+        testing_ii = self.ds.parse_ii("ieee802-dot1q-tsn-types-upc-version:tsn-uni", PathFormat.URL)
+        # This is a crime, but a neceesary one
+        try:
+            r = requests.get('https://127.0.0.1:8443/restconf/data/ieee802-dot1q-tsn-types-upc-version:tsn-uni', verify='/home/jetconf/data/example-client_curl.pem')
+        except Exception as err:
+            print(err)
+        print("####This is the payload for the get", r)
         i = 0
         #print(testing[0])
         for test in testing :

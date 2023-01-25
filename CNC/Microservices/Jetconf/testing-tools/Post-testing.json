@@ -1,75 +1,75 @@
 {
-      "ieee802-dot1q-tsn-types-upc-version:stream-list":{
-    		"stream-id": "12-5A-99-aC-BF-b4:bC-25",
-        "request": {
-              "talker": {
+    "ieee802-dot1q-tsn-types-upc-version:stream-list":{
+          "stream-id": "12-5A-99-aC-BF-b4:bC-25",
+      "request": {
+            "talker": {
 
-                  "stream-rank": {
-                      "rank": 0
-                  },
+                "stream-rank": {
+                    "rank": 0
+                },
 
-                  "end-station-interfaces": [
-                      {
-                          "mac-address": "12-5A-99-aC-BF-b4",
-                          "interface-name": "eth0"
-                      }
-                  ],
-                  "data-frame-specification": [
+                "end-station-interfaces": [
                     {
-                      "index": 1
+                        "mac-address": "12-5A-99-aC-BF-b7",
+                        "interface-name": "eth0"
                     }
-                  ],
-                  "traffic-specification": {
-                      "interval": {
-                          "numerator": 1,
-                          "denominator": 1
-                      },
-                      "max-frames-per-interval": 1000,
-                      "max-frame-size": 1518,
-                      "transmission-selection": 0,
-                      "time-aware": {
-                          "earliest-transmit-offset": 10,
-                          "latest-transmit-offset": 30,
-                          "jitter": 5
-                      }
-
-                  },
-                  "user-to-network-requirements": {
-                      "num-seamless-trees": 0,
-                      "max-latency": 10
-                  },
-                  "interface-capabilities": {
-                      "vlan-tag-capable": true,
-                      "cb-stream-iden-type-list": [],
-                      "cb-sequence-type-list": []
-
+                ],
+                "data-frame-specification": [
+                  {
+                    "index": 1
                   }
+                ],
+                "traffic-specification": {
+                    "interval": {
+                        "numerator": 2500,
+                        "denominator": 1
+                    },
+                    "max-frames-per-interval": 10,
+                    "max-frame-size": 256,
+                    "transmission-selection": 0,
+                    "time-aware": {
+                        "earliest-transmit-offset": 10,
+                        "latest-transmit-offset": 30,
+                        "jitter": 5
+                    }
 
-              },
-              "listeners-list": [
-                {
-                  "index": 1,
-                  "end-station-interfaces": [
-                      {
-                          "mac-address": "60-F2-62-74-45-F4",
-                          "interface-name": "eth1"
-                      }
-                  ],
+                },
+                "user-to-network-requirements": {
+                    "num-seamless-trees": 0,
+                    "max-latency": 10000
+                },
+                "interface-capabilities": {
+                    "vlan-tag-capable": true,
+                    "cb-stream-iden-type-list": [],
+                    "cb-sequence-type-list": []
 
-                  "user-to-network-requirements": {
-                      "num-seamless-trees": 0,
-                      "max-latency": 10
-                  },
-
-                  "interface-capabilities": {
-                      "vlan-tag-capable": true,
-                      "cb-stream-iden-type-list": [],
-                      "cb-sequence-type-list": []
-
-                  }
                 }
-              ]
 
-        }
-    	}
+            },
+            "listeners-list": [
+              {
+                "index": 1,
+                "end-station-interfaces": [
+                    {
+                        "mac-address": "60-F2-62-74-45-F4",
+                        "interface-name": "eth1"
+                    }
+                ],
+
+                "user-to-network-requirements": {
+                    "num-seamless-trees": 0,
+                    "max-latency": 1000
+                },
+
+                "interface-capabilities": {
+                    "vlan-tag-capable": true,
+                    "cb-stream-iden-type-list": [],
+                    "cb-sequence-type-list": []
+
+                }
+              }
+            ]
+
+      }
+      }
 }

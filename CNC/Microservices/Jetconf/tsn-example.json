@@ -1,0 +1,10 @@
+{
+    "ietf-netconf-acm:nacm":{
+        "enable-nacm":false
+    },
+    "ieee802-dot1q-tsn-types-upc-version:tsn-uni":{
+        "stream-list": [
+  
+      ]
+      }
+}

@@ -19,5 +19,5 @@ HTTP_SERVER:
     CA_CERT: "/home/jetconf/data/ca.pem"
 
 NACM:
-    ENABLED: true
+    ENABLED: false
     ALLOWED_USERS: ["example@mail.cz"]

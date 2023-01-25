@@ -40,6 +40,19 @@ services:
     depends_on: 
       - rabbitmq-microservice
 
+  jetconf:
+    build:
+      context: .
+      dockerfile: Jetconf/Dockerfile
+    volumes:
+      - ./Jetconf:/Jetconf
+    stdin_open: true 
+    tty: true
+    depends_on: 
+      - rabbitmq-microservice
+    ports:
+      - 8443:8443
+  
   southconf:
     build:
       context: .
