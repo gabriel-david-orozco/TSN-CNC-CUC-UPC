@@ -69,6 +69,7 @@ def gantt_chart_generator(Result_offsets, Repetitions, Streams_Period) :
                     Repeated_Stream = {'Task' : frame["Task"] , 'Start' : frame["Start"] + Streams_Period[stream_index]*(i), 'Color' : color[frame["Color"]]}
                     New_offsets.append(Repeated_Stream)
         stream_index = stream_index + 1
+    print("just making sure it is arriving to the gantt chart generator")
 
     Result_offsets = New_offsets
     data = [[frame['Task'], frame['Start'], frame['Color']] for frame in New_offsets]
@@ -83,6 +84,7 @@ def gantt_chart_generator(Result_offsets, Repetitions, Streams_Period) :
     plt.ylabel("Frames")
     plt.xlabel("Time in miliseconds")
     plt.title("Gantt Chart")
+    
 
     return df
 
@@ -100,6 +102,7 @@ def information_generator(Num_of_Frames, Streams_Period, Link_order_Descriptor, 
     plt.text(0.1, 0.3, "Indexed Links order per stream: \n " + str(Link_order_Descriptor), bbox=dict(facecolor='red', alpha=0.5))
     plt.text(0.1, 0.1, "Streams Paths: \n " + str(Streams_links_paths), bbox=dict(facecolor='red', alpha=0.5))
     plt.axis('off')
+    plt.savefig('testing.png')
     #plt.show()
 
 

@@ -63,6 +63,8 @@ if __name__ == "__main__":
        identificator = Preprocessed_data["identificator"] 
        interface_Matrix = Preprocessed_data["interface_Matrix"]
        Hyperperiod=Preprocessed_data['Hyperperiod']
+       Streams_links_paths=Preprocessed_data['Streams_links_paths']
+       Repetitions=Preprocessed_data['Repetitions']
        scheduler = ILP_Raagard_solver(Preprocessed_data['Number_of_Streams'], Preprocessed_data['Network_links'], \
                         Preprocessed_data['Link_order_Descriptor'], \
                         Streams_Period, Preprocessed_data['Hyperperiod'], Preprocessed_data['Frames_per_Stream'], \
@@ -76,6 +78,10 @@ if __name__ == "__main__":
                 Link_order_Descriptor, Links_per_Stream, Frames_per_Stream, Deathline_Stream, Streams_Period, Streams_size, Hyperperiod, Repetitions_Descriptor, identificator, interface_Matrix)
        json_Full_scheduled_data = json.dumps(Full_scheduled_data, indent = 4) 
        print("Working")
-       send_message(json_Full_scheduled_data, 'ilp-south')
+       
+       Feasibility_indicator, Result_offsets, Clean_offsets_collector, Results_latencies  = ILP_results_visualizer(instance, Model_Descriptor_vector)
+       df = gantt_chart_generator(Result_offsets, Repetitions, Streams_Period)
+       information_generator(Num_of_Frames, Streams_Period, Link_order_Descriptor, Network_links, Streams_links_paths)
+
     else:
         print("There is not input data, check the previous microserrvices or the RabbitMQ logs")

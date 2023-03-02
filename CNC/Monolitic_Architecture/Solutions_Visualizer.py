@@ -89,6 +89,7 @@ def gantt_chart_generator(Result_offsets, Repetitions, Streams_Period) :
     plt.ylabel("Frames")
     plt.xlabel("Time in miliseconds")
     plt.title("Gantt Chart")
+    plt.savefig('testing.png')
 
     return df
 
