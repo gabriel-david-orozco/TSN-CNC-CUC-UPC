@@ -49,7 +49,7 @@ Number_of_Streams = int(configParser.get('random', 'Number_of_Streams'))
 
 # topology random geneator
 
-Network_nodes, Network_links, Adjacency_Matrix, plot_network = Random_Network_Generator(Number_of_edges, Connection_probability)
+Network_nodes, Network_links, Adjacency_Matrix, plot_network, Sources, Destinations = Random_Network_Generator(Number_of_edges, Connection_probability)
 Stream_Source_Destination = Random_flows_generator(Number_of_Streams, Number_of_edges) 
 identificator, interface_Matrix = Network_identificator(Network_nodes, Adjacency_Matrix)
 
@@ -80,6 +80,8 @@ Stream_information["Hyperperiod"]= Hyperperiod
 Stream_information["Frames_per_Stream"]=Frames_per_Stream
 Stream_information["Max_frames"]=Max_frames
 Stream_information["Num_of_Frames"]=Num_of_Frames
+Stream_information["Sources"]=Sources
+Stream_information["Destinations"]=Destinations
 
 json_Stream_information = json.dumps(Stream_information, indent = 4) 
 

@@ -86,7 +86,7 @@ def Random_Network_Generator(Number_of_edges, Connection_probability) :
     plt.title("Network Topology")
     nx.draw(G, with_labels=True)
 
-    return Network_nodes, Network_links, Adjacency_Matrix, plot_network
+    return Network_nodes, Network_links, Adjacency_Matrix, plot_network, Sources, Destinations
 
 # This function generates a set of flows from a destination to an end
 # This function is placed here because it needs both parameters from the network and the Streams 

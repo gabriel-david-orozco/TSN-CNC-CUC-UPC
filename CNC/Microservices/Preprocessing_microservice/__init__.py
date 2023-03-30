@@ -136,6 +136,8 @@ if __name__ == "__main__":
       Preprocessed_data["Max_frames" ] = Stream_information["Max_frames"]
       Preprocessed_data["Streams_size"] = Stream_information["Streams_size"]
       Preprocessed_data["Num_of_Frames"] = Stream_information["Num_of_Frames"]
+      Preprocessed_data["Destinations"] = Stream_information["Destinations"]
+      Preprocessed_data["Sources"] = Stream_information["Sources"]
       Preprocessed_data["Model_Descriptor"] = Model_Descriptor
       Preprocessed_data["Model_Descriptor_vector"] = Model_Descriptor_vector
       Preprocessed_data["Deathline_Stream"] = Stream_information["Deathline_Stream"]

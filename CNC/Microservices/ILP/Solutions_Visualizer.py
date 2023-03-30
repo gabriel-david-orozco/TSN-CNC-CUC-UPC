@@ -2,9 +2,10 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import networkx as nx 
 
 def ILP_results_visualizer(instance, Model_Descriptor_vector):
-    print("############### This is the set of offsets ######################")
+    # print("############### This is the set of offsets ######################")
     Result_offsets = []
     Clean_offsets_collector = []
     Feasibility_indicator = 0
@@ -12,7 +13,7 @@ def ILP_results_visualizer(instance, Model_Descriptor_vector):
         for j in instance.Links:
             for k in instance.Frames:
                 if Model_Descriptor_vector [i][k][j] :
-                    print("The offset of stream", i, "link", j, "frame", k, "is",instance.Frame_Offset[i,j,k].value)
+                    # print("The offset of stream", i, "link", j, "frame", k, "is",instance.Frame_Offset[i,j,k].value)
                     frame_indicator = ("S", i, "L", j, "F", k)
                     helper = { "Task" :str(frame_indicator), "Start": instance.Frame_Offset[i,j,k].value, "Finish" : (instance.Frame_Offset[i,j,k].value +12), "Color" : j }
                     clean_offset = { "Task" :str(frame_indicator), "Start": instance.Frame_Offset[i,j,k].value }
@@ -20,26 +21,26 @@ def ILP_results_visualizer(instance, Model_Descriptor_vector):
                     Clean_offsets_collector.append(clean_offset)
                     if instance.Frame_Offset[i,j,k].value != 1 :
                         Feasibility_indicator = Feasibility_indicator + 1         
-    print("############### This is the set of latencies ######################")
+    # print("############### This is the set of latencies ######################")
     Results_latencies = []
     for stream in instance.Streams:
-        print("The latency of Stream", stream, "is",instance.Latency[stream].value)
+        # print("The latency of Stream", stream, "is",instance.Latency[stream].value)
         Results_latencies.append(instance.Latency[stream].value)
         
-    print("############### This is the set of queues ######################")
-    for link in instance.Links:
-        print("The number of queues of link ", link, "is",instance.Num_Queues[link].value)
+    # print("############### This is the set of queues ######################")
+    # for link in instance.Links:
+        # print("The number of queues of link ", link, "is",instance.Num_Queues[link].value)
 
-    print("############### This is the set of queues per stream and link######################")
-    for stream in instance.Streams:
-        for link in instance.Links:
-            print("The number of queues of Link",link , "Stream" , stream, "is", instance.Queue_Assignment[stream, link].value)
+    # print("############### This is the set of queues per stream and link######################")
+    # for stream in instance.Streams:
+        # for link in instance.Links:
+            # print("The number of queues of Link",link , "Stream" , stream, "is", instance.Queue_Assignment[stream, link].value)
 
-    print("############### This is the set of auxiliar queues variables######################")
-    for stream in instance.Streams :
-        for stream_2 in instance.Streams :
-            for link in instance.Links :
-                print("Aux variable for stream_1 ", stream, "Stream_2", stream_2, "link", link, ":", instance.Aux_Same_Queue[stream_2, link ,stream].value)
+    # print("############### This is the set of auxiliar queues variables######################")
+    # for stream in instance.Streams :
+    #     for stream_2 in instance.Streams :
+    #         for link in instance.Links :
+                # print("Aux variable for stream_1 ", stream, "Stream_2", stream_2, "link", link, ":", instance.Aux_Same_Queue[stream_2, link ,stream].value)
     return Feasibility_indicator, Result_offsets, Clean_offsets_collector, Results_latencies
 
 ##### For printing the model results and variables #####
@@ -69,7 +70,6 @@ def gantt_chart_generator(Result_offsets, Repetitions, Streams_Period) :
                     Repeated_Stream = {'Task' : frame["Task"] , 'Start' : frame["Start"] + Streams_Period[stream_index]*(i), 'Color' : color[frame["Color"]]}
                     New_offsets.append(Repeated_Stream)
         stream_index = stream_index + 1
-    print("just making sure it is arriving to the gantt chart generator")
 
     Result_offsets = New_offsets
     data = [[frame['Task'], frame['Start'], frame['Color']] for frame in New_offsets]
@@ -141,6 +141,21 @@ def dataframe_printer(instance, Clean_offsets, Results_latencies, Feasibility_in
     with open('/var/results.txt', 'a') as f :
         f.write("\n" + str(Full_scheduled_data))
     return Full_scheduled_data
+
+def Generate_network_graphic(Sources, Destinations):
+    # Build a dataframe with the Source and destination connections
+
+    df = pd.DataFrame({ 'from': Sources , 'to': Destinations})
+
+    # Build the graph
+    G=nx.from_pandas_edgelist(df, 'from', 'to')
+
+    # Plot the graph
+    plot_network = plt.figure(1, figsize=(14, 7))
+    plt.subplot(221)
+    plt.title("Network Topology")
+    nx.draw(G, with_labels=True)
+    return plot_network
 
 def Evaluation_function(Number_of_edges, Connection_probability,Number_of_Streams) :
 
